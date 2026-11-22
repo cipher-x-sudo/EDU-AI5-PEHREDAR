@@ -79,6 +79,23 @@ services:
     volumes:
       - gateway_state:/state:ro
 
+  data:
+    profiles: [data]
+    build:
+      context: .
+      target: data
+    working_dir: /app
+    env_file:
+      - .env
+    environment:
+      PEHREDAR_POLICY_PATH: /app/config/policy.yaml
+      PEHREDAR_DB_PATH: /tmp/pehredar.db
+    volumes:
+      - ./data:/app/data
+      - ./scripts:/app/scripts:ro
+      - ./config:/app/config:ro
+    command: python -m scripts.download_data
+
 volumes:
   ollama_models:
   gateway_state:

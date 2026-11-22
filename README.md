@@ -86,3 +86,15 @@ Invoke-RestMethod -Uri http://127.0.0.1:8000/v1/chat/completions -Method Post -C
 ```
 
 Run checks with `pytest`.
+
+## Public dataset pipeline
+
+The raw downloads and unified JSONL files are ignored by Git. Use the Docker data profile to reproduce them:
+
+```powershell
+docker compose --profile data run --rm --build data python -m scripts.download_data
+docker compose --profile data run --rm data python -m scripts.unify
+docker compose --profile test run --rm tests
+```
+
+The downloader pins source revisions, skips files already present, and enforces a 20 GiB `data/raw/` limit. The unifier writes the training and secondary evaluation pools under `data/processed/`; source revisions, rights, counts, and pending manual access steps are in [data/PROVENANCE.md](data/PROVENANCE.md) and [data/STATS.md](data/STATS.md). The human Roman Urdu test set remains a separate team collection and is never created by these commands.

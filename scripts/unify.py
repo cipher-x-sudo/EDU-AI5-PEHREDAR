@@ -10,6 +10,7 @@ import unicodedata
 import zipfile
 from datetime import date
 from collections import Counter, defaultdict
+from functools import lru_cache
 from pathlib import Path
 
 from pehredar.output_guard import PII_PATTERNS, SECRET_PATTERNS
@@ -24,6 +25,12 @@ OUTPUT = defaultdict(list)
 SEEN = set()
 ROMAN = {"hai", "nahi", "kya", "mujhe", "aur", "karo", "bhai", "yaar"}
 ENGLISH = {"the", "is", "are", "what", "how", "please", "can", "you", "to", "of"}
+
+
+@lru_cache
+def source_metadata(name):
+    path = RAW / name / "metadata.json"
+    return json.loads(path.read_text(encoding="utf-8")) if path.exists() else {}
 
 
 def norm(text):
@@ -112,7 +119,7 @@ def add(file, name, text, label, kind, original, usage="train", turns=None, extr
         COUNTS[name]["duplicate"] += 1
         return
     SEEN.add(key)
-    meta = json.loads((RAW / name / "metadata.json").read_text(encoding="utf-8")) if (RAW / name / "metadata.json").exists() else {}
+    meta = source_metadata(name)
     record = {"id": f"{name}-{COUNTS[name]['downloaded']}", "text": text, "lang": detected_lang,
               "label": label, "type": kind, "source": name, "split_group": group(text),
               "usage": usage, "redistributable": meta.get("redistributable", False),
@@ -173,10 +180,16 @@ def main():
             add("injection_train", "tensor_trust", row.get("attack"), "attack",
                 "extraction" if "extraction" in rel else "injection", rel)
     for rel, row in rows("safemtdata") or []:
-        turns = [{"role": "user", "content": x} for x in row.get("multi_turn_queries", []) if isinstance(x, str)]
+        if "SafeMTData_1K" in rel:
+            turns = [turn for turn in row.get("conversations", [])
+                     if isinstance(turn, dict) and turn.get("role") in {"user", "assistant"}
+                     and isinstance(turn.get("content"), str)]
+        else:
+            turns = [{"role": "user", "content": x} for x in row.get("multi_turn_queries", []) if isinstance(x, str)]
         text = "\n".join(x["content"] for x in turns)
         if turns:
-            add("multiturn", "safemtdata", text, "attack", "jailbreak", row.get("category"), turns=turns)
+            add("multiturn", "safemtdata", text, "attack", "jailbreak",
+                row.get("category", "actor attack"), turns=turns)
     for rel, row in rows("tom_gibbs_multiturn") or []:
         try:
             turns = ast.literal_eval(row["Multi-turn conversation"])
@@ -359,7 +372,7 @@ def main():
         "- https://data.mendeley.com/datasets/v5jfhsvtmd/5 — download RUwV-NSR and confirm its dataset license.",
         "- https://huggingface.co/datasets/xTRam1/safe-guard-prompt-injection — obtain an explicit dataset license from the maintainer.",
         "- https://huggingface.co/datasets/qxcv/tensor-trust — obtain an explicit dataset license from the maintainer.",
-        "- https://github.com/kriti-hippo/red_queen — obtain an explicit dataset license from the maintainer.",
+        "- https://huggingface.co/datasets/YifanJ/Red_Queen — obtain an explicit dataset license from the maintainer.",
         "- https://github.com/mshahzaib7/injectionshield — obtain the benchmark rows from its maintainers for external evaluation.",
         "", "## Run", "",
         "Install `huggingface_hub`, `pandas`, `pyarrow`, and `requests` in the project's Python environment, then run `python -m scripts.download_data` and `python -m scripts.unify`.",

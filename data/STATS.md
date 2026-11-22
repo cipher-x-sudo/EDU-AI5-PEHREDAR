@@ -3,9 +3,9 @@
 File | Label | Type | Lang | Source | Rows
 ---|---|---|---|---|---:
 external_eval | attack | injection | en | deepset_pi | 60
-external_eval | attack | jailbreak | en | jb_class | 111
+external_eval | attack | jailbreak | en | jb_class | 114
 external_eval | benign | none | en | deepset_pi | 56
-external_eval | benign | none | en | jb_class | 119
+external_eval | benign | none | en | jb_class | 250
 harm | attack | harm | en | aegis2 | 11965
 harm | attack | harm | en | beavertails | 1924
 harm | attack | harm | en | harmbench | 317
@@ -20,11 +20,11 @@ indirect_eval | attack | injection | en | injecagent | 351
 injection_train | attack | extraction | en | gandalf | 570
 injection_train | attack | injection | en | deepset_pi | 202
 injection_train | attack | jailbreak | en | jailbreak_llms | 570
-injection_train | attack | jailbreak | en | jb_class | 460
-injection_train | benign | none | en | deepset_pi | 41
-injection_train | benign | none | en | jailbreak_llms | 1699
-injection_train | benign | none | en | jb_class | 62
-multiturn | attack | jailbreak | en | safemtdata | 600
+injection_train | attack | jailbreak | en | jb_class | 457
+injection_train | benign | none | en | deepset_pi | 35
+injection_train | benign | none | en | jailbreak_llms | 1633
+injection_train | benign | none | en | jb_class | 131
+multiturn | attack | jailbreak | en | safemtdata | 678
 multiturn | attack | jailbreak | en | tom_gibbs_multiturn | 4218
 multiturn | benign | none | en | tom_gibbs_multiturn | 2400
 overrefusal_eval | benign | none | en | or_bench | 1319
@@ -52,9 +52,9 @@ gandalf | 1000 | 998 | 1 | 0 | 0 | 1 | 0
 harmbench | 320 | 317 | 3 | 0 | 0 | 0 | 0
 injecagent | 1054 | 351 | 0 | 703 | 0 | 0 | 0
 jailbreak_llms | 15140 | 12312 | 1058 | 44 | 1680 | 46 | 0
-jb_class | 1306 | 1201 | 18 | 2 | 85 | 0 | 0
+jb_class | 1998 | 1865 | 25 | 5 | 103 | 0 | 0
 or_bench | 1319 | 1319 | 0 | 0 | 0 | 0 | 0
-safemtdata | 600 | 600 | 0 | 0 | 0 | 0 | 0
+safemtdata | 2280 | 678 | 0 | 0 | 1602 | 0 | 0
 smat26 | 20228 | 19466 | 560 | 11 | 191 | 0 | 0
 synthetic | 3 | 3 | 0 | 0 | 0 | 0 | 0
 tom_gibbs_multiturn | 6840 | 6618 | 0 | 1 | 221 | 0 | 78
@@ -62,5 +62,5 @@ toxicchat | 10165 | 9635 | 514 | 16 | 0 | 0 | 0
 uci_roman_urdu | 20229 | 0 | 20026 | 11 | 192 | 0 | 0
 xstest | 250 | 249 | 1 | 0 | 0 | 0 | 0
 
-Classifier training pool: 1802 attack, 1802 benign.
-Raw directory size: 0.247 GiB.
+Classifier training pool: 1799 attack, 1799 benign.
+Raw directory size: 0.300 GiB.

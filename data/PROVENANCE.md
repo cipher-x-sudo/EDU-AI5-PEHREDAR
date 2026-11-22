@@ -18,13 +18,13 @@ harmbench | https://github.com/centerforaisafety/HarmBench | `8e1604d1171fe8a48d
 injecagent | https://github.com/uiuc-kang-lab/InjecAgent | `f19c9f2c79a41046eb13c03c51a24c567a8ffa07` | 2026-11-22 | mit | 1054 | 351 | eval_only | true | —
 injectionshield | https://github.com/mshahzaib7/injectionshield | `f1b8bdcb5bdc0e0d059ebdef8413332956a049b8` | 2026-11-22 | mixed upstream | 0 | 0 | skipped | false | Benchmark only; repository does not contain the benchmark rows. Never train.
 jailbreak_llms | https://github.com/verazuo/jailbreak_llms | `4f4031bf8be187f4478c7f94f42b08714722c12e` | 2026-11-22 | mit | 15140 | 12312 | train | true | —
-jb_class | https://huggingface.co/datasets/jackhhao/jailbreak-classification | `2f2ceeb39658696fd3f462403562b6eea5306287` | 2026-11-22 | apache-2.0 | 1306 | 1201 | secondary_eval, train | true | —
+jb_class | https://huggingface.co/datasets/jackhhao/jailbreak-classification | `2f2ceeb39658696fd3f462403562b6eea5306287` | 2026-11-22 | apache-2.0 | 1998 | 1865 | secondary_eval, train | true | —
 mhj | https://huggingface.co/datasets/ScaleAI/mhj | `ad6e928f5c2823f53fbb828f6d60dd4137fd43e7` | 2026-11-22 | cc-by-nc-4.0 | 0 | 0 | skipped | false | Gated; repository has no accessible data file until approval. Nonredistributable.
 necent_merged | https://huggingface.co/datasets/Necent/llm-jailbreak-prompt-injection-dataset | `4edfb5aeaafe58c9bf489a478a42188f239d7c1e` | 2026-11-22 | mixed upstream | 0 | 0 | skipped | false | Gated; access denied. Mixed upstream licenses require per-source review.
 or_bench | https://huggingface.co/datasets/bench-llm/or-bench | `e36d8b80e81837c8a8f264bbb2a49f1b32c7e272` | 2026-11-22 | cc-by-4.0 | 1319 | 1319 | eval_only | true | —
 red_queen | https://huggingface.co/datasets/YifanJ/Red_Queen | `8505fdb5270585a820ba49f086ec67e1ad310c9d` | 2026-11-22 | unspecified | 0 | 0 | skipped | false | Official GitHub/HF source; no explicit dataset license; skipped.
 safeguard_pi | https://huggingface.co/datasets/xTRam1/safe-guard-prompt-injection | `a3a877d608f37b7d20d9945671902df895ecdb46` | 2026-11-22 | unspecified | 0 | 0 | skipped | false | Card does not state a license; skipped pending rights confirmation.
-safemtdata | https://huggingface.co/datasets/SafeMTData/SafeMTData | `04af7bd0b6b6044e797e936d79674e348316b9b8` | 2026-11-22 | mit | 600 | 600 | train | true | —
+safemtdata | https://huggingface.co/datasets/SafeMTData/SafeMTData | `04af7bd0b6b6044e797e936d79674e348316b9b8` | 2026-11-22 | mit | 2280 | 678 | train | true | —
 smat26 | https://github.com/Smat26/Roman-Urdu-Dataset | `762ba24484024855798ef15d248e45f12a410de3` | 2026-11-22 | gpl-3.0 | 20228 | 19466 | train | true | —
 tensor_trust | https://huggingface.co/datasets/qxcv/tensor-trust | `4de2b2fe01ba0cb6fbf7cbb9f1a3fabaf8157372` | 2026-11-22 | unspecified | 0 | 0 | skipped | false | Card does not state a license; skipped pending rights confirmation.
 tom_gibbs_multiturn | https://huggingface.co/datasets/tom-gibbs/multi-turn_jailbreak_attack_datasets | `e3b30257c4d6be5438ea19f0989ac82c24234fe4` | 2026-11-22 | mit | 6840 | 6618 | train | true | —
@@ -44,7 +44,7 @@ ruwv_nsr | https://data.mendeley.com/datasets/v5jfhsvtmd/5 | unavailable | not d
 - https://data.mendeley.com/datasets/v5jfhsvtmd/5 — download RUwV-NSR and confirm its dataset license.
 - https://huggingface.co/datasets/xTRam1/safe-guard-prompt-injection — obtain an explicit dataset license from the maintainer.
 - https://huggingface.co/datasets/qxcv/tensor-trust — obtain an explicit dataset license from the maintainer.
-- https://github.com/kriti-hippo/red_queen — obtain an explicit dataset license from the maintainer.
+- https://huggingface.co/datasets/YifanJ/Red_Queen — obtain an explicit dataset license from the maintainer.
 - https://github.com/mshahzaib7/injectionshield — obtain the benchmark rows from its maintainers for external evaluation.
 
 ## Run

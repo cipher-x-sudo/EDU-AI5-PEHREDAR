@@ -24,5 +24,9 @@ COPY dashboard.py ./dashboard.py
 RUN --mount=type=cache,target=/root/.cache/pip pip install --timeout 300 --retries 10 ".[dashboard]"
 CMD ["streamlit", "run", "dashboard.py", "--server.address=0.0.0.0", "--server.port=8501"]
 
+FROM gateway AS data
+COPY scripts ./scripts
+RUN --mount=type=cache,target=/root/.cache/pip pip install --timeout 300 --retries 10 ".[data]"
+
 FROM gateway AS tests
 RUN --mount=type=cache,target=/root/.cache/pip pip install --timeout 300 --retries 10 pytest

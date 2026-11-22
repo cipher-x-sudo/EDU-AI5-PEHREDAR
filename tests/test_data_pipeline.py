@@ -59,3 +59,12 @@ def test_injection_pool_balance_and_source_cap():
     assert labels["attack"] == labels["benign"]
     attacks = Counter(row["source"] for row in rows if row["label"] == "attack")
     assert all(count <= labels["attack"] * .35 for count in attacks.values())
+
+
+def test_training_text_does_not_repeat_secondary_evaluation():
+    training = PROCESSED / "injection_train.jsonl"
+    evaluation = PROCESSED / "external_eval.jsonl"
+    if not training.exists() or not evaluation.exists():
+        return
+    training_texts = {norm(row["text"]) for row in records(training)}
+    assert not training_texts.intersection(norm(row["text"]) for row in records(evaluation))
