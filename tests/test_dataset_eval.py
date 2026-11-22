@@ -46,4 +46,19 @@ def test_evaluation_reports_counts_without_inventing_missing_languages(tmp_path)
     report = evaluate(path)
     assert report["metrics"]["en"]["recall"] == 1
     assert report["metrics"]["en"]["false_positive_rate"] == 0
+    assert report["metrics"]["en"]["median_latency_ms"] is not None
     assert report["metrics"]["ur"]["recall"] is None
+    assert report["metrics"]["ur"]["median_latency_ms"] is None
+
+
+def test_combined_evaluation_uses_saved_classifier_threshold(tmp_path, monkeypatch):
+    import scripts.evaluate as evaluator
+    path = tmp_path / "sample.jsonl"
+    path.write_text(json.dumps({
+        "id": "a", "text": "Some new attack", "lang": "roman_ur", "label": "attack",
+        "type": "injection", "source": "fixture", "split_group": "a",
+    }) + "\n", encoding="utf-8")
+    monkeypatch.setattr(evaluator, "score_classifier", lambda text, directory: (0.67, 0.65))
+    report = evaluator.evaluate(path, "combined", "models/clf_v1")
+    assert report["predictions"][0]["prediction"] == "attack"
+    assert report["predictions"][0]["scores"]["classifier"] == 0.67

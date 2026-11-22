@@ -34,4 +34,12 @@ Run the rules-only baseline:
 python -m scripts.evaluate data/frozen_test/human_v1.jsonl --output baseline_rules.json
 ```
 
-The report includes the input SHA-256 hash, predictions, per-language confusion counts, recall, false-positive rate, and latency. Missing language groups receive `null` rates.
+For the temporary English-focused DeBERTa comparison, install the classifier dependencies and run:
+
+```powershell
+pip install -e ".[classifier]"
+python -m scripts.evaluate data/frozen_test/human_v1.jsonl --detector deberta --output baseline_deberta.json
+python -m scripts.evaluate data/frozen_test/human_v1.jsonl --detector combined --classifier-dir models/clf_v1 --output candidate_combined.json
+```
+
+The report includes the input SHA-256 hash, predictions, per-language confusion counts, recall, false-positive rate, and latency. Missing language groups receive `null` rates. DeBERTa is only a temporary English prompt-injection baseline; its Roman Urdu result is reported as measured, without presenting it as a multilingual guard.
