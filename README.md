@@ -98,3 +98,5 @@ docker compose --profile test run --rm tests
 ```
 
 The downloader pins source revisions, skips files already present, and enforces a 20 GiB `data/raw/` limit. The unifier writes the training and secondary evaluation pools under `data/processed/`; source revisions, rights, counts, and pending manual access steps are in [data/PROVENANCE.md](data/PROVENANCE.md) and [data/STATS.md](data/STATS.md). The human Roman Urdu test set remains a separate team collection and is never created by these commands.
+
+The classifier pool limits each attack source to 25%, selects hard benign examples first, and uses a 1:1.5 attack-to-benign ratio. SPML contributes paired system and user text because its label is context-dependent. LLMail uses Phase 2 submissions, with email-shaped PII redacted before selecting 5,000 training and 2,000 indirect-evaluation rows. HackAPrompt, WildJailbreak, and WildGuardMix require accepted Hugging Face access and an `HF_TOKEN` in `.env` before their rows can enter the pipeline.

@@ -8,6 +8,7 @@ from pathlib import Path
 
 import requests
 from huggingface_hub import HfApi, hf_hub_download
+from huggingface_hub.utils import HfHubHTTPError
 
 ROOT = Path(__file__).resolve().parent.parent
 RAW = ROOT / "data" / "raw"
@@ -25,6 +26,11 @@ SOURCES = {
     "toxicchat": ("hf", "lmsys/toxic-chat", ["data/0124/toxic-chat_annotation_train.csv", "data/0124/toxic-chat_annotation_test.csv"], "cc-by-nc-4.0", False),
     "or_bench": ("hf", "bench-llm/or-bench", ["or-bench-hard-1k.csv"], "cc-by-4.0", True),
     "ai4privacy": ("hf", "ai4privacy/open-pii-masking-500k-ai4privacy", ["data/validation/test.jsonl"], "other:cc-by-4.0+llama-community", False),
+    "spml": ("hf", "reshabhs/SPML_Chatbot_Prompt_Injection", ["spml_prompt_injection.csv"], "mit", True),
+    "llmail": ("hf", "microsoft/llmail-inject-challenge", ["data/raw_submissions_phase2.jsonl"], "mit", True),
+    "hackaprompt": ("hf", "hackaprompt/hackaprompt-dataset", ["hackaprompt.parquet"], "mit", True),
+    "wildjailbreak": ("hf", "allenai/wildjailbreak", ["train/train.tsv"], "odc-by", False),
+    "wildguardmix": ("hf", "allenai/wildguardmix", ["train/wildguard_train.parquet"], "odc-by", False),
     "jailbreak_llms": ("gh", "verazuo/jailbreak_llms", ["data/prompts/jailbreak_prompts_2023_12_25.csv", "data/prompts/regular_prompts_2023_12_25.csv"], "mit", True),
     "bipia": ("gh", "microsoft/BIPIA", ["benchmark/text_attack_test.json", "benchmark/code_attack_test.json"], "mit; source task restrictions", False),
     "injecagent": ("gh", "uiuc-kang-lab/InjecAgent", ["data/test_cases_dh_base.json", "data/test_cases_ds_base.json"], "mit", True),
@@ -60,6 +66,11 @@ HF_REVISIONS = {
     "toxicchat": "29df8e4dba60e1f4af4b4075c0705c5b313548a8",
     "or_bench": "e36d8b80e81837c8a8f264bbb2a49f1b32c7e272",
     "ai4privacy": "506996d625ed970a0063432daf6007cf4a3a48e3",
+    "spml": "02ce8084e979bc7d4c24ee35d22ecb7f2db96ff5",
+    "llmail": "1063bdf01ec8762b812d5e06ee768a06faa5a6f7",
+    "hackaprompt": "25b87fbedfb86840abaf8cd09af7a029208a971a",
+    "wildjailbreak": "5ddc12a7894f842b0619b8e1c7ee496b198af009",
+    "wildguardmix": "d29c47f41c8b51348b5c8e8c81c039b3132b66d1",
 }
 
 
@@ -111,6 +122,13 @@ def download(names: list[str], root: Path = RAW) -> dict:
                 report[name] = {"status": "missing_file", "revision": revision}
                 continue
             if info.gated and not token_from_env():
+                folder.mkdir(parents=True, exist_ok=True)
+                metadata_path.write_text(json.dumps({
+                    "source_url": f"https://huggingface.co/datasets/{source}",
+                    "revision": revision, "license": expected_license,
+                    "redistributable": redistributable, "download_date": date.today().isoformat(),
+                    "files": files, "status": "manual_access",
+                }, indent=2) + "\n", encoding="utf-8")
                 report[name] = {"status": "manual_access", "revision": revision}
                 continue
             estimated = sum(index[path] or 0 for path in files if not (folder / path).exists())
@@ -124,9 +142,17 @@ def download(names: list[str], root: Path = RAW) -> dict:
                 if destination.exists():
                     continue
                 folder.mkdir(parents=True, exist_ok=True)
-                hf_hub_download(source, path, repo_type="dataset", revision=revision,
-                                local_dir=folder, token=token_from_env())
+                try:
+                    hf_hub_download(source, path, repo_type="dataset", revision=revision,
+                                    local_dir=folder, token=token_from_env())
+                except HfHubHTTPError as exc:
+                    if info.gated and exc.response is not None and exc.response.status_code in (401, 403):
+                        report[name] = {"status": "manual_access", "revision": revision}
+                        break
+                    raise
                 existing_bytes += destination.stat().st_size
+            if report.get(name, {}).get("status") == "manual_access":
+                continue
         elif kind == "gh":
             revision = GITHUB_REVISIONS[name]
             base = f"https://raw.githubusercontent.com/{source}/{revision}"

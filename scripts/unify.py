@@ -23,6 +23,8 @@ COUNTS = defaultdict(Counter)
 POOL = []
 OUTPUT = defaultdict(list)
 SEEN = set()
+MAX_PROMPT = 12_000
+PII_EXEMPT_EVAL = {"injecagent", "bipia", "agentdojo"}
 ROMAN = {"hai", "nahi", "kya", "mujhe", "aur", "karo", "bhai", "yaar"}
 ENGLISH = {"the", "is", "are", "what", "how", "please", "can", "you", "to", "of"}
 
@@ -35,6 +37,17 @@ def source_metadata(name):
 
 def norm(text):
     return re.sub(r"\s+", " ", unicodedata.normalize("NFKC", text).casefold()).strip()
+
+
+def near_hash(text):
+    collapsed = re.sub(r"[\W_]+", " ", norm(text), flags=re.UNICODE).strip()
+    return hashlib.sha256(collapsed.encode()).hexdigest()
+
+
+def redact_pii(text):
+    for pattern in PII_PATTERNS + SECRET_PATTERNS:
+        text = pattern.sub("[REDACTED]", text)
+    return text
 
 
 def group(text):
@@ -75,9 +88,10 @@ def rows(name):
         if not path.exists():
             continue
         if path.suffix == ".parquet":
-            import pandas as pd
-            for batch in pd.read_parquet(path).to_dict("records"):
-                yield rel, batch
+            import pyarrow.parquet as pq
+            for batch in pq.ParquetFile(path).iter_batches(batch_size=2048):
+                for row in batch.to_pylist():
+                    yield rel, row
         elif path.suffix in (".csv", ".tsv"):
             with path.open(encoding="utf-8-sig", errors="replace", newline="") as stream:
                 reader = csv.reader(stream) if name == "smat26" else csv.DictReader(
@@ -101,23 +115,30 @@ def add(file, name, text, label, kind, original, usage="train", turns=None, extr
     COUNTS[name]["downloaded"] += 1
     if not isinstance(text, str):
         COUNTS[name]["unclear"] += 1
-        return
+        return False
     text = text.strip()
-    if not 3 <= len(text) <= 4000:
+    if (len(text) < 3 or
+            (turns is None and len(text) > MAX_PROMPT) or
+            (turns is not None and any(len(turn["content"]) > MAX_PROMPT for turn in turns))):
         COUNTS[name]["length"] += 1
-        return
+        return False
     response = (extra or {}).get("response")
-    if file != "pii_eval" and any(p.search(value) for value in (text, response) if isinstance(value, str) for p in PII_PATTERNS + SECRET_PATTERNS):
-        COUNTS[name]["pii"] += 1
-        return
+    has_pii = any(p.search(value) for value in (text, response)
+                  if isinstance(value, str) for p in PII_PATTERNS + SECRET_PATTERNS)
+    if file != "pii_eval" and has_pii:
+        if file == "indirect_eval" and name in PII_EXEMPT_EVAL:
+            COUNTS[name]["pii_exempt"] += 1
+        else:
+            COUNTS[name]["pii"] += 1
+            return False
     detected_lang = source_lang(name, text)
     if file == "injection_train" and detected_lang == "other":
         COUNTS[name]["lang_other"] += 1
-        return
+        return False
     key = norm(text)
     if key in SEEN:
         COUNTS[name]["duplicate"] += 1
-        return
+        return False
     SEEN.add(key)
     meta = source_metadata(name)
     record = {"id": f"{name}-{COUNTS[name]['downloaded']}", "text": text, "lang": detected_lang,
@@ -128,6 +149,7 @@ def add(file, name, text, label, kind, original, usage="train", turns=None, extr
         record.update(extra)
     (POOL if file == "injection_train" else OUTPUT[file]).append(record)
     COUNTS[name]["kept"] += 1
+    return True
 
 
 def mapped(name, row, field, label, attack_values, benign_values, kind, file="injection_train", usage="train", extra=None):
@@ -143,7 +165,32 @@ def mapped(name, row, field, label, attack_values, benign_values, kind, file="in
     add(file, name, row.get(field), mapped_label, mapped_kind, value, usage, extra=extra)
 
 
+def capped_sample(groups, limit, denominator, seed=42, multiple=1, preserve_keys=()):
+    """Largest deterministic sample with no group above 1/denominator."""
+    rng = random.Random(seed)
+    choices = {key: list(values) for key, values in groups.items() if values}
+    for key, values in choices.items():
+        if key not in preserve_keys:
+            rng.shuffle(values)
+    maximum = min(limit, sum(map(len, choices.values())))
+    size = next((n for n in range(maximum - maximum % multiple, 0, -multiple)
+                 if sum(min(len(values), n // denominator)
+                        for values in choices.values()) >= n), 0)
+    cap = size // denominator
+    selected = []
+    for index in range(cap):
+        for key in sorted(choices):
+            if index < len(choices[key]) and len(selected) < size:
+                selected.append(choices[key][index])
+    return selected
+
+
 def main():
+    COUNTS.clear()
+    POOL.clear()
+    OUTPUT.clear()
+    SEEN.clear()
+    source_metadata.cache_clear()
     OUT.mkdir(parents=True, exist_ok=True)
     for name, field, label, attack, benign, kind in [
         ("deepset_pi", "text", "label", {1}, {0}, "injection"),
@@ -159,20 +206,99 @@ def main():
             label = "benign" if "regular" in rel else "attack"
             add("injection_train", name, row.get("prompt"), label,
                 "none" if label == "benign" else "jailbreak", row.get("jailbreak", label))
+    for _, row in rows("spml") or []:
+        system, prompt = row.get("System Prompt"), row.get("User Prompt")
+        if not isinstance(system, str) or not isinstance(prompt, str):
+            COUNTS["spml"]["unclear"] += 1
+            continue
+        mapped("spml", {"text": f"System: {system.strip()}\nUser: {prompt.strip()}",
+                        "label": row.get("Prompt injection")}, "text", "label",
+               {"1", 1}, {"0", 0}, "injection",
+               extra={"contextual": True,
+                      "hard_negative": row.get("Prompt injection") in {"0", 0}})
+    llmail_counts = Counter()
+    llmail_train_groups = set()
+    for rel, row in rows("llmail") or []:
+        if llmail_counts["train"] >= 5000 and llmail_counts["eval"] >= 2000:
+            break
+        subject, body = row.get("subject"), row.get("body")
+        if not isinstance(subject, str) or not isinstance(body, str):
+            COUNTS["llmail"]["unclear"] += 1
+            continue
+        text = f"Subject: {subject.strip()}\nBody: {body.strip()}"
+        clean = redact_pii(text)
+        if clean != text:
+            COUNTS["llmail"]["pii_redacted"] += 1
+        text = clean
+        if llmail_counts["train"] < 5000:
+            if add("injection_train", "llmail", text, "attack", "injection",
+                   row.get("scenario", "submission")):
+                llmail_counts["train"] += 1
+                llmail_train_groups.add(group(text))
+        elif group(text) not in llmail_train_groups and add("indirect_eval", "llmail", text, "attack", "injection",
+                 row.get("scenario", "submission"), "eval_only"):
+            llmail_counts["eval"] += 1
+    hack_candidates = defaultdict(list)
+    hack_order = {}
+    hack_seen = set()
+    for _, row in rows("hackaprompt") or []:
+        if not {"user_input", "expected_completion"} <= row.keys():
+            raise ValueError("HackAPrompt file schema differs from expected user_input/expected_completion")
+        goal = row.get("expected_completion")
+        if not isinstance(goal, str) or not goal.strip():
+            COUNTS["hackaprompt"]["unclear"] += 1
+            continue
+        goal = norm(goal)
+        prompt = row.get("user_input")
+        if not isinstance(prompt, str):
+            COUNTS["hackaprompt"]["unclear"] += 1
+            continue
+        key = near_hash(prompt)
+        if key in hack_seen:
+            COUNTS["hackaprompt"]["near_duplicate"] += 1
+            continue
+        if len(hack_candidates[goal]) >= 2000:
+            COUNTS["hackaprompt"]["goal_cap"] += 1
+            continue
+        if add("injection_train", "hackaprompt", prompt,
+               "attack", "injection", row.get("level"), extra={"goal": goal}):
+            hack_seen.add(key)
+            hack_candidates[goal].append(POOL[-1])
+    if hack_candidates:
+        chosen = capped_sample(hack_candidates, 5000, 5)
+        hack_order = {row["id"]: index for index, row in enumerate(chosen)}
+        chosen_ids = {row["id"] for row in chosen}
+        excluded = [row for values in hack_candidates.values() for row in values
+                    if row["id"] not in chosen_ids]
+        COUNTS["hackaprompt"]["goal_cap"] += len(excluded)
+        COUNTS["hackaprompt"]["kept"] -= len(excluded)
+        SEEN.difference_update(norm(row["text"]) for row in excluded)
+        POOL[:] = [row for row in POOL if row["source"] != "hackaprompt" or row["id"] in chosen_ids]
     wild_counts = Counter()
     for rel, row in rows("wildjailbreak") or []:
         data_type = row.get("data_type")
         if data_type not in {"adversarial_harmful", "adversarial_benign"}:
             continue
-        if wild_counts[data_type] >= 15000:
+        if wild_counts[data_type] >= 8000:
             continue
         text = row.get("adversarial")
         label = "attack" if data_type == "adversarial_harmful" else "benign"
-        add("injection_train", "wildjailbreak", text, label,
-            "jailbreak" if label == "attack" else "none", data_type)
-        wild_counts[data_type] += 1
+        if add("injection_train", "wildjailbreak", text, label,
+               "jailbreak" if label == "attack" else "none", data_type,
+               extra={"hard_negative": label == "benign"}):
+            wild_counts[data_type] += 1
     for _, row in rows("gandalf") or []:
         add("injection_train", "gandalf", row.get("text"), "attack", "extraction", "password extraction")
+    wildguard_count = 0
+    for rel, row in rows("wildguardmix") or []:
+        if "train" not in rel or wildguard_count >= 3000:
+            break
+        if not {"prompt", "prompt_harm_label", "adversarial"} <= row.keys():
+            raise ValueError("WildGuardMix train schema requires prompt, prompt_harm_label, adversarial")
+        if row.get("adversarial") is True and row.get("prompt_harm_label") == "harmful":
+            if add("injection_train", "wildguardmix", row.get("prompt"),
+                   "attack", "harm", "adversarial_harmful"):
+                wildguard_count += 1
     for rel, row in rows("tensor_trust") or []:
         if "detecting-extractions" in rel:
             add("extraction_eval", "tensor_trust", row.get("llm_output"), "attack", "extraction", row.get("is_extraction"), "eval_only")
@@ -207,6 +333,8 @@ def main():
         add("multiturn", "tom_gibbs_multiturn", text, label, kind, rel, turns=turns)
     for name in ("aegis2", "beavertails", "toxicchat", "wildguardmix"):
         for rel, row in rows(name) or []:
+            if name == "wildguardmix" and "test" not in rel:
+                continue
             if name == "beavertails" and COUNTS[name]["downloaded"] >= 10000:
                 break
             if name == "aegis2":
@@ -277,30 +405,33 @@ def main():
             "attack", "injection", row.get("Attack Type"), "eval_only")
     for name in list(OUTPUT):
         OUTPUT[name].sort(key=lambda r: r.get("id", ""))
-    rng = random.Random(42)
-    attack = [r for r in POOL if r["label"] == "attack"]
-    benign = [r for r in POOL if r["label"] == "benign"]
-    rng.shuffle(attack)
-    rng.shuffle(benign)
-    attack_sources = Counter(r["source"] for r in attack)
-    cap = max(1, sum(attack_sources.values()) // max(3, len(attack_sources)))
-    selected, sources = [], Counter()
-    for row in attack:
-        if sources[row["source"]] < cap:
-            selected.append(row)
-            sources[row["source"]] += 1
-    while selected and max(sources.values()) > len(selected) * .35:
-        source = max(sources, key=sources.get)
-        index = next(i for i, row in enumerate(selected) if row["source"] == source)
-        selected.pop(index)
-        sources[source] -= 1
-    selected += benign[:len(selected)]
-    OUTPUT["injection_train"] = sorted(selected, key=lambda r: r["id"])
     frozen = Path("data/frozen_test/human_v1.jsonl")
     if frozen.exists():
         held_out = {norm(json.loads(line)["text"]) for line in frozen.read_text(encoding="utf-8").splitlines() if line.strip()}
+        POOL[:] = [row for row in POOL if norm(row["text"]) not in held_out]
         for file, records in OUTPUT.items():
             OUTPUT[file] = [row for row in records if row["usage"] != "train" or norm(row["text"]) not in held_out]
+    attacks_by_source = defaultdict(list)
+    benign = []
+    for row in POOL:
+        if row["label"] == "attack":
+            attacks_by_source[row["source"]].append(row)
+        else:
+            benign.append(row)
+    if hack_order:
+        attacks_by_source["hackaprompt"].sort(key=lambda row: hack_order[row["id"]])
+    attacks = capped_sample(attacks_by_source, len(benign) * 2 // 3, 4,
+                            multiple=20, preserve_keys={"hackaprompt"})
+    rng = random.Random(42)
+    hard = [row for row in benign if row.get("hard_negative") or
+            re.search(r"\b(?:instructions|system|password|ignore)\b", row["text"], re.I)]
+    hard_ids = {row["id"] for row in hard}
+    easy = [row for row in benign if row["id"] not in hard_ids]
+    rng.shuffle(hard)
+    rng.shuffle(easy)
+    benign_needed = len(attacks) * 3 // 2
+    OUTPUT["injection_train"] = sorted(attacks + (hard + easy)[:benign_needed],
+                                       key=lambda row: row["id"])
     for name, records in OUTPUT.items():
         with (OUT / (name + ".jsonl")).open("w", encoding="utf-8") as stream:
             for record in records:
@@ -310,11 +441,20 @@ def main():
         counts = Counter((r.get("label"), r.get("type"), r.get("lang"), r.get("source")) for r in records)
         for key, count in sorted(counts.items()):
             stats.append(f"{file} | {' | '.join(str(x) for x in key)} | {count}")
-    stats += ["", "## Filtering by source", "", "Source | Downloaded | Kept before balancing | Duplicate | PII | Length | Other language | Unclear", "---|---:|---:|---:|---:|---:|---:|---:"]
+    for row in OUTPUT["injection_train"]:
+        COUNTS[row["source"]]["selected_train"] += 1
+    stats += ["", "## Filtering by source", "",
+              "Source | Scanned | Kept before balancing | Final classifier | Duplicate | Near duplicate | PII dropped | PII redacted | PII exempt in synthetic eval | Length | Other language | Unclear | Goal cap",
+              "---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:"]
     for name, count in sorted(COUNTS.items()):
-        stats.append(f"{name} | {count['downloaded']} | {count['kept']} | {count['duplicate']} | {count['pii']} | {count['length']} | {count['lang_other']} | {count['unclear']}")
+        stats.append(f"{name} | {count['downloaded']} | {count['kept']} | {count['selected_train']} | "
+                     f"{count['duplicate']} | {count['near_duplicate']} | {count['pii']} | "
+                     f"{count['pii_redacted']} | {count['pii_exempt']} | "
+                     f"{count['length']} | {count['lang_other']} | {count['unclear']} | {count['goal_cap']}")
     labels = Counter(r["label"] for r in OUTPUT["injection_train"])
-    stats += ["", f"Classifier training pool: {labels['attack']} attack, {labels['benign']} benign.",
+    stats += ["", f"Classifier training pool: {labels['attack']} attack, {labels['benign']} benign (1:1.5).",
+              "Every attack source is capped at 25% of final attacks; benign hard negatives are selected first.",
+              "PII exemption applies only to synthetic indirect-evaluation sources: injecagent, bipia, agentdojo.",
               f"Raw directory size: {sum(p.stat().st_size for p in RAW.rglob('*') if p.is_file()) / 1024**3:.3f} GiB."]
     (Path("data") / "STATS.md").write_text("\n".join(stats) + "\n", encoding="utf-8")
     provenance = [
@@ -332,10 +472,14 @@ def main():
         "mhj": "Gated; repository has no accessible data file until approval. Nonredistributable.",
         "wildjailbreak": "Gated; access denied.",
         "wildguardmix": "Gated; access denied.",
+        "hackaprompt": "MIT card; gated. Maximum 5,000 training rows, 20% per goal after access and schema verification.",
+        "spml": "MIT card; label depends on paired system prompt. Both system and user text retained together.",
+        "llmail": "MIT card; Phase2 only. Subject and body joined; PII redacted before deduplication; first 5,000 accepted for training, next 2,000 for indirect evaluation.",
         "necent_merged": "Gated; access denied. Mixed upstream licenses require per-source review.",
-        "injectionshield": "Benchmark only; repository does not contain the benchmark rows. Never train.",
-        "agentdojo": "Task GOAL definitions are available, but they are objectives rather than injected payloads; raw definitions only.",
-        "bipia": "Only text/code attack lists, no licensed WebQA/Summarization contexts.",
+        "injectionshield": "Only 3 display examples and summary metrics in repository; benchmark folders are placeholders. No usable full benchmark rows. Never train.",
+        "agentdojo": "Task GOAL definitions are not injected payloads; no eval rows extracted. Synthetic indirect-eval PII exemption applies if payloads become available.",
+        "bipia": "Only text/code attack lists, no licensed WebQA/Summarization contexts. Synthetic indirect-eval PII exemption.",
+        "injecagent": "Synthetic indirect-eval PII exemption; matched rows retained and counted in STATS.md.",
         "erupd": "English/Roman Urdu translation pairs, not attacks.",
         "ai4privacy": "CC BY 4.0 plus Llama Community License terms; marked nonredistributable conservatively.",
         "beavertails": "30k train first 10,000 rows only. Noncommercial and nonredistributable.",
@@ -367,15 +511,16 @@ def main():
         "", "## Manual actions for the team", "",
         "- https://huggingface.co/datasets/allenai/wildjailbreak — click **Accept** on the dataset page, then rerun downloads.",
         "- https://huggingface.co/datasets/allenai/wildguardmix — click **Accept** on the dataset page, then rerun downloads.",
+        "- https://huggingface.co/datasets/hackaprompt/hackaprompt-dataset — click **Accept** on the dataset page, then rerun downloads; verify its file columns before unification.",
         "- https://huggingface.co/datasets/Necent/llm-jailbreak-prompt-injection-dataset — click **Accept**, then check every upstream source license before unifying.",
         "- https://huggingface.co/datasets/ScaleAI/mhj — provide requested contact information and click **Accept**; obtain the actual dataset files from the maintainers.",
         "- https://data.mendeley.com/datasets/v5jfhsvtmd/5 — download RUwV-NSR and confirm its dataset license.",
         "- https://huggingface.co/datasets/xTRam1/safe-guard-prompt-injection — obtain an explicit dataset license from the maintainer.",
         "- https://huggingface.co/datasets/qxcv/tensor-trust — obtain an explicit dataset license from the maintainer.",
         "- https://huggingface.co/datasets/YifanJ/Red_Queen — obtain an explicit dataset license from the maintainer.",
-        "- https://github.com/mshahzaib7/injectionshield — obtain the benchmark rows from its maintainers for external evaluation.",
+        "- https://github.com/mshahzaib7/injectionshield — obtain the full benchmark rows from its maintainers for external evaluation; the repository has only 3 display examples.",
         "", "## Run", "",
-        "Install `huggingface_hub`, `pandas`, `pyarrow`, and `requests` in the project's Python environment, then run `python -m scripts.download_data` and `python -m scripts.unify`.",
+        "Run `docker compose --profile data run --rm data python -m scripts.download_data` and then `docker compose --profile data run --rm data python -m scripts.unify`.",
         "The downloader skips files already present and stops before `data/raw/` exceeds 20 GB.",
         "Unification rebuilds processed files from raw inputs and excludes any exact or normalized frozen-test text from training.",
     ]
