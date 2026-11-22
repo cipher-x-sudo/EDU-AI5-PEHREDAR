@@ -1,0 +1,8 @@
+tenant: default
+thresholds:
+  warn: 0.45
+  judge_low: 0.30
+  block: 0.75
+logging:
+  store_raw_text: false
+  store_hash: true

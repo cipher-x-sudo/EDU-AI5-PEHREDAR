@@ -1,0 +1,84 @@
+services:
+  ollama:
+    image: ollama/ollama:latest
+    volumes:
+      - ollama_models:/root/.ollama
+    environment:
+      OLLAMA_MAX_LOADED_MODELS: "2"
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    restart: unless-stopped
+
+  gateway:
+    build:
+      context: .
+      target: gateway
+    env_file:
+      - .env
+    ports:
+      - "127.0.0.1:8000:8000"
+    environment:
+      PEHREDAR_UPSTREAM_URL: http://ollama:11434/v1
+      PEHREDAR_DB_PATH: /state/pehredar.db
+      PEHREDAR_POLICY_PATH: /app/config/policy.yaml
+      PEHREDAR_GUARD_MODEL: hf.co/QuantFactory/Qwen3Guard-Gen-0.6B-GGUF:Q4_K_M
+      PEHREDAR_CLASSIFIER_DIR: ${PEHREDAR_CLASSIFIER_DIR:-}
+      PEHREDAR_MODELS_DIR: /app/models
+    volumes:
+      - ./config:/app/config:ro
+      - ./models:/app/models:ro
+      - gateway_state:/state
+    depends_on:
+      - ollama
+    restart: unless-stopped
+
+  tests:
+    profiles: [test]
+    build:
+      context: .
+      target: tests
+    working_dir: /app
+    environment:
+      PEHREDAR_DB_PATH: /tmp/pehredar.db
+    volumes:
+      - .:/app:ro
+    command: python -m pytest -q -p no:cacheprovider --basetemp=/tmp/pytest
+
+  training:
+    profiles: [training]
+    build:
+      context: .
+      target: trainer
+    working_dir: /app
+    volumes:
+      - ./data:/app/data:ro
+      - ./models:/app/models
+    command: python -m scripts.train_classifier data/processed/train.jsonl models/clf_v1
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+
+  dashboard:
+    profiles: [dashboard]
+    build:
+      context: .
+      target: dashboard
+    ports:
+      - "127.0.0.1:8501:8501"
+    environment:
+      PEHREDAR_DB_PATH: /state/pehredar.db
+    volumes:
+      - gateway_state:/state:ro
+
+volumes:
+  ollama_models:
+  gateway_state:
