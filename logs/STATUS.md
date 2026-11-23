@@ -1,11 +1,8 @@
-job: training-image-build
-state: done
-last_check: 2026-11-23T17:37:37.1617579+05:00
-last_log_lines:
-#14 DONE 26.0s
-
-#15 resolving provenance for metadata file
-#15 DONE 0.1s
- Image pehredar-training Built 
-
-Dataset regeneration complete. Docker tests: 52 passed. No GPU jobs started yet.
+job: train-v0-full
+state: running
+container: 4cd99199f0e47e984a58248a2b0043c3e4d4160197c00298e6d3cd211eb31db2
+last_check: 2026-11-23T18:17:54.8703933+05:00
+log: logs/train_v0.log
+smoke: passed on CUDA, 20 steps, peak 5.23 GB
+progress: latest logged step 2900, peak 5.26 GB
+next: wait for completion; then evaluate, then translation pilot

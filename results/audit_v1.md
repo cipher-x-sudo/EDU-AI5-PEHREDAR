@@ -62,7 +62,7 @@ The source label is context dependent, so prompt-only training can introduce lab
 ## Leakage
 
 Shared split groups across public train/dev: 0. Normalized exact text overlaps: 0.
-Embedding cosine results are recorded separately when multilingual-e5-small is available.
+Embedding model: `intfloat/multilingual-e5-small`; cosine threshold: 0.95. Candidate train/dev near-duplicates: 935; whole split_groups moved: 1728.
 The pipeline did not open sealed human data. Its contents therefore cannot be compared in this task.
 
 

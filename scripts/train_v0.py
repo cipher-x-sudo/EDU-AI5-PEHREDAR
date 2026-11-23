@@ -33,7 +33,9 @@ def main():
     train = [r for r in load("train_public.jsonl") if r["lang"] == "en"]
     dev = [r for r in load("dev_public.jsonl") if r["lang"] == "en"]
     if args.smoke:
-        train = train[:200]
+        attack_rows = [r for r in train if r["label"] == "attack"]
+        benign_rows = [r for r in train if r["label"] == "benign"]
+        train = attack_rows[:100] + benign_rows[:100]
     if not train or not dev: raise RuntimeError("English public train/dev data is empty")
     tokenizer = AutoTokenizer.from_pretrained(BASE)
     model = AutoModelForSequenceClassification.from_pretrained(BASE, num_labels=2,

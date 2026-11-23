@@ -56,7 +56,7 @@ services:
       target: trainer
     working_dir: /app
     volumes:
-      - ./data:/app/data:ro
+      - ./data:/app/data
       - ./models:/app/models
       - ./results:/app/results
     command: python -m scripts.train_classifier data/processed/train.jsonl models/clf_v1
