@@ -17,7 +17,7 @@ WORKDIR /app
 COPY pyproject.toml README.md ./
 COPY pehredar ./pehredar
 COPY scripts ./scripts
-RUN --mount=type=cache,target=/root/.cache/pip pip install --timeout 300 --retries 10 --no-build-isolation ".[training]"
+RUN --mount=type=cache,target=/root/.cache/pip pip install --timeout 300 --retries 10 --no-build-isolation ".[training,embeddings]"
 
 FROM gateway AS dashboard
 COPY dashboard.py ./dashboard.py

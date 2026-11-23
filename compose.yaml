@@ -58,6 +58,7 @@ services:
     volumes:
       - ./data:/app/data:ro
       - ./models:/app/models
+      - ./results:/app/results
     command: python -m scripts.train_classifier data/processed/train.jsonl models/clf_v1
     deploy:
       resources:
