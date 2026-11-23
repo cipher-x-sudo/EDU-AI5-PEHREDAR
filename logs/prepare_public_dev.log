@@ -1,9 +1,13 @@
 {
-  "pool": 33003,
-  "train": 29705,
-  "dev": 3298,
-  "source_sha256": "fdf81eb8cd9479362a0b713de55ec946efcc6e69759807a8cfbbb52517df22dd",
+  "pool": 71850,
+  "train": 64666,
+  "dev": 7184,
+  "source_sha256": "ba56c39fd088b8bce3d4445b491e1ad0d4cf391bd2dc0e1dc37cf83a9c823bb9",
   "strata": {
+    "aegis2/benign": {
+      "pool": 8562,
+      "dev": 856
+    },
     "deepset_pi/attack": {
       "pool": 203,
       "dev": 20
@@ -17,16 +21,16 @@
       "dev": 100
     },
     "hackaprompt/attack": {
-      "pool": 2922,
-      "dev": 292
+      "pool": 5000,
+      "dev": 500
     },
     "jailbreak_llms/attack": {
       "pool": 761,
       "dev": 76
     },
     "jailbreak_llms/benign": {
-      "pool": 5573,
-      "dev": 557
+      "pool": 12837,
+      "dev": 1284
     },
     "jb_class/attack": {
       "pool": 509,
@@ -37,28 +41,32 @@
       "dev": 106
     },
     "llmail/attack": {
-      "pool": 2922,
-      "dev": 292
+      "pool": 5000,
+      "dev": 500
     },
     "spml/attack": {
-      "pool": 2922,
-      "dev": 292
+      "pool": 6635,
+      "dev": 664
     },
     "spml/benign": {
       "pool": 3372,
       "dev": 337
     },
+    "toxicchat/benign": {
+      "pool": 8934,
+      "dev": 893
+    },
     "wildguardmix/attack": {
-      "pool": 2922,
-      "dev": 292
+      "pool": 3000,
+      "dev": 300
     },
     "wildjailbreak/attack": {
-      "pool": 2921,
-      "dev": 292
+      "pool": 6634,
+      "dev": 663
     },
     "wildjailbreak/benign": {
-      "pool": 5573,
-      "dev": 557
+      "pool": 8000,
+      "dev": 800
     }
   }
 }

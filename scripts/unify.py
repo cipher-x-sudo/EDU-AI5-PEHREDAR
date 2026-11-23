@@ -355,7 +355,8 @@ def main():
             elif name == "toxicchat":
                 value = row.get("toxicity")
                 text, response = row.get("user_input"), row.get("model_output")
-                label = "attack" if str(value) == "1" else "benign"
+                jailbreaking = row.get("jailbreaking")
+                label = "attack" if str(value) == "1" or str(jailbreaking) == "1" else "benign"
             else:
                 value = row.get("prompt_harm_label")
                 text, response = row.get("prompt"), row.get("response")
@@ -363,8 +364,17 @@ def main():
             if label is None:
                 COUNTS[name]["unclear"] += 1
                 continue
-            add("harm", name, text, label, "harm" if label == "attack" else "none", value,
-                "eval_only" if "test" in rel else "train", extra={"response": response})
+            if label == "benign" and (
+                (name == "aegis2" and value == "safe")
+                or (name == "toxicchat" and str(value) == "0"
+                    and str(row.get("jailbreaking")) == "0")
+            ):
+                add("injection_train", name, text, "benign", "none", value,
+                    "train", extra={"response": response})
+            else:
+                add("harm", name, text, label, "harm" if label == "attack" else "none",
+                    value, "eval_only" if "test" in rel else "train",
+                    extra={"response": response})
     for rel, row in rows("xstest") or []:
         if row.get("label") == "safe":
             mapped("xstest", row, "prompt", "label", set(), {"safe"}, "harm",
@@ -462,6 +472,14 @@ def main():
     if len(selected_benign) < benign_needed:
         print(f"WARNING: benign shortfall {benign_needed - len(selected_benign)} rows after 35% source caps")
     OUTPUT["injection_train"] = sorted(attacks + selected_benign, key=lambda row: row["id"])
+    train_texts = {norm(row["text"]) for row in OUTPUT["injection_train"]}
+    for file, records in list(OUTPUT.items()):
+        if file != "injection_train":
+            OUTPUT[file] = [
+                row for row in records
+                if row.get("usage") not in {"eval_only", "secondary_eval"}
+                or norm(row["text"]) not in train_texts
+            ]
     for name, records in OUTPUT.items():
         with (OUT / (name + ".jsonl")).open("w", encoding="utf-8") as stream:
             for record in records:

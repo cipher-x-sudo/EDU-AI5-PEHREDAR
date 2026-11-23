@@ -6,7 +6,7 @@ Raw and processed files remain outside Git.
 
 Name | Source URL | Revision | Download date | License | Rows downloaded | Rows kept | Usage | Redistributable | Notes
 ---|---|---|---|---|---:|---:|---|---|---
-aegis2 | https://huggingface.co/datasets/nvidia/Aegis-AI-Content-Safety-Dataset-2.0 | `d86bb8bedff51d25ac834ab7838f1cc61acb7a2c` | 2026-11-22 | cc-by-4.0 | 28216 | 20574 | eval_only, train | true | —
+aegis2 | https://huggingface.co/datasets/nvidia/Aegis-AI-Content-Safety-Dataset-2.0 | `d86bb8bedff51d25ac834ab7838f1cc61acb7a2c` | 2026-11-22 | cc-by-4.0 | 28216 | 20555 | eval_only, train | true | —
 agentdojo | https://github.com/ethz-spylab/agentdojo | `089ed468cf3ed0322acc66b0211f26d9d90dbf60` | 2026-11-22 | mit | 0 | 0 | skipped | true | Task GOAL definitions are not injected payloads; no eval rows extracted. Synthetic indirect-eval PII exemption applies if payloads become available.
 ai4privacy | https://huggingface.co/datasets/ai4privacy/open-pii-masking-500k-ai4privacy | `506996d625ed970a0063432daf6007cf4a3a48e3` | 2026-11-22 | CC-BY-4.0 + Llama Community License | 5017 | 5000 | eval_only | false | CC BY 4.0 plus Llama Community License terms; marked nonredistributable conservatively.
 beavertails | https://huggingface.co/datasets/PKU-Alignment/BeaverTails | `8401fe609d288129cc684a9b3be6a93e41cfe678` | 2026-11-22 | cc-by-nc-4.0 | 10000 | 3379 | train | false | 30k train first 10,000 rows only. Noncommercial and nonredistributable.
@@ -31,7 +31,7 @@ smat26 | https://github.com/Smat26/Roman-Urdu-Dataset | `762ba24484024855798ef15
 spml | https://huggingface.co/datasets/reshabhs/SPML_Chatbot_Prompt_Injection | `02ce8084e979bc7d4c24ee35d22ecb7f2db96ff5` | 2026-11-22 | mit | 16012 | 15913 | train | true | MIT card; label depends on paired system prompt. Both system and user text retained together.
 tensor_trust | https://huggingface.co/datasets/qxcv/tensor-trust | `4de2b2fe01ba0cb6fbf7cbb9f1a3fabaf8157372` | 2026-11-22 | unspecified | 0 | 0 | skipped | false | Card does not state a license; skipped pending rights confirmation.
 tom_gibbs_multiturn | https://huggingface.co/datasets/tom-gibbs/multi-turn_jailbreak_attack_datasets | `e3b30257c4d6be5438ea19f0989ac82c24234fe4` | 2026-11-22 | mit | 6840 | 6839 | train | true | —
-toxicchat | https://huggingface.co/datasets/lmsys/toxic-chat | `29df8e4dba60e1f4af4b4075c0705c5b313548a8` | 2026-11-22 | cc-by-nc-4.0 | 10165 | 9633 | eval_only, train | false | Latest 0124 config. Noncommercial and nonredistributable.
+toxicchat | https://huggingface.co/datasets/lmsys/toxic-chat | `29df8e4dba60e1f4af4b4075c0705c5b313548a8` | 2026-11-22 | cc-by-nc-4.0 | 10165 | 9628 | eval_only, train | false | Latest 0124 config. Noncommercial and nonredistributable.
 uci_roman_urdu | https://archive.ics.uci.edu/dataset/458/roman+urdu+data+set | `sha256:78e7cd1d7b0dc8e960a52c9151fc3114c70a3809111d3421581bbad931a6f5a8` | 2026-11-22 | cc-by-4.0 | 20229 | 0 | skipped | true | UCI dataset 458; overlaps Smat26 and is deduplicated.
 wildguardmix | https://huggingface.co/datasets/allenai/wildguardmix | `d29c47f41c8b51348b5c8e8c81c039b3132b66d1` | 2026-11-23 | odc-by | 3202 | 3000 | train | false | ODC-By card; access granted. Adversarial harmful train rows capped at 3,000 before global balancing.
 wildjailbreak | https://huggingface.co/datasets/allenai/wildjailbreak | `5ddc12a7894f842b0619b8e1c7ee496b198af009` | 2026-11-23 | odc-by | 16026 | 16000 | train | false | ODC-By card; access granted. Adversarial harmful and benign rows capped at 8,000 each before global balancing.

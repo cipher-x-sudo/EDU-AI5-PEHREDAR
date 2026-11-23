@@ -7,59 +7,63 @@ Scope: public classifier pool before the public 10% dev split.
 
 Source | Label | Type | Lang | Rows
 ---|---|---|---|---:
+aegis2 | benign | none | en | 8562
 deepset_pi | attack | injection | en | 203
 deepset_pi | benign | none | en | 343
 gandalf | attack | extraction | en | 998
-hackaprompt | attack | injection | en | 2922
+hackaprompt | attack | injection | en | 5000
 jailbreak_llms | attack | jailbreak | en | 761
-jailbreak_llms | benign | none | en | 5572
-jailbreak_llms | benign | none | ur | 1
+jailbreak_llms | benign | none | en | 12835
+jailbreak_llms | benign | none | ur | 2
 jb_class | attack | jailbreak | en | 509
 jb_class | benign | none | en | 1062
-llmail | attack | injection | en | 2907
-llmail | attack | injection | mixed | 15
-spml | attack | injection | en | 2922
+llmail | attack | injection | en | 4977
+llmail | attack | injection | mixed | 23
+spml | attack | injection | en | 6635
 spml | benign | none | en | 3372
-wildguardmix | attack | jailbreak | en | 2922
-wildjailbreak | attack | jailbreak | en | 2921
-wildjailbreak | benign | none | en | 5573
+toxicchat | benign | none | en | 8934
+wildguardmix | attack | jailbreak | en | 3000
+wildjailbreak | attack | jailbreak | en | 6634
+wildjailbreak | benign | none | en | 8000
 
 ## Label review
 
-Deterministic random sample: 420 rows, up to 30 per source and label (seed 42).
+Deterministic random sample: 480 rows, up to 30 per source and label (seed 42).
 The sample IDs are listed below for manual review. Automated cue checks are triage, not label adjudication.
 
 Source | Label | Sample IDs
 ---|---|---
-deepset_pi | attack | deepset_pi-516, deepset_pi-250, deepset_pi-126, deepset_pi-542, deepset_pi-379, deepset_pi-368, deepset_pi-361, deepset_pi-270, deepset_pi-541, deepset_pi-224, deepset_pi-526, deepset_pi-81, deepset_pi-493, deepset_pi-191, deepset_pi-504, deepset_pi-441, deepset_pi-136, deepset_pi-131, deepset_pi-213, deepset_pi-354, deepset_pi-364, deepset_pi-474, deepset_pi-507, deepset_pi-87, deepset_pi-497, deepset_pi-334, deepset_pi-519, deepset_pi-543, deepset_pi-44, deepset_pi-359
-deepset_pi | benign | deepset_pi-356, deepset_pi-53, deepset_pi-254, deepset_pi-101, deepset_pi-193, deepset_pi-341, deepset_pi-29, deepset_pi-190, deepset_pi-220, deepset_pi-288, deepset_pi-161, deepset_pi-156, deepset_pi-312, deepset_pi-158, deepset_pi-30, deepset_pi-292, deepset_pi-61, deepset_pi-246, deepset_pi-123, deepset_pi-365, deepset_pi-448, deepset_pi-173, deepset_pi-310, deepset_pi-147, deepset_pi-46, deepset_pi-264, deepset_pi-74, deepset_pi-68, deepset_pi-301, deepset_pi-485
-gandalf | attack | gandalf-276, gandalf-749, gandalf-162, gandalf-14, gandalf-709, gandalf-309, gandalf-811, gandalf-366, gandalf-171, gandalf-888, gandalf-313, gandalf-899, gandalf-192, gandalf-45, gandalf-355, gandalf-517, gandalf-685, gandalf-869, gandalf-435, gandalf-249, gandalf-440, gandalf-426, gandalf-292, gandalf-717, gandalf-345, gandalf-746, gandalf-963, gandalf-729, gandalf-697, gandalf-164
-hackaprompt | attack | hackaprompt-6487, hackaprompt-7329, hackaprompt-15684, hackaprompt-4182, hackaprompt-18489, hackaprompt-15397, hackaprompt-26790, hackaprompt-23437, hackaprompt-19314, hackaprompt-7546, hackaprompt-9139, hackaprompt-4943, hackaprompt-17614, hackaprompt-9054, hackaprompt-21275, hackaprompt-11806, hackaprompt-17921, hackaprompt-11039, hackaprompt-20811, hackaprompt-24283, hackaprompt-19227, hackaprompt-12116, hackaprompt-17306, hackaprompt-5219, hackaprompt-20771, hackaprompt-17379, hackaprompt-814, hackaprompt-2919, hackaprompt-24023, hackaprompt-7605
-jailbreak_llms | attack | jailbreak_llms-690, jailbreak_llms-1161, jailbreak_llms-1292, jailbreak_llms-1155, jailbreak_llms-1273, jailbreak_llms-803, jailbreak_llms-779, jailbreak_llms-1290, jailbreak_llms-830, jailbreak_llms-529, jailbreak_llms-829, jailbreak_llms-284, jailbreak_llms-1397, jailbreak_llms-1244, jailbreak_llms-1154, jailbreak_llms-746, jailbreak_llms-729, jailbreak_llms-1098, jailbreak_llms-1051, jailbreak_llms-1119, jailbreak_llms-1172, jailbreak_llms-877, jailbreak_llms-1179, jailbreak_llms-932, jailbreak_llms-464, jailbreak_llms-844, jailbreak_llms-1069, jailbreak_llms-228, jailbreak_llms-206, jailbreak_llms-701
-jailbreak_llms | benign | jailbreak_llms-6516, jailbreak_llms-14881, jailbreak_llms-7170, jailbreak_llms-10257, jailbreak_llms-9999, jailbreak_llms-12333, jailbreak_llms-6714, jailbreak_llms-15095, jailbreak_llms-9087, jailbreak_llms-2964, jailbreak_llms-12269, jailbreak_llms-2040, jailbreak_llms-4611, jailbreak_llms-13250, jailbreak_llms-4941, jailbreak_llms-10080, jailbreak_llms-15046, jailbreak_llms-5823, jailbreak_llms-13634, jailbreak_llms-6002, jailbreak_llms-12146, jailbreak_llms-8715, jailbreak_llms-2147, jailbreak_llms-9024, jailbreak_llms-8366, jailbreak_llms-14017, jailbreak_llms-13136, jailbreak_llms-3576, jailbreak_llms-13328, jailbreak_llms-6786
-jb_class | attack | jb_class-907, jb_class-689, jb_class-876, jb_class-367, jb_class-87, jb_class-10, jb_class-448, jb_class-1504, jb_class-298, jb_class-1014, jb_class-1188, jb_class-881, jb_class-1564, jb_class-811, jb_class-981, jb_class-755, jb_class-723, jb_class-1477, jb_class-1355, jb_class-1092, jb_class-1356, jb_class-412, jb_class-902, jb_class-1133, jb_class-1143, jb_class-630, jb_class-293, jb_class-733, jb_class-1119, jb_class-97
-jb_class | benign | jb_class-1344, jb_class-1350, jb_class-89, jb_class-1448, jb_class-288, jb_class-737, jb_class-1574, jb_class-1541, jb_class-413, jb_class-663, jb_class-584, jb_class-781, jb_class-997, jb_class-820, jb_class-133, jb_class-248, jb_class-176, jb_class-1164, jb_class-487, jb_class-106, jb_class-193, jb_class-161, jb_class-1020, jb_class-1185, jb_class-1152, jb_class-190, jb_class-1178, jb_class-1081, jb_class-469, jb_class-988
-llmail | attack | llmail-11985, llmail-12306, llmail-9686, llmail-7910, llmail-11758, llmail-8453, llmail-11046, llmail-8815, llmail-8889, llmail-7798, llmail-12016, llmail-7802, llmail-7026, llmail-11544, llmail-10764, llmail-10786, llmail-9600, llmail-7455, llmail-581, llmail-7184, llmail-7053, llmail-7738, llmail-10431, llmail-9723, llmail-9565, llmail-9494, llmail-10797, llmail-10481, llmail-6991, llmail-368
-spml | attack | spml-12228, spml-15, spml-13883, spml-13870, spml-6494, spml-4714, spml-12872, spml-4129, spml-13674, spml-15571, spml-5017, spml-15032, spml-11456, spml-4558, spml-6762, spml-1195, spml-11014, spml-8819, spml-6577, spml-10323, spml-11830, spml-14779, spml-13322, spml-3824, spml-5421, spml-5345, spml-14326, spml-3711, spml-11139, spml-13287
-spml | benign | spml-2354, spml-10038, spml-2521, spml-14726, spml-9292, spml-9301, spml-3574, spml-15081, spml-3022, spml-7819, spml-8427, spml-9283, spml-530, spml-7184, spml-8183, spml-4080, spml-1268, spml-13365, spml-15281, spml-13784, spml-11071, spml-5735, spml-8506, spml-509, spml-11145, spml-8699, spml-15587, spml-11062, spml-10902, spml-5818
-wildguardmix | attack | wildguardmix-2953, wildguardmix-3053, wildguardmix-316, wildguardmix-1647, wildguardmix-1233, wildguardmix-3072, wildguardmix-1331, wildguardmix-1761, wildguardmix-1280, wildguardmix-518, wildguardmix-1278, wildguardmix-839, wildguardmix-1967, wildguardmix-2655, wildguardmix-1492, wildguardmix-42, wildguardmix-2009, wildguardmix-456, wildguardmix-516, wildguardmix-1164, wildguardmix-611, wildguardmix-1338, wildguardmix-2719, wildguardmix-766, wildguardmix-474, wildguardmix-403, wildguardmix-3129, wildguardmix-2296, wildguardmix-2072, wildguardmix-1838
-wildjailbreak | attack | wildjailbreak-7800, wildjailbreak-4125, wildjailbreak-340, wildjailbreak-3661, wildjailbreak-4976, wildjailbreak-2332, wildjailbreak-7829, wildjailbreak-7510, wildjailbreak-3992, wildjailbreak-5632, wildjailbreak-4149, wildjailbreak-174, wildjailbreak-1078, wildjailbreak-5645, wildjailbreak-7248, wildjailbreak-6694, wildjailbreak-2024, wildjailbreak-1743, wildjailbreak-6435, wildjailbreak-3142, wildjailbreak-6134, wildjailbreak-3660, wildjailbreak-2344, wildjailbreak-4491, wildjailbreak-1701, wildjailbreak-3463, wildjailbreak-4690, wildjailbreak-3841, wildjailbreak-2603, wildjailbreak-5421
-wildjailbreak | benign | wildjailbreak-8381, wildjailbreak-13608, wildjailbreak-9188, wildjailbreak-9703, wildjailbreak-8223, wildjailbreak-10089, wildjailbreak-9858, wildjailbreak-8519, wildjailbreak-13570, wildjailbreak-9813, wildjailbreak-11222, wildjailbreak-11582, wildjailbreak-13160, wildjailbreak-11359, wildjailbreak-11265, wildjailbreak-8498, wildjailbreak-11817, wildjailbreak-13257, wildjailbreak-13364, wildjailbreak-9100, wildjailbreak-12479, wildjailbreak-14046, wildjailbreak-12386, wildjailbreak-9465, wildjailbreak-13155, wildjailbreak-15962, wildjailbreak-15770, wildjailbreak-12994, wildjailbreak-10582, wildjailbreak-11082
+aegis2 | benign | aegis2-1543, aegis2-11252, aegis2-23695, aegis2-22215, aegis2-2103, aegis2-16842, aegis2-15012, aegis2-14287, aegis2-5155, aegis2-11571, aegis2-11472, aegis2-14604, aegis2-20794, aegis2-21545, aegis2-9176, aegis2-11307, aegis2-19814, aegis2-5048, aegis2-20909, aegis2-6455, aegis2-23869, aegis2-10324, aegis2-17931, aegis2-5194, aegis2-26695, aegis2-23843, aegis2-17711, aegis2-20629, aegis2-26554, aegis2-14989
+deepset_pi | attack | deepset_pi-213, deepset_pi-420, deepset_pi-219, deepset_pi-407, deepset_pi-403, deepset_pi-507, deepset_pi-375, deepset_pi-144, deepset_pi-539, deepset_pi-459, deepset_pi-491, deepset_pi-259, deepset_pi-417, deepset_pi-179, deepset_pi-495, deepset_pi-386, deepset_pi-513, deepset_pi-511, deepset_pi-410, deepset_pi-500, deepset_pi-333, deepset_pi-533, deepset_pi-169, deepset_pi-70, deepset_pi-522, deepset_pi-363, deepset_pi-385, deepset_pi-542, deepset_pi-364, deepset_pi-223
+deepset_pi | benign | deepset_pi-312, deepset_pi-254, deepset_pi-36, deepset_pi-8, deepset_pi-302, deepset_pi-195, deepset_pi-307, deepset_pi-299, deepset_pi-217, deepset_pi-247, deepset_pi-86, deepset_pi-141, deepset_pi-63, deepset_pi-199, deepset_pi-445, deepset_pi-236, deepset_pi-37, deepset_pi-249, deepset_pi-82, deepset_pi-47, deepset_pi-222, deepset_pi-281, deepset_pi-130, deepset_pi-229, deepset_pi-118, deepset_pi-277, deepset_pi-327, deepset_pi-248, deepset_pi-137, deepset_pi-218
+gandalf | attack | gandalf-941, gandalf-969, gandalf-621, gandalf-907, gandalf-761, gandalf-39, gandalf-295, gandalf-703, gandalf-56, gandalf-464, gandalf-914, gandalf-942, gandalf-692, gandalf-521, gandalf-230, gandalf-343, gandalf-227, gandalf-326, gandalf-786, gandalf-616, gandalf-596, gandalf-341, gandalf-788, gandalf-638, gandalf-494, gandalf-927, gandalf-637, gandalf-467, gandalf-432, gandalf-300
+hackaprompt | attack | hackaprompt-15454, hackaprompt-5930, hackaprompt-5331, hackaprompt-13501, hackaprompt-11765, hackaprompt-14220, hackaprompt-16088, hackaprompt-16472, hackaprompt-27862, hackaprompt-9431, hackaprompt-12372, hackaprompt-26238, hackaprompt-26109, hackaprompt-9393, hackaprompt-4408, hackaprompt-6713, hackaprompt-20206, hackaprompt-7752, hackaprompt-10442, hackaprompt-14406, hackaprompt-6995, hackaprompt-20721, hackaprompt-24056, hackaprompt-14296, hackaprompt-21985, hackaprompt-3108, hackaprompt-16401, hackaprompt-3863, hackaprompt-10156, hackaprompt-20611
+jailbreak_llms | attack | jailbreak_llms-736, jailbreak_llms-1199, jailbreak_llms-743, jailbreak_llms-1115, jailbreak_llms-875, jailbreak_llms-1326, jailbreak_llms-889, jailbreak_llms-857, jailbreak_llms-1222, jailbreak_llms-1172, jailbreak_llms-147, jailbreak_llms-1180, jailbreak_llms-780, jailbreak_llms-771, jailbreak_llms-1000, jailbreak_llms-847, jailbreak_llms-1353, jailbreak_llms-723, jailbreak_llms-1019, jailbreak_llms-1121, jailbreak_llms-1398, jailbreak_llms-1336, jailbreak_llms-1266, jailbreak_llms-1063, jailbreak_llms-1267, jailbreak_llms-809, jailbreak_llms-1085, jailbreak_llms-1092, jailbreak_llms-988, jailbreak_llms-719
+jailbreak_llms | benign | jailbreak_llms-11228, jailbreak_llms-9583, jailbreak_llms-5480, jailbreak_llms-9683, jailbreak_llms-12230, jailbreak_llms-12274, jailbreak_llms-7766, jailbreak_llms-4479, jailbreak_llms-5772, jailbreak_llms-12917, jailbreak_llms-14587, jailbreak_llms-5395, jailbreak_llms-6793, jailbreak_llms-3598, jailbreak_llms-13720, jailbreak_llms-5592, jailbreak_llms-9491, jailbreak_llms-9033, jailbreak_llms-8321, jailbreak_llms-13535, jailbreak_llms-8731, jailbreak_llms-1691, jailbreak_llms-3188, jailbreak_llms-7984, jailbreak_llms-7589, jailbreak_llms-2754, jailbreak_llms-3850, jailbreak_llms-5207, jailbreak_llms-4077, jailbreak_llms-12140
+jb_class | attack | jb_class-1364, jb_class-1339, jb_class-1106, jb_class-152, jb_class-1019, jb_class-437, jb_class-402, jb_class-1341, jb_class-1328, jb_class-1002, jb_class-112, jb_class-606, jb_class-512, jb_class-1093, jb_class-1117, jb_class-85, jb_class-1042, jb_class-793, jb_class-1511, jb_class-340, jb_class-1351, jb_class-1420, jb_class-559, jb_class-293, jb_class-1322, jb_class-38, jb_class-1218, jb_class-621, jb_class-890, jb_class-818
+jb_class | benign | jb_class-884, jb_class-234, jb_class-687, jb_class-1509, jb_class-1250, jb_class-1257, jb_class-762, jb_class-521, jb_class-738, jb_class-699, jb_class-867, jb_class-1140, jb_class-1260, jb_class-1156, jb_class-673, jb_class-489, jb_class-1292, jb_class-25, jb_class-1514, jb_class-813, jb_class-1385, jb_class-734, jb_class-149, jb_class-320, jb_class-855, jb_class-252, jb_class-1197, jb_class-798, jb_class-126, jb_class-1131
+llmail | attack | llmail-9370, llmail-10126, llmail-10853, llmail-12255, llmail-11566, llmail-7867, llmail-8796, llmail-8738, llmail-12037, llmail-7813, llmail-10531, llmail-11544, llmail-7588, llmail-10017, llmail-7694, llmail-165, llmail-8410, llmail-337, llmail-8038, llmail-9524, llmail-8806, llmail-11441, llmail-11800, llmail-544, llmail-12072, llmail-10530, llmail-9722, llmail-9384, llmail-10554, llmail-6782
+spml | attack | spml-1101, spml-10908, spml-5951, spml-4076, spml-450, spml-5013, spml-12852, spml-11002, spml-4587, spml-11383, spml-13304, spml-11183, spml-6147, spml-11177, spml-7570, spml-14219, spml-2702, spml-12196, spml-568, spml-14417, spml-5856, spml-614, spml-10709, spml-66, spml-11424, spml-301, spml-7252, spml-5944, spml-5607, spml-4877
+spml | benign | spml-15611, spml-1467, spml-13599, spml-732, spml-8142, spml-15590, spml-14252, spml-14730, spml-2634, spml-1228, spml-7382, spml-6879, spml-15352, spml-3595, spml-8791, spml-11385, spml-10154, spml-3617, spml-6461, spml-5448, spml-11801, spml-11399, spml-5014, spml-13721, spml-4445, spml-14726, spml-12313, spml-1815, spml-11312, spml-14377
+toxicchat | benign | toxicchat-7050, toxicchat-5658, toxicchat-3401, toxicchat-8117, toxicchat-9962, toxicchat-5957, toxicchat-9689, toxicchat-10135, toxicchat-5903, toxicchat-2540, toxicchat-3034, toxicchat-5244, toxicchat-2735, toxicchat-2599, toxicchat-3368, toxicchat-5437, toxicchat-5600, toxicchat-4260, toxicchat-664, toxicchat-4140, toxicchat-5232, toxicchat-9243, toxicchat-8927, toxicchat-4959, toxicchat-1708, toxicchat-2358, toxicchat-7886, toxicchat-5510, toxicchat-1605, toxicchat-10060
+wildguardmix | attack | wildguardmix-2329, wildguardmix-1521, wildguardmix-619, wildguardmix-2045, wildguardmix-1646, wildguardmix-2762, wildguardmix-3186, wildguardmix-891, wildguardmix-2705, wildguardmix-338, wildguardmix-1037, wildguardmix-1446, wildguardmix-1300, wildguardmix-831, wildguardmix-1596, wildguardmix-3163, wildguardmix-1144, wildguardmix-2473, wildguardmix-417, wildguardmix-319, wildguardmix-1592, wildguardmix-2714, wildguardmix-1508, wildguardmix-1168, wildguardmix-2229, wildguardmix-2454, wildguardmix-1160, wildguardmix-2426, wildguardmix-1838, wildguardmix-795
+wildjailbreak | attack | wildjailbreak-3219, wildjailbreak-6925, wildjailbreak-1922, wildjailbreak-4134, wildjailbreak-7932, wildjailbreak-5952, wildjailbreak-460, wildjailbreak-6501, wildjailbreak-7658, wildjailbreak-239, wildjailbreak-3109, wildjailbreak-2461, wildjailbreak-91, wildjailbreak-2587, wildjailbreak-4652, wildjailbreak-1220, wildjailbreak-2606, wildjailbreak-7541, wildjailbreak-3951, wildjailbreak-7956, wildjailbreak-4646, wildjailbreak-93, wildjailbreak-6948, wildjailbreak-7529, wildjailbreak-3208, wildjailbreak-3376, wildjailbreak-2430, wildjailbreak-80, wildjailbreak-7231, wildjailbreak-1970
+wildjailbreak | benign | wildjailbreak-13141, wildjailbreak-9141, wildjailbreak-10317, wildjailbreak-9030, wildjailbreak-13864, wildjailbreak-11826, wildjailbreak-11638, wildjailbreak-8685, wildjailbreak-9521, wildjailbreak-13779, wildjailbreak-12872, wildjailbreak-12507, wildjailbreak-8717, wildjailbreak-8511, wildjailbreak-9134, wildjailbreak-11868, wildjailbreak-11830, wildjailbreak-10193, wildjailbreak-15419, wildjailbreak-11586, wildjailbreak-13273, wildjailbreak-12697, wildjailbreak-12288, wildjailbreak-9077, wildjailbreak-10569, wildjailbreak-9920, wildjailbreak-8331, wildjailbreak-12292, wildjailbreak-12884, wildjailbreak-15268
 
 Potential label issues requiring human review:
 
-- `jailbreak_llms-4611`: Benign row contains an explicit jailbreak cue; review source label.
-- `jailbreak_llms-4941`: Benign row contains an explicit jailbreak cue; review source label.
+- No automatic cue flags in this sample. Human semantic review remains required.
 
 ## SPML
 
-6294 selected rows use `text` = User Prompt as classifier input; `system_prompt` stores the paired System Prompt. `orig_label` 1 maps to attack and 0 to benign.
+10007 selected rows use `text` = User Prompt as classifier input; `system_prompt` stores the paired System Prompt. `orig_label` 1 maps to attack and 0 to benign.
 The source label is context dependent, so prompt-only training can introduce label noise.
 
 ## Leakage
 
 Shared split groups across public train/dev: 0. Normalized exact text overlaps: 0.
 Embedding cosine results are recorded separately when multilingual-e5-small is available.
-
-After benign source-cap regeneration: public pool 33,003 rows; train 29,705; dev_public 3,298; normalized exact-overlap leakage: 0. The benign cap is enforced at 35% per source. Available benign data yields 15,923 rows (target 25,620), so the ratio target cannot be met without violating the cap; shortfall: 9,697 rows.
 The pipeline did not open sealed human data. Its contents therefore cannot be compared in this task.
+
+
+After adding safe ToxicChat and Aegis2 training rows: public pool 71,850 rows; train 64,666; dev_public 7,184; attacks 28,740; benign 43,110; ratio 1:1.5; normalized exact-overlap leakage: 0. Safe ToxicChat/Aegis2 rows were removed from eval-only outputs when duplicated. The frozen human set was not read.
