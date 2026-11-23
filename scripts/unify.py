@@ -4,6 +4,7 @@ import csv
 import gzip
 import hashlib
 import json
+import os
 import random
 import re
 import unicodedata
@@ -406,6 +407,8 @@ def main():
     for name in list(OUTPUT):
         OUTPUT[name].sort(key=lambda r: r.get("id", ""))
     frozen = Path("data/frozen_test/human_v1.jsonl")
+    if os.getenv("PEHREDAR_SKIP_FROZEN") == "1":
+        frozen = Path("__sealed_human_set_not_read__")
     if frozen.exists():
         held_out = {norm(json.loads(line)["text"]) for line in frozen.read_text(encoding="utf-8").splitlines() if line.strip()}
         POOL[:] = [row for row in POOL if norm(row["text"]) not in held_out]
