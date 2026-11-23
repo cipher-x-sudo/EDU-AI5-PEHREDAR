@@ -1,7 +1,5 @@
-job: translation-pilot
-state: stopped early for this turn
-container: 81e06fe16136525bc588839a26f255372c0b31c385568b473b6ecd3a227f9a36
-log: logs/translation_pilot.log
-progress: FAILED hackaprompt-5597: ValueError: validation failed
-reason: diagnosis instrumentation is committed; rerun required to produce final 200-row diagnosis
+job: v1-e2
+state: running
+container: 2b8e06bb0f9fb32f7612a7f76d342f64a6a2c14275494496cb00783e690989d1
+log: logs/v1_e2.log
 

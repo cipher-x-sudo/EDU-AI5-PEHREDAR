@@ -1,4 +1,4 @@
-WARMUP_SECONDS 101.57
+WARMUP_SECONDS 78.95
 FAILED aegis2-11777: ValueError: validation failed
 FAILED aegis2-12102: ValueError: validation failed
 FAILED aegis2-13369: ValueError: validation failed
@@ -9,7 +9,7 @@ FAILED aegis2-19694: ValueError: validation failed
 FAILED aegis2-21796: ValueError: validation failed
 FAILED aegis2-22140: ValueError: validation failed
 FAILED aegis2-23958: ValueError: validation failed
-PROGRESS done=10 failed=10 rows_per_min=8.29 eta_seconds=1374.4
+PROGRESS done=10 failed=10 rows_per_min=8.22 eta_seconds=1387.2
 FAILED aegis2-24932: ValueError: validation failed
 FAILED aegis2-25897: ValueError: validation failed
 FAILED aegis2-3417: ValueError: validation failed
@@ -20,15 +20,195 @@ FAILED aegis2-7622: ValueError: validation failed
 FAILED deepset_pi-227: ValueError: validation failed
 FAILED gandalf-271: ValueError: validation failed
 FAILED gandalf-684: ValueError: validation failed
-PROGRESS done=20 failed=20 rows_per_min=7.85 eta_seconds=1376.6
+PROGRESS done=20 failed=20 rows_per_min=7.90 eta_seconds=1366.3
 FAILED gandalf-940: ValueError: validation failed
-FAILED hackaprompt-12350: ValueError: validation failed
 FAILED hackaprompt-15989: ValueError: validation failed
 FAILED hackaprompt-16172: ValueError: validation failed
-FAILED hackaprompt-17079: ValueError: validation failed
 FAILED hackaprompt-19092: ValueError: validation failed
 FAILED hackaprompt-21392: ValueError: validation failed
 FAILED hackaprompt-21579: ValueError: validation failed
 FAILED hackaprompt-23973: ValueError: validation failed
-PROGRESS done=30 failed=29 rows_per_min=8.03 eta_seconds=1269.8
+PROGRESS done=30 failed=27 rows_per_min=8.45 eta_seconds=1207.5
 FAILED hackaprompt-3154: ValueError: validation failed
+FAILED hackaprompt-3478: ValueError: validation failed
+FAILED hackaprompt-3837: ValueError: validation failed
+FAILED hackaprompt-4045: ValueError: validation failed
+FAILED hackaprompt-5597: ValueError: validation failed
+FAILED hackaprompt-7011: ValueError: validation failed
+FAILED hackaprompt-7173: ValueError: validation failed
+FAILED hackaprompt-8981: ValueError: validation failed
+FAILED jailbreak_llms-10430: ValueError: validation failed
+PROGRESS done=40 failed=36 rows_per_min=8.01 eta_seconds=1199.1
+FAILED jailbreak_llms-10514: ValueError: validation failed
+FAILED jailbreak_llms-10611: ValueError: validation failed
+FAILED jailbreak_llms-11066: ValueError: validation failed
+FAILED jailbreak_llms-11216: ValueError: validation failed
+FAILED jailbreak_llms-11636: ValueError: validation failed
+FAILED jailbreak_llms-12015: ValueError: validation failed
+FAILED jailbreak_llms-12097: ValueError: validation failed
+FAILED jailbreak_llms-13017: ValueError: validation failed
+FAILED jailbreak_llms-13284: ValueError: validation failed
+FAILED jailbreak_llms-13523: ValueError: validation failed
+PROGRESS done=50 failed=46 rows_per_min=8.99 eta_seconds=1000.6
+FAILED jailbreak_llms-13546: JSONDecodeError: Expecting ',' delimiter: line 45 column 6 (char 3379)
+FAILED jailbreak_llms-1502: ValueError: validation failed
+FAILED jailbreak_llms-2234: ValueError: validation failed
+FAILED jailbreak_llms-234: ValueError: validation failed
+FAILED jailbreak_llms-2667: ValueError: validation failed
+FAILED jailbreak_llms-2949: ValueError: validation failed
+FAILED jailbreak_llms-2961: ValueError: validation failed
+FAILED jailbreak_llms-3206: ValueError: validation failed
+FAILED jailbreak_llms-3965: ValueError: validation failed
+PROGRESS done=60 failed=55 rows_per_min=8.49 eta_seconds=989.7
+FAILED jailbreak_llms-4463: ValueError: validation failed
+FAILED jailbreak_llms-4636: ValueError: validation failed
+FAILED jailbreak_llms-5561: ValueError: validation failed
+FAILED jailbreak_llms-6563: ValueError: validation failed
+FAILED jailbreak_llms-6911: ValueError: validation failed
+FAILED jailbreak_llms-7329: JSONDecodeError: Expecting ',' delimiter: line 57 column 6 (char 3030)
+FAILED jailbreak_llms-7349: JSONDecodeError: Unterminated string starting at: line 3 column 9 (char 2775)
+FAILED jailbreak_llms-7646: ValueError: validation failed
+FAILED jailbreak_llms-7718: ValueError: validation failed
+PROGRESS done=70 failed=64 rows_per_min=7.84 eta_seconds=995.0
+FAILED jailbreak_llms-792: ValueError: validation failed
+FAILED jailbreak_llms-8236: JSONDecodeError: Unterminated string starting at: line 3 column 9 (char 2321)
+FAILED jailbreak_llms-8458: JSONDecodeError: Expecting ',' delimiter: line 45 column 6 (char 3109)
+FAILED jailbreak_llms-8816: ValueError: validation failed
+FAILED jb_class-1345: JSONDecodeError: Expecting ',' delimiter: line 39 column 6 (char 3902)
+FAILED jb_class-1570: ValueError: validation failed
+FAILED jb_class-401: ValueError: validation failed
+FAILED jb_class-428: ValueError: validation failed
+FAILED jb_class-588: ValueError: validation failed
+FAILED jb_class-809: ValueError: validation failed
+PROGRESS done=80 failed=74 rows_per_min=6.88 eta_seconds=1047.2
+FAILED llmail-10320: ValueError: validation failed
+FAILED llmail-11035: ValueError: validation failed
+FAILED llmail-11110: ValueError: validation failed
+FAILED llmail-11291: ValueError: validation failed
+FAILED llmail-11299: ValueError: validation failed
+FAILED llmail-11492: ValueError: validation failed
+FAILED llmail-506: ValueError: validation failed
+FAILED llmail-7032: ValueError: validation failed
+FAILED llmail-7536: ValueError: validation failed
+PROGRESS done=90 failed=83 rows_per_min=6.79 eta_seconds=971.9
+FAILED llmail-7553: JSONDecodeError: Unterminated string starting at: line 3 column 9 (char 3085)
+FAILED llmail-7913: ValueError: validation failed
+FAILED llmail-8343: ValueError: validation failed
+FAILED llmail-8849: JSONDecodeError: Unterminated string starting at: line 4 column 12 (char 1922)
+FAILED llmail-9038: ValueError: validation failed
+FAILED llmail-9733: JSONDecodeError: Expecting ',' delimiter: line 45 column 6 (char 3030)
+FAILED spml-10172: ValueError: validation failed
+FAILED spml-10188: ValueError: validation failed
+FAILED spml-10425: ValueError: validation failed
+FAILED spml-11875: ValueError: validation failed
+PROGRESS done=100 failed=93 rows_per_min=6.31 eta_seconds=950.4
+FAILED spml-13197: ValueError: validation failed
+FAILED spml-13249: JSONDecodeError: Unterminated string starting at: line 3 column 9 (char 1660)
+FAILED spml-13349: ValueError: validation failed
+FAILED spml-13385: JSONDecodeError: Expecting ',' delimiter: line 51 column 6 (char 3825)
+FAILED spml-14567: ValueError: validation failed
+FAILED spml-14752: ValueError: validation failed
+FAILED spml-15803: ValueError: validation failed
+FAILED spml-15814: ValueError: validation failed
+FAILED spml-300: ValueError: validation failed
+PROGRESS done=110 failed=102 rows_per_min=6.08 eta_seconds=887.8
+FAILED spml-3013: ValueError: validation failed
+FAILED spml-3709: ValueError: validation failed
+FAILED spml-3845: ValueError: validation failed
+FAILED spml-385: ValueError: validation failed
+FAILED spml-4215: ValueError: validation failed
+FAILED spml-4924: ValueError: validation failed
+FAILED spml-4977: ValueError: validation failed
+FAILED spml-5821: ValueError: validation failed
+FAILED spml-6713: ValueError: validation failed
+FAILED spml-7143: ValueError: validation failed
+PROGRESS done=120 failed=112 rows_per_min=6.17 eta_seconds=777.5
+FAILED spml-7157: JSONDecodeError: Expecting ',' delimiter: line 57 column 6 (char 3694)
+FAILED spml-7748: ValueError: validation failed
+FAILED spml-8362: JSONDecodeError: Expecting ',' delimiter: line 51 column 6 (char 3966)
+FAILED spml-8671: ValueError: validation failed
+FAILED spml-8727: ValueError: validation failed
+FAILED spml-9786: ValueError: validation failed
+FAILED spml-9816: ValueError: validation failed
+FAILED spml-9996: ValueError: validation failed
+FAILED toxicchat-1276: ValueError: validation failed
+FAILED toxicchat-1595: ValueError: validation failed
+PROGRESS done=130 failed=122 rows_per_min=6.03 eta_seconds=695.9
+FAILED toxicchat-2007: ValueError: validation failed
+FAILED toxicchat-2180: ValueError: validation failed
+FAILED toxicchat-2356: ValueError: validation failed
+FAILED toxicchat-2526: ValueError: validation failed
+FAILED toxicchat-2533: ValueError: validation failed
+FAILED toxicchat-3178: ValueError: validation failed
+FAILED toxicchat-3536: ValueError: validation failed
+FAILED toxicchat-4014: ValueError: validation failed
+FAILED toxicchat-4367: ValueError: validation failed
+FAILED toxicchat-5922: ValueError: validation failed
+PROGRESS done=140 failed=132 rows_per_min=6.14 eta_seconds=586.6
+FAILED toxicchat-6110: ValueError: validation failed
+FAILED toxicchat-6994: ValueError: validation failed
+FAILED toxicchat-7126: ValueError: validation failed
+FAILED toxicchat-7754: ValueError: validation failed
+FAILED toxicchat-7975: ValueError: validation failed
+FAILED toxicchat-8082: ValueError: validation failed
+FAILED toxicchat-8098: ValueError: validation failed
+FAILED toxicchat-833: ValueError: validation failed
+FAILED toxicchat-8699: ValueError: validation failed
+FAILED toxicchat-9018: ValueError: validation failed
+PROGRESS done=150 failed=142 rows_per_min=6.22 eta_seconds=482.1
+FAILED toxicchat-9207: ValueError: validation failed
+FAILED toxicchat-9802: ValueError: validation failed
+FAILED wildguardmix-1510: ValueError: validation failed
+FAILED wildguardmix-169: ValueError: validation failed
+FAILED wildguardmix-1781: ValueError: validation failed
+FAILED wildguardmix-1906: ValueError: validation failed
+FAILED wildguardmix-2387: ValueError: validation failed
+FAILED wildguardmix-2394: ValueError: validation failed
+FAILED wildguardmix-2562: JSONDecodeError: Expecting ',' delimiter: line 57 column 6 (char 3560)
+FAILED wildguardmix-3040: ValueError: validation failed
+PROGRESS done=160 failed=152 rows_per_min=6.16 eta_seconds=389.5
+FAILED wildguardmix-3123: ValueError: validation failed
+FAILED wildguardmix-316: ValueError: validation failed
+FAILED wildguardmix-527: ValueError: validation failed
+FAILED wildguardmix-713: ValueError: validation failed
+FAILED wildjailbreak-10174: ValueError: validation failed
+FAILED wildjailbreak-10226: ValueError: validation failed
+FAILED wildjailbreak-10520: ValueError: validation failed
+FAILED wildjailbreak-11239: JSONDecodeError: Unterminated string starting at: line 3 column 9 (char 1536)
+FAILED wildjailbreak-1163: ValueError: validation failed
+FAILED wildjailbreak-1187: ValueError: validation failed
+PROGRESS done=170 failed=162 rows_per_min=6.11 eta_seconds=294.5
+FAILED wildjailbreak-1192: ValueError: validation failed
+FAILED wildjailbreak-1242: ValueError: validation failed
+FAILED wildjailbreak-13288: ValueError: validation failed
+FAILED wildjailbreak-13327: ValueError: validation failed
+FAILED wildjailbreak-13764: ValueError: validation failed
+FAILED wildjailbreak-13882: ValueError: validation failed
+FAILED wildjailbreak-142: ValueError: validation failed
+FAILED wildjailbreak-15439: ValueError: validation failed
+FAILED wildjailbreak-15534: ValueError: validation failed
+FAILED wildjailbreak-1573: ValueError: validation failed
+PROGRESS done=180 failed=172 rows_per_min=6.15 eta_seconds=195.2
+FAILED wildjailbreak-15790: ValueError: validation failed
+FAILED wildjailbreak-174: ValueError: validation failed
+FAILED wildjailbreak-1772: ValueError: validation failed
+FAILED wildjailbreak-2084: ValueError: validation failed
+FAILED wildjailbreak-2807: ValueError: validation failed
+FAILED wildjailbreak-3109: ValueError: validation failed
+FAILED wildjailbreak-3805: ValueError: validation failed
+FAILED wildjailbreak-3898: ValueError: validation failed
+FAILED wildjailbreak-442: ValueError: validation failed
+FAILED wildjailbreak-4641: ValueError: validation failed
+PROGRESS done=190 failed=182 rows_per_min=6.12 eta_seconds=98.0
+FAILED wildjailbreak-5221: ValueError: validation failed
+FAILED wildjailbreak-5454: ValueError: validation failed
+FAILED wildjailbreak-550: ValueError: validation failed
+FAILED wildjailbreak-636: JSONDecodeError: Expecting ',' delimiter: line 45 column 6 (char 3375)
+FAILED wildjailbreak-6383: ValueError: validation failed
+FAILED wildjailbreak-6699: ValueError: validation failed
+FAILED wildjailbreak-7076: ValueError: validation failed
+FAILED wildjailbreak-7827: JSONDecodeError: Expecting ',' delimiter: line 57 column 6 (char 3633)
+FAILED wildjailbreak-9436: ValueError: validation failed
+FAILED wildjailbreak-9560: ValueError: validation failed
+PROGRESS done=200 failed=192 rows_per_min=6.01 eta_seconds=0.0
+{"attempted": 200, "passed": 8, "failed": 192, "validation_rate": 0.04, "seconds_per_row": 9.98546809903004, "reasons": {"roman_ur:length ratio": 19, "ur:length ratio": 21, "mixed:length ratio": 19, "roman_ur:empty": 153, "ur:empty": 153, "mixed:empty": 156}, "pilot_stopped": true}
