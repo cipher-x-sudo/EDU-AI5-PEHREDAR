@@ -1,0 +1,467 @@
+{
+  "v0": {
+    "threshold": 0.6275244951248169,
+    "dev_public": {
+      "overall": {
+        "count": 6246,
+        "recall": 0.9412819363514119,
+        "fpr": 0.02017434620174346,
+        "f1": 0.9519492293744334
+      },
+      "per_source": {
+        "unknown": {
+          "count": 6246,
+          "recall": 0.9412819363514119,
+          "fpr": 0.02017434620174346,
+          "f1": 0.9519492293744334
+        }
+      },
+      "median_latency_ms": 3.088279841818093,
+      "p95_latency_ms": 3.088279841818093
+    },
+    "external_eval": {
+      "overall": {
+        "count": 506,
+        "recall": 0.6091370558375635,
+        "fpr": 0.006472491909385114,
+        "f1": 0.7523510971786834
+      },
+      "per_source": {
+        "unknown": {
+          "count": 506,
+          "recall": 0.6091370558375635,
+          "fpr": 0.006472491909385114,
+          "f1": 0.7523510971786834
+        }
+      },
+      "median_latency_ms": 3.257136952561987,
+      "p95_latency_ms": 3.257136952561987
+    },
+    "indirect_eval": {
+      "overall": {
+        "count": 3179,
+        "recall": 0.6300723497955332,
+        "fpr": null,
+        "f1": 0.77306059436511
+      },
+      "per_source": {
+        "unknown": {
+          "count": 3179,
+          "recall": 0.6300723497955332,
+          "fpr": null,
+          "f1": 0.77306059436511
+        }
+      },
+      "median_latency_ms": 3.1675602755580616,
+      "p95_latency_ms": 3.1675602755580616
+    },
+    "overrefusal_eval": {
+      "overall": {
+        "count": 1568,
+        "recall": null,
+        "fpr": 0.17155612244897958,
+        "f1": 0.0
+      },
+      "per_source": {
+        "unknown": {
+          "count": 1568,
+          "recall": null,
+          "fpr": 0.17155612244897958,
+          "f1": 0.0
+        }
+      },
+      "median_latency_ms": 0.5950976779340821,
+      "p95_latency_ms": 0.5950976779340821
+    },
+    "benign_email_probe": {
+      "overall": {
+        "count": 100,
+        "recall": null,
+        "fpr": 1.0,
+        "f1": 0.0
+      },
+      "per_source": {
+        "unknown": {
+          "count": 100,
+          "recall": null,
+          "fpr": 1.0,
+          "f1": 0.0
+        }
+      },
+      "median_latency_ms": 0.6111652500112541,
+      "p95_latency_ms": 0.6111652500112541
+    }
+  },
+  "v1a_e1": {
+    "threshold": 0.7473317980766296,
+    "dev_public": {
+      "overall": {
+        "count": 6246,
+        "recall": 0.9269385925593904,
+        "fpr": 0.02017434620174346,
+        "f1": 0.9442922374429223
+      },
+      "per_source": {
+        "unknown": {
+          "count": 6246,
+          "recall": 0.9269385925593904,
+          "fpr": 0.02017434620174346,
+          "f1": 0.9442922374429223
+        }
+      },
+      "median_latency_ms": 3.145585826769646,
+      "p95_latency_ms": 3.145585826769646
+    },
+    "external_eval": {
+      "overall": {
+        "count": 506,
+        "recall": 0.5634517766497462,
+        "fpr": 0.006472491909385114,
+        "f1": 0.7161290322580646
+      },
+      "per_source": {
+        "unknown": {
+          "count": 506,
+          "recall": 0.5634517766497462,
+          "fpr": 0.006472491909385114,
+          "f1": 0.7161290322580646
+        }
+      },
+      "median_latency_ms": 3.308658096832343,
+      "p95_latency_ms": 3.308658096832343
+    },
+    "indirect_eval": {
+      "overall": {
+        "count": 3179,
+        "recall": 0.6388801509908776,
+        "fpr": null,
+        "f1": 0.7796545105566218
+      },
+      "per_source": {
+        "unknown": {
+          "count": 3179,
+          "recall": 0.6388801509908776,
+          "fpr": null,
+          "f1": 0.7796545105566218
+        }
+      },
+      "median_latency_ms": 3.185562802454026,
+      "p95_latency_ms": 3.185562802454026
+    },
+    "overrefusal_eval": {
+      "overall": {
+        "count": 1568,
+        "recall": null,
+        "fpr": 0.23214285714285715,
+        "f1": 0.0
+      },
+      "per_source": {
+        "unknown": {
+          "count": 1568,
+          "recall": null,
+          "fpr": 0.23214285714285715,
+          "f1": 0.0
+        }
+      },
+      "median_latency_ms": 0.6099641109683164,
+      "p95_latency_ms": 0.6099641109683164
+    },
+    "benign_email_probe": {
+      "overall": {
+        "count": 100,
+        "recall": null,
+        "fpr": 1.0,
+        "f1": 0.0
+      },
+      "per_source": {
+        "unknown": {
+          "count": 100,
+          "recall": null,
+          "fpr": 1.0,
+          "f1": 0.0
+        }
+      },
+      "median_latency_ms": 0.6234986399795162,
+      "p95_latency_ms": 0.6234986399795162
+    }
+  },
+  "v1a_e2": {
+    "threshold": 0.7896155118942261,
+    "dev_public": {
+      "overall": {
+        "count": 6246,
+        "recall": 0.9260421335723891,
+        "fpr": 0.02017434620174346,
+        "f1": 0.9438099588853358
+      },
+      "per_source": {
+        "unknown": {
+          "count": 6246,
+          "recall": 0.9260421335723891,
+          "fpr": 0.02017434620174346,
+          "f1": 0.9438099588853358
+        }
+      },
+      "median_latency_ms": 3.1740448045146454,
+      "p95_latency_ms": 3.1740448045146454
+    },
+    "external_eval": {
+      "overall": {
+        "count": 506,
+        "recall": 0.6548223350253807,
+        "fpr": 0.006472491909385114,
+        "f1": 0.7865853658536586
+      },
+      "per_source": {
+        "unknown": {
+          "count": 506,
+          "recall": 0.6548223350253807,
+          "fpr": 0.006472491909385114,
+          "f1": 0.7865853658536586
+        }
+      },
+      "median_latency_ms": 3.346591620558087,
+      "p95_latency_ms": 3.346591620558087
+    },
+    "indirect_eval": {
+      "overall": {
+        "count": 3179,
+        "recall": 0.6373073293488518,
+        "fpr": null,
+        "f1": 0.7784822286263209
+      },
+      "per_source": {
+        "unknown": {
+          "count": 3179,
+          "recall": 0.6373073293488518,
+          "fpr": null,
+          "f1": 0.7784822286263209
+        }
+      },
+      "median_latency_ms": 3.211132159798496,
+      "p95_latency_ms": 3.211132159798496
+    },
+    "overrefusal_eval": {
+      "overall": {
+        "count": 1568,
+        "recall": null,
+        "fpr": 0.3635204081632653,
+        "f1": 0.0
+      },
+      "per_source": {
+        "unknown": {
+          "count": 1568,
+          "recall": null,
+          "fpr": 0.3635204081632653,
+          "f1": 0.0
+        }
+      },
+      "median_latency_ms": 0.6063977302291074,
+      "p95_latency_ms": 0.6063977302291074
+    },
+    "benign_email_probe": {
+      "overall": {
+        "count": 100,
+        "recall": null,
+        "fpr": 1.0,
+        "f1": 0.0
+      },
+      "per_source": {
+        "unknown": {
+          "count": 100,
+          "recall": null,
+          "fpr": 1.0,
+          "f1": 0.0
+        }
+      },
+      "median_latency_ms": 0.6136808000155725,
+      "p95_latency_ms": 0.6136808000155725
+    }
+  },
+  "rules": {
+    "threshold": 0.75,
+    "dev_public": {
+      "overall": {
+        "count": 6246,
+        "recall": 0.01927386822052891,
+        "fpr": 0.006973848069738481,
+        "f1": 0.03735881841876629
+      },
+      "per_source": {
+        "unknown": {
+          "count": 6246,
+          "recall": 0.01927386822052891,
+          "fpr": 0.006973848069738481,
+          "f1": 0.03735881841876629
+        }
+      },
+      "median_latency_ms": 0.049756126480420534,
+      "p95_latency_ms": 0.049756126480420534
+    },
+    "external_eval": {
+      "overall": {
+        "count": 506,
+        "recall": 0.01015228426395939,
+        "fpr": 0.0,
+        "f1": 0.020100502512562814
+      },
+      "per_source": {
+        "unknown": {
+          "count": 506,
+          "recall": 0.01015228426395939,
+          "fpr": 0.0,
+          "f1": 0.020100502512562814
+        }
+      },
+      "median_latency_ms": 0.07037464823190072,
+      "p95_latency_ms": 0.07037464823190072
+    },
+    "indirect_eval": {
+      "overall": {
+        "count": 3179,
+        "recall": 0.0006291286568103177,
+        "fpr": null,
+        "f1": 0.0012574662055957245
+      },
+      "per_source": {
+        "unknown": {
+          "count": 3179,
+          "recall": 0.0006291286568103177,
+          "fpr": null,
+          "f1": 0.0012574662055957245
+        }
+      },
+      "median_latency_ms": 0.08378794494960015,
+      "p95_latency_ms": 0.08378794494960015
+    },
+    "overrefusal_eval": {
+      "overall": {
+        "count": 1568,
+        "recall": null,
+        "fpr": 0.0,
+        "f1": null
+      },
+      "per_source": {
+        "unknown": {
+          "count": 1568,
+          "recall": null,
+          "fpr": 0.0,
+          "f1": null
+        }
+      },
+      "median_latency_ms": 0.00860591007392718,
+      "p95_latency_ms": 0.00860591007392718
+    },
+    "benign_email_probe": {
+      "overall": {
+        "count": 100,
+        "recall": null,
+        "fpr": 0.0,
+        "f1": null
+      },
+      "per_source": {
+        "unknown": {
+          "count": 100,
+          "recall": null,
+          "fpr": 0.0,
+          "f1": null
+        }
+      },
+      "median_latency_ms": 0.011708780002663843,
+      "p95_latency_ms": 0.011708780002663843
+    }
+  },
+  "deberta": {
+    "threshold": 0.5,
+    "dev_public": {
+      "overall": {
+        "count": 6246,
+        "recall": 0.7458538771851188,
+        "fpr": 0.16612702366127025,
+        "f1": 0.7295046032441912
+      },
+      "per_source": {
+        "unknown": {
+          "count": 6246,
+          "recall": 0.7458538771851188,
+          "fpr": 0.16612702366127025,
+          "f1": 0.7295046032441912
+        }
+      },
+      "median_latency_ms": 7.834556486551552,
+      "p95_latency_ms": 7.834556486551552
+    },
+    "external_eval": {
+      "overall": {
+        "count": 506,
+        "recall": 0.6903553299492385,
+        "fpr": 0.016181229773462782,
+        "f1": 0.8047337278106509
+      },
+      "per_source": {
+        "unknown": {
+          "count": 506,
+          "recall": 0.6903553299492385,
+          "fpr": 0.016181229773462782,
+          "f1": 0.8047337278106509
+        }
+      },
+      "median_latency_ms": 11.020436345845997,
+      "p95_latency_ms": 11.020436345845997
+    },
+    "indirect_eval": {
+      "overall": {
+        "count": 3179,
+        "recall": 0.48663101604278075,
+        "fpr": null,
+        "f1": 0.6546762589928058
+      },
+      "per_source": {
+        "unknown": {
+          "count": 3179,
+          "recall": 0.48663101604278075,
+          "fpr": null,
+          "f1": 0.6546762589928058
+        }
+      },
+      "median_latency_ms": 9.329338286569373,
+      "p95_latency_ms": 9.329338286569373
+    },
+    "overrefusal_eval": {
+      "overall": {
+        "count": 1568,
+        "recall": null,
+        "fpr": 0.0548469387755102,
+        "f1": 0.0
+      },
+      "per_source": {
+        "unknown": {
+          "count": 1568,
+          "recall": null,
+          "fpr": 0.0548469387755102,
+          "f1": 0.0
+        }
+      },
+      "median_latency_ms": 0.9362845656893597,
+      "p95_latency_ms": 0.9362845656893597
+    },
+    "benign_email_probe": {
+      "overall": {
+        "count": 100,
+        "recall": null,
+        "fpr": 0.0,
+        "f1": null
+      },
+      "per_source": {
+        "unknown": {
+          "count": 100,
+          "recall": null,
+          "fpr": 0.0,
+          "f1": null
+        }
+      },
+      "median_latency_ms": 1.0427223100123229,
+      "p95_latency_ms": 1.0427223100123229
+    }
+  }
+}
