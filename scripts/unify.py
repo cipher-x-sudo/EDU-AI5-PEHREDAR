@@ -65,11 +65,14 @@ def lang(text):
         return "ur" if len(words) < 3 else "mixed"
     if not words:
         return "other"
-    ru = sum(w in ROMAN for w in words) / len(words)
+    ru_words = {w for w in words if w in ROMAN}
+    ru = len(ru_words) / len(words)
     en = sum(w in ENGLISH for w in words) / len(words)
-    if ru > .2 and en > .2:
+    # A few English words in names, addresses, or email text must not create a
+    # mixed label; require at least two distinct Roman Urdu markers.
+    if len(ru_words) >= 2 and ru > .2 and en > .2:
         return "mixed"
-    return "roman_ur" if ru > .2 else "en"
+    return "roman_ur" if len(ru_words) >= 2 and ru > .2 else "en"
 
 
 def source_lang(name, text):
@@ -298,7 +301,7 @@ def main():
             raise ValueError("WildGuardMix train schema requires prompt, prompt_harm_label, adversarial")
         if row.get("adversarial") is True and row.get("prompt_harm_label") == "harmful":
             if add("injection_train", "wildguardmix", row.get("prompt"),
-                   "attack", "harm", "adversarial_harmful"):
+                   "attack", "jailbreak", "adversarial_harmful"):
                 wildguard_count += 1
     for rel, row in rows("tensor_trust") or []:
         if "detecting-extractions" in rel:
@@ -425,16 +428,40 @@ def main():
         attacks_by_source["hackaprompt"].sort(key=lambda row: hack_order[row["id"]])
     attacks = capped_sample(attacks_by_source, len(benign) * 2 // 3, 4,
                             multiple=20, preserve_keys={"hackaprompt"})
+    benign_needed = len(attacks) * 3 // 2
     rng = random.Random(42)
     hard = [row for row in benign if row.get("hard_negative") or
             re.search(r"\b(?:instructions|system|password|ignore)\b", row["text"], re.I)]
     hard_ids = {row["id"] for row in hard}
     easy = [row for row in benign if row["id"] not in hard_ids]
-    rng.shuffle(hard)
-    rng.shuffle(easy)
-    benign_needed = len(attacks) * 3 // 2
-    OUTPUT["injection_train"] = sorted(attacks + (hard + easy)[:benign_needed],
-                                       key=lambda row: row["id"])
+    rng.shuffle(hard); rng.shuffle(easy)
+    # Apply the benign source cap after hard-negative prioritization. When the
+    # cap itself causes a shortfall, solve for the largest self-consistent
+    # final size so no source exceeds 35% of the rows actually selected.
+    available = Counter(row["source"] for row in hard + easy)
+    low, high = 0, benign_needed
+    while low < high:
+        candidate_total = (low + high + 1) // 2
+        cap = int(candidate_total * .35)
+        capacity = sum(min(count, cap) for count in available.values())
+        if capacity >= candidate_total:
+            low = candidate_total
+        else:
+            high = candidate_total - 1
+    final_benign_target = low
+    max_per_source = int(final_benign_target * .35)
+    selected_benign, source_counts = [], Counter()
+    for candidate in hard + easy:
+        if len(selected_benign) >= final_benign_target:
+            break
+        source = candidate["source"]
+        if source_counts[source] >= max_per_source:
+            continue
+        selected_benign.append(candidate)
+        source_counts[source] += 1
+    if len(selected_benign) < benign_needed:
+        print(f"WARNING: benign shortfall {benign_needed - len(selected_benign)} rows after 35% source caps")
+    OUTPUT["injection_train"] = sorted(attacks + selected_benign, key=lambda row: row["id"])
     for name, records in OUTPUT.items():
         with (OUT / (name + ".jsonl")).open("w", encoding="utf-8") as stream:
             for record in records:
@@ -455,8 +482,18 @@ def main():
                      f"{count['pii_redacted']} | {count['pii_exempt']} | "
                      f"{count['length']} | {count['lang_other']} | {count['unclear']} | {count['goal_cap']}")
     labels = Counter(r["label"] for r in OUTPUT["injection_train"])
-    stats += ["", f"Classifier training pool: {labels['attack']} attack, {labels['benign']} benign (1:1.5).",
-              "Every attack source is capped at 25% of final attacks; benign hard negatives are selected first.",
+    attack_sources = Counter(r["source"] for r in OUTPUT["injection_train"] if r["label"] == "attack")
+    benign_sources = Counter(r["source"] for r in OUTPUT["injection_train"] if r["label"] == "benign")
+    stats += ["", "## Final classifier source shares", "",
+              "Label | Source | Rows | Share", "---|---|---:|---:"]
+    for label, counts in (("attack", attack_sources), ("benign", benign_sources)):
+        total = labels[label]
+        for source, count in sorted(counts.items()):
+            stats.append(f"{label} | {source} | {count} | {count / total:.2%}")
+    ratio = labels["benign"] / labels["attack"] if labels["attack"] else 0
+    stats += ["", f"Classifier training pool: {labels['attack']} attack, {labels['benign']} benign.",
+              f"Actual benign/attack ratio: {ratio:.4f}; target: 1.5000.",
+              "Every attack source is capped at 25% of final attacks; every benign source is capped at 35% of final benign rows after hard-negative-first selection.",
               "PII exemption applies only to synthetic indirect-evaluation sources: injecagent, bipia, agentdojo.",
               f"Raw directory size: {sum(p.stat().st_size for p in RAW.rglob('*') if p.is_file()) / 1024**3:.3f} GiB."]
     (Path("data") / "STATS.md").write_text("\n".join(stats) + "\n", encoding="utf-8")

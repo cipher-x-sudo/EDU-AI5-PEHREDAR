@@ -20,7 +20,6 @@ indirect_eval | attack | injection | en | injecagent | 1054
 indirect_eval | attack | injection | en | llmail | 1997
 indirect_eval | attack | injection | mixed | llmail | 3
 injection_train | attack | extraction | en | gandalf | 998
-injection_train | attack | harm | en | wildguardmix | 2922
 injection_train | attack | injection | en | deepset_pi | 203
 injection_train | attack | injection | en | hackaprompt | 2922
 injection_train | attack | injection | en | llmail | 2907
@@ -28,26 +27,26 @@ injection_train | attack | injection | en | spml | 2922
 injection_train | attack | injection | mixed | llmail | 15
 injection_train | attack | jailbreak | en | jailbreak_llms | 761
 injection_train | attack | jailbreak | en | jb_class | 509
+injection_train | attack | jailbreak | en | wildguardmix | 2922
 injection_train | attack | jailbreak | en | wildjailbreak | 2921
 injection_train | benign | none | en | deepset_pi | 343
-injection_train | benign | none | en | jailbreak_llms | 12842
-injection_train | benign | none | en | jb_class | 1061
+injection_train | benign | none | en | jailbreak_llms | 5572
+injection_train | benign | none | en | jb_class | 1062
 injection_train | benign | none | en | spml | 3372
-injection_train | benign | none | en | wildjailbreak | 8000
-injection_train | benign | none | ur | jailbreak_llms | 2
+injection_train | benign | none | en | wildjailbreak | 5573
+injection_train | benign | none | ur | jailbreak_llms | 1
 multiturn | attack | jailbreak | en | safemtdata | 2274
 multiturn | attack | jailbreak | en | tom_gibbs_multiturn | 4439
 multiturn | benign | none | en | tom_gibbs_multiturn | 2400
 overrefusal_eval | benign | none | en | or_bench | 1319
 overrefusal_eval | benign | none | en | xstest | 249
-pii_eval | attack | pii | en | ai4privacy | 4953
+pii_eval | attack | pii | en | ai4privacy | 4954
 pii_eval | attack | pii | en | synthetic | 3
 pii_eval | attack | pii | other | ai4privacy | 46
-pii_eval | attack | pii | roman_ur | ai4privacy | 1
 translation_pairs | benign | none | roman_ur | erupd | 58065
-urdu_benign | benign | none | mixed | smat26 | 7
+urdu_benign | benign | none | mixed | smat26 | 1
 urdu_benign | benign | none | other | smat26 | 32
-urdu_benign | benign | none | roman_ur | smat26 | 19427
+urdu_benign | benign | none | roman_ur | smat26 | 19433
 
 ## Filtering by source
 
@@ -63,8 +62,8 @@ gandalf | 1000 | 998 | 998 | 1 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0
 hackaprompt | 28051 | 5000 | 2922 | 43 | 90092 | 1 | 0 | 0 | 1151 | 941 | 21804 | 482725
 harmbench | 320 | 317 | 0 | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0
 injecagent | 1054 | 1054 | 0 | 0 | 0 | 0 | 0 | 703 | 0 | 0 | 0 | 0
-jailbreak_llms | 15140 | 13608 | 13605 | 1197 | 0 | 99 | 0 | 0 | 189 | 47 | 0 | 0
-jb_class | 1998 | 1961 | 1570 | 27 | 0 | 6 | 0 | 0 | 3 | 1 | 0 | 0
+jailbreak_llms | 15140 | 13608 | 6334 | 1197 | 0 | 99 | 0 | 0 | 189 | 47 | 0 | 0
+jb_class | 1998 | 1961 | 1571 | 27 | 0 | 6 | 0 | 0 | 3 | 1 | 0 | 0
 llmail | 16470 | 7000 | 2922 | 9458 | 0 | 0 | 13848 | 0 | 12 | 0 | 0 | 0
 or_bench | 1319 | 1319 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0
 safemtdata | 2280 | 2274 | 0 | 0 | 0 | 4 | 0 | 0 | 2 | 0 | 0 | 0
@@ -75,10 +74,30 @@ tom_gibbs_multiturn | 6840 | 6839 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 78 | 0
 toxicchat | 10165 | 9633 | 0 | 516 | 0 | 16 | 0 | 0 | 0 | 0 | 0 | 0
 uci_roman_urdu | 20229 | 0 | 0 | 20026 | 0 | 11 | 0 | 0 | 192 | 0 | 0 | 0
 wildguardmix | 3202 | 3000 | 2922 | 200 | 0 | 2 | 0 | 0 | 0 | 0 | 0 | 0
-wildjailbreak | 16026 | 16000 | 10921 | 2 | 0 | 6 | 0 | 0 | 18 | 0 | 0 | 0
+wildjailbreak | 16026 | 16000 | 8494 | 2 | 0 | 6 | 0 | 0 | 18 | 0 | 0 | 0
 xstest | 250 | 249 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0
 
-Classifier training pool: 17080 attack, 25620 benign (1:1.5).
-Every attack source is capped at 25% of final attacks; benign hard negatives are selected first.
+## Final classifier source shares
+
+Label | Source | Rows | Share
+---|---|---:|---:
+attack | deepset_pi | 203 | 1.19%
+attack | gandalf | 998 | 5.84%
+attack | hackaprompt | 2922 | 17.11%
+attack | jailbreak_llms | 761 | 4.46%
+attack | jb_class | 509 | 2.98%
+attack | llmail | 2922 | 17.11%
+attack | spml | 2922 | 17.11%
+attack | wildguardmix | 2922 | 17.11%
+attack | wildjailbreak | 2921 | 17.10%
+benign | deepset_pi | 343 | 2.15%
+benign | jailbreak_llms | 5573 | 35.00%
+benign | jb_class | 1062 | 6.67%
+benign | spml | 3372 | 21.18%
+benign | wildjailbreak | 5573 | 35.00%
+
+Classifier training pool: 17080 attack, 15923 benign.
+Actual benign/attack ratio: 0.9323; target: 1.5000.
+Every attack source is capped at 25% of final attacks; every benign source is capped at 35% of final benign rows after hard-negative-first selection.
 PII exemption applies only to synthetic indirect-evaluation sources: injecagent, bipia, agentdojo.
 Raw directory size: 1.257 GiB.

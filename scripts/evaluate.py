@@ -67,20 +67,26 @@ def evaluate(path: Path, detector: str = "rules", classifier_dir: str | None = N
             "latency_ms": round((time.perf_counter() - start) * 1000, 3),
         })
     metrics = {}
-    for language in ("en", "ur", "roman_ur", "mixed"):
-        group = [p for p in predictions if p["lang"] == language]
+    def summarize(group):
         group_latencies = sorted(p["latency_ms"] for p in group)
         tp = sum(p["label"] == "attack" and p["prediction"] == "attack" for p in group)
         fn = sum(p["label"] == "attack" and p["prediction"] == "benign" for p in group)
         fp = sum(p["label"] == "benign" and p["prediction"] == "attack" for p in group)
         tn = sum(p["label"] == "benign" and p["prediction"] == "benign" for p in group)
-        metrics[language] = {
+        return {
             "count": len(group), "tp": tp, "fn": fn, "fp": fp, "tn": tn,
             "recall": tp / (tp + fn) if tp + fn else None,
             "false_positive_rate": fp / (fp + tn) if fp + tn else None,
+            "f1": 2 * tp / (2 * tp + fp + fn) if 2 * tp + fp + fn else None,
             "median_latency_ms": statistics.median(group_latencies) if group_latencies else None,
             "p95_latency_ms": group_latencies[max(0, int(len(group_latencies) * 0.95) - 1)] if group_latencies else None,
         }
+    for language in ("en", "ur", "roman_ur", "mixed"):
+        group = [p for p in predictions if p["lang"] == language]
+        metrics[language] = summarize(group)
+    by_source = {}
+    for source in sorted({row.source or "unknown" for row in rows}):
+        by_source[source] = summarize([p for p, row in zip(predictions, rows) if (row.source or "unknown") == source])
     latencies = sorted(p["latency_ms"] for p in predictions)
     return {
         "input_sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
@@ -88,6 +94,11 @@ def evaluate(path: Path, detector: str = "rules", classifier_dir: str | None = N
         "classifier_dir": classifier_dir,
         "deberta_scope": "English prompt injection only" if detector == "deberta" else None,
         "metrics": metrics,
+        "per_source": by_source,
+        "indirect_eval_source_scope": {
+            source: ("seen distribution" if source == "llmail" else "unseen")
+            for source in by_source
+        } if path.name == "indirect_eval.jsonl" else None,
         "median_latency_ms": statistics.median(latencies) if latencies else None,
         "p95_latency_ms": latencies[max(0, int(len(latencies) * 0.95) - 1)] if latencies else None,
         "predictions": predictions,

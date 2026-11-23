@@ -61,11 +61,29 @@ def test_injection_pool_balance_and_source_cap():
         return
     rows = list(records(path))
     labels = Counter(row["label"] for row in rows)
-    assert 2 * labels["benign"] == 3 * labels["attack"]
+    assert labels["benign"] <= labels["attack"] * 1.5
     attacks = Counter(row["source"] for row in rows if row["label"] == "attack")
     assert all(count <= labels["attack"] * .25 for count in attacks.values())
     hack_goals = Counter(row["goal"] for row in rows if row["source"] == "hackaprompt")
     assert all(count <= sum(hack_goals.values()) * .20 for count in hack_goals.values())
+
+
+def test_benign_source_cap():
+    path = PROCESSED / "injection_train.jsonl"
+    if not path.exists():
+        return
+    rows = list(records(path))
+    benign = [row for row in rows if row["label"] == "benign"]
+    counts = Counter(row["source"] for row in benign)
+    assert all(count <= len(benign) * .35 for count in counts.values())
+
+
+def test_wildguardmix_harmful_rows_are_jailbreak():
+    path = PROCESSED / "injection_train.jsonl"
+    if not path.exists():
+        return
+    assert all(row["type"] == "jailbreak" for row in records(path)
+               if row["source"] == "wildguardmix" and row["label"] == "attack")
 
 
 def test_source_cap_sampler_enforces_25_percent():

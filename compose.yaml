@@ -10,7 +10,7 @@ services:
         reservations:
           devices:
             - driver: nvidia
-              count: 1
+              count: all
               capabilities: [gpu]
     restart: unless-stopped
 
@@ -65,7 +65,7 @@ services:
         reservations:
           devices:
             - driver: nvidia
-              count: 1
+              count: all
               capabilities: [gpu]
 
   dashboard:
@@ -79,6 +79,16 @@ services:
       PEHREDAR_DB_PATH: /state/pehredar.db
     volumes:
       - gateway_state:/state:ro
+
+  frontend:
+    build:
+      context: .
+      target: frontend
+    ports:
+      - "127.0.0.1:3000:80"
+    depends_on:
+      - gateway
+    restart: unless-stopped
 
   data:
     profiles: [data]

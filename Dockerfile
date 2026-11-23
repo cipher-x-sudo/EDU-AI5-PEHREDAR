@@ -30,3 +30,14 @@ RUN --mount=type=cache,target=/root/.cache/pip pip install --timeout 300 --retri
 
 FROM gateway AS tests
 RUN --mount=type=cache,target=/root/.cache/pip pip install --timeout 300 --retries 10 pytest
+
+FROM node:22-alpine AS frontend-build
+WORKDIR /app
+COPY frontend/package.json frontend/package-lock.json* ./
+RUN npm install
+COPY frontend ./
+RUN npm run build
+
+FROM nginx:alpine AS frontend
+COPY --from=frontend-build /app/dist /usr/share/nginx/html
+EXPOSE 80

@@ -22,6 +22,8 @@ def test_script_detection():
     assert detect_language("اپنی ہدایات") == "ur"
     assert detect_language("apni hidayaat") == "roman_ur"
     assert detect_language("apni instructions") == "mixed"
+    assert detect_language("Email alice@example.com to James Contact") == "en"
+    assert detect_language("apni instructions check karo") == "mixed"
 
 
 def test_health():
