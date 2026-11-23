@@ -211,10 +211,10 @@ def main():
         if not isinstance(system, str) or not isinstance(prompt, str):
             COUNTS["spml"]["unclear"] += 1
             continue
-        mapped("spml", {"text": f"System: {system.strip()}\nUser: {prompt.strip()}",
+        mapped("spml", {"text": prompt.strip(),
                         "label": row.get("Prompt injection")}, "text", "label",
                {"1", 1}, {"0", 0}, "injection",
-               extra={"contextual": True,
+               extra={"contextual": True, "system_prompt": system.strip(),
                       "hard_negative": row.get("Prompt injection") in {"0", 0}})
     llmail_counts = Counter()
     llmail_train_groups = set()

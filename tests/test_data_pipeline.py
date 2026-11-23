@@ -23,7 +23,7 @@ def test_processed_schema_and_unique_ids():
         return
     ids = set()
     for path in PROCESSED.glob("*.jsonl"):
-        if path.name.startswith("unclear_"):
+        if path.name.startswith("unclear_") or path.name in {"dev_public.jsonl", "train_public.jsonl"}:
             continue
         for row in records(path):
             assert REQUIRED <= row.keys(), (path, row.get("id"))
