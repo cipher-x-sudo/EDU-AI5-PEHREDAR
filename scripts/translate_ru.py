@@ -58,7 +58,11 @@ def main():
               reasons[f"{lang}:{reason}"]=reasons.get(f"{lang}:{reason}",0)+1; good=False
           if not good: raise ValueError("validation failed")
           for lang in ("roman_ur","ur","mixed"):
-            out.write(json.dumps({"id":f"translated-{r['id']}-{lang}","text":result[lang],"lang":lang,"label":r["label"],"type":r["type"],"source":"translated","orig_id":r["id"],"split_group":r["split_group"],"usage":"train"},ensure_ascii=False)+"\n")
+            out.write(json.dumps({"id":f"translated-{r['id']}-{lang}","text":result[lang],
+              "lang":lang,"label":r["label"],"type":r["type"],"source":"translated",
+              "orig_id":r["id"],"split_group":r["split_group"],"usage":"train",
+              "turns":None,"orig_label":r["label"],"license":"synthetic",
+              "redistributable":True},ensure_ascii=False)+"\n")
           passed+=1
         except Exception as e:
           failed+=1; print(f"FAILED {r['id']}: {type(e).__name__}: {e}", flush=True)

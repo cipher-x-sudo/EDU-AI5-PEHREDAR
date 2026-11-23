@@ -28,6 +28,8 @@ def main():
     ap.add_argument("--smoke", action="store_true")
     ap.add_argument("--batch-size", type=int, default=8)
     ap.add_argument("--grad-accum", type=int, default=1)
+    ap.add_argument("--epochs", type=int, default=2)
+    ap.add_argument("--output-dir", default="models/clf_v0")
     args = ap.parse_args()
     random.seed(SEED); torch.manual_seed(SEED)
     train = [r for r in load("train_public.jsonl") if r["lang"] == "en"]
@@ -57,7 +59,7 @@ def main():
     steps = 0
     scaler = torch.amp.GradScaler("cuda", enabled=use_fp16)
     opt.zero_grad()
-    for _ in range(2):
+    for _ in range(args.epochs):
         model.train()
         for batch in loader:
             batch={k:v.to(device) for k,v in batch.items()}
@@ -90,8 +92,8 @@ def main():
         tp=sum(r["label"]=="attack" and r["risk"]>=th for r in scored); fp=sum(r["label"]=="benign" and r["risk"]>=th for r in scored); fn=sum(r["label"]=="attack" and r["risk"]<th for r in scored)
         return 2*tp/(2*tp+fp+fn) if tp+fp+fn else 0
     threshold=max(candidates,key=lambda x:(f1(x),x))
-    dest=Path("models/clf_v0"); dest.mkdir(parents=True,exist_ok=True); model.save_pretrained(dest); tokenizer.save_pretrained(dest)
-    report={"data_commit":"0746919","base_model":BASE,"base_revision":getattr(model.config,"_commit_hash",None),"dataset_sha256":hashlib.sha256((ROOT/"train_public.jsonl").read_bytes()).hexdigest(),"epochs":2,"max_length":512,"truncation":"head+tail","seed":SEED,"threshold":threshold,"train_count":len(train),"dev_count":len(dev),"device":str(device),"training_seconds":time.perf_counter()-start}
+    dest=Path(args.output_dir); dest.mkdir(parents=True,exist_ok=True); model.save_pretrained(dest); tokenizer.save_pretrained(dest)
+    report={"data_commit":"83d0563","base_model":BASE,"base_revision":getattr(model.config,"_commit_hash",None),"dataset_sha256":hashlib.sha256((ROOT/"train_public.jsonl").read_bytes()).hexdigest(),"epochs":args.epochs,"max_length":512,"truncation":"head+tail","seed":SEED,"threshold":threshold,"train_count":len(train),"dev_count":len(dev),"device":str(device),"training_seconds":time.perf_counter()-start}
     (dest/"model_card.md").write_text("# Pehredar classifier v0\n\n"+json.dumps(report,indent=2)+"\n",encoding="utf-8")
     print(json.dumps(report,indent=2))
 if __name__=="__main__": main()
