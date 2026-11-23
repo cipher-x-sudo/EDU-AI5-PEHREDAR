@@ -473,9 +473,9 @@ def main():
         "tensor_trust": "Card does not state a license; skipped pending rights confirmation.",
         "red_queen": "Official GitHub/HF source; no explicit dataset license; skipped.",
         "mhj": "Gated; repository has no accessible data file until approval. Nonredistributable.",
-        "wildjailbreak": "Gated; access denied.",
-        "wildguardmix": "Gated; access denied.",
-        "hackaprompt": "MIT card; gated. Maximum 5,000 training rows, 20% per goal after access and schema verification.",
+        "wildjailbreak": "ODC-By card; access granted. Adversarial harmful and benign rows capped at 8,000 each before global balancing.",
+        "wildguardmix": "ODC-By card; access granted. Adversarial harmful train rows capped at 3,000 before global balancing.",
+        "hackaprompt": "MIT card; access granted. Maximum 5,000 training rows and 20% per goal after near-deduplication.",
         "spml": "MIT card; label depends on paired system prompt. Both system and user text retained together.",
         "llmail": "MIT card; Phase2 only. Subject and body joined; PII redacted before deduplication; first 5,000 accepted for training, next 2,000 for indirect evaluation.",
         "necent_merged": "Gated; access denied. Mixed upstream licenses require per-source review.",
@@ -512,9 +512,7 @@ def main():
     )
     provenance += [
         "", "## Manual actions for the team", "",
-        "- https://huggingface.co/datasets/allenai/wildjailbreak — click **Accept** on the dataset page, then rerun downloads.",
-        "- https://huggingface.co/datasets/allenai/wildguardmix — click **Accept** on the dataset page, then rerun downloads.",
-        "- https://huggingface.co/datasets/hackaprompt/hackaprompt-dataset — click **Accept** on the dataset page, then rerun downloads; verify its file columns before unification.",
+        "- WildJailbreak, WildGuardMix, and HackAPrompt access was verified on 2026-11-23; rerun the downloader when refreshing the pinned revisions.",
         "- https://huggingface.co/datasets/Necent/llm-jailbreak-prompt-injection-dataset — click **Accept**, then check every upstream source license before unifying.",
         "- https://huggingface.co/datasets/ScaleAI/mhj — provide requested contact information and click **Accept**; obtain the actual dataset files from the maintainers.",
         "- https://data.mendeley.com/datasets/v5jfhsvtmd/5 — download RUwV-NSR and confirm its dataset license.",
