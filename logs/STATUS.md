@@ -1,8 +1,7 @@
 job: translation-pilot
-state: done
-container: 776638dde459440bea07fe0c5966ff9411746540e63bf36b3a070d3badc95a6d
+state: stopped early for this turn
+container: 81e06fe16136525bc588839a26f255372c0b31c385568b473b6ecd3a227f9a36
 log: logs/translation_pilot.log
-result: 200 attempted, 4 passed, 196 failed, validation_rate=0.02
-translated_rows: 12
-ollama: stopped; GPU released
+progress: FAILED hackaprompt-5597: ValueError: validation failed
+reason: diagnosis instrumentation is committed; rerun required to produce final 200-row diagnosis
 
