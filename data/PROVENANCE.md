@@ -1,6 +1,6 @@
 # Public dataset provenance
 
-Generated 2026-11-22. Revisions are immutable Hub or GitHub commit hashes unless noted.
+Generated 2026-11-23. Revisions are immutable Hub or GitHub commit hashes unless noted.
 Rows downloaded counts source rows scanned by the unifier; rows kept are before the final classifier balancing step.
 Raw and processed files remain outside Git.
 
@@ -28,7 +28,7 @@ red_queen | https://huggingface.co/datasets/YifanJ/Red_Queen | `8505fdb5270585a8
 safeguard_pi | https://huggingface.co/datasets/xTRam1/safe-guard-prompt-injection | `a3a877d608f37b7d20d9945671902df895ecdb46` | 2026-11-22 | unspecified | 0 | 0 | skipped | false | Card does not state a license; skipped pending rights confirmation.
 safemtdata | https://huggingface.co/datasets/SafeMTData/SafeMTData | `04af7bd0b6b6044e797e936d79674e348316b9b8` | 2026-11-22 | mit | 2280 | 2274 | train | true | —
 smat26 | https://github.com/Smat26/Roman-Urdu-Dataset | `762ba24484024855798ef15d248e45f12a410de3` | 2026-11-22 | gpl-3.0 | 20228 | 19466 | train | true | —
-spml | https://huggingface.co/datasets/reshabhs/SPML_Chatbot_Prompt_Injection | `02ce8084e979bc7d4c24ee35d22ecb7f2db96ff5` | 2026-11-22 | mit | 16012 | 16012 | train | true | MIT card; label depends on paired system prompt. Both system and user text retained together.
+spml | https://huggingface.co/datasets/reshabhs/SPML_Chatbot_Prompt_Injection | `02ce8084e979bc7d4c24ee35d22ecb7f2db96ff5` | 2026-11-22 | mit | 16012 | 15913 | train | true | MIT card; label depends on paired system prompt. Both system and user text retained together.
 tensor_trust | https://huggingface.co/datasets/qxcv/tensor-trust | `4de2b2fe01ba0cb6fbf7cbb9f1a3fabaf8157372` | 2026-11-22 | unspecified | 0 | 0 | skipped | false | Card does not state a license; skipped pending rights confirmation.
 tom_gibbs_multiturn | https://huggingface.co/datasets/tom-gibbs/multi-turn_jailbreak_attack_datasets | `e3b30257c4d6be5438ea19f0989ac82c24234fe4` | 2026-11-22 | mit | 6840 | 6839 | train | true | —
 toxicchat | https://huggingface.co/datasets/lmsys/toxic-chat | `29df8e4dba60e1f4af4b4075c0705c5b313548a8` | 2026-11-22 | cc-by-nc-4.0 | 10165 | 9635 | eval_only, train | false | Latest 0124 config. Noncommercial and nonredistributable.

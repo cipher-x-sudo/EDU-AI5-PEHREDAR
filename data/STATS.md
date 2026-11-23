@@ -27,9 +27,9 @@ injection_train | attack | injection | mixed | llmail | 2
 injection_train | attack | jailbreak | en | jailbreak_llms | 761
 injection_train | attack | jailbreak | en | jb_class | 509
 injection_train | benign | none | en | deepset_pi | 41
-injection_train | benign | none | en | jailbreak_llms | 3756
-injection_train | benign | none | en | jb_class | 143
-injection_train | benign | none | en | spml | 3470
+injection_train | benign | none | en | jailbreak_llms | 3852
+injection_train | benign | none | en | jb_class | 145
+injection_train | benign | none | en | spml | 3372
 multiturn | attack | jailbreak | en | safemtdata | 2274
 multiturn | attack | jailbreak | en | tom_gibbs_multiturn | 4439
 multiturn | benign | none | en | tom_gibbs_multiturn | 2400
@@ -57,13 +57,13 @@ erupd | 65132 | 58065 | 0 | 7066 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0
 gandalf | 1000 | 998 | 998 | 1 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0
 harmbench | 320 | 317 | 0 | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0
 injecagent | 1054 | 1054 | 0 | 0 | 0 | 0 | 0 | 703 | 0 | 0 | 0 | 0
-jailbreak_llms | 15140 | 13608 | 4517 | 1197 | 0 | 99 | 0 | 0 | 189 | 47 | 0 | 0
-jb_class | 1998 | 1961 | 652 | 27 | 0 | 6 | 0 | 0 | 3 | 1 | 0 | 0
+jailbreak_llms | 15140 | 13608 | 4613 | 1197 | 0 | 99 | 0 | 0 | 189 | 47 | 0 | 0
+jb_class | 1998 | 1961 | 654 | 27 | 0 | 6 | 0 | 0 | 3 | 1 | 0 | 0
 llmail | 16470 | 7000 | 1235 | 9458 | 0 | 0 | 13848 | 0 | 12 | 0 | 0 | 0
 or_bench | 1319 | 1319 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0
 safemtdata | 2280 | 2274 | 0 | 0 | 0 | 4 | 0 | 0 | 2 | 0 | 0 | 0
 smat26 | 20228 | 19466 | 0 | 560 | 0 | 11 | 0 | 0 | 191 | 0 | 0 | 0
-spml | 16012 | 16012 | 4704 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0
+spml | 16012 | 15913 | 4606 | 98 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0
 synthetic | 3 | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0
 tom_gibbs_multiturn | 6840 | 6839 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 78 | 0
 toxicchat | 10165 | 9635 | 0 | 514 | 0 | 16 | 0 | 0 | 0 | 0 | 0 | 0

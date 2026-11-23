@@ -1,0 +1,48 @@
+{
+  "pool": 12350,
+  "train": 11116,
+  "dev": 1234,
+  "source_sha256": "dda9ac2bcee1a292cc17953d36c59b2549aa23d99b585affefbd7f7bdc421193",
+  "strata": {
+    "deepset_pi/attack": {
+      "pool": 203,
+      "dev": 20
+    },
+    "deepset_pi/benign": {
+      "pool": 41,
+      "dev": 4
+    },
+    "gandalf/attack": {
+      "pool": 998,
+      "dev": 100
+    },
+    "jailbreak_llms/attack": {
+      "pool": 761,
+      "dev": 76
+    },
+    "jailbreak_llms/benign": {
+      "pool": 3852,
+      "dev": 385
+    },
+    "jb_class/attack": {
+      "pool": 509,
+      "dev": 51
+    },
+    "jb_class/benign": {
+      "pool": 145,
+      "dev": 14
+    },
+    "llmail/attack": {
+      "pool": 1235,
+      "dev": 124
+    },
+    "spml/attack": {
+      "pool": 1234,
+      "dev": 123
+    },
+    "spml/benign": {
+      "pool": 3372,
+      "dev": 337
+    }
+  }
+}
