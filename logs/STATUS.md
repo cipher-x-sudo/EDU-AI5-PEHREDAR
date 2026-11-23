@@ -1,8 +1,9 @@
-job: train-v0-full
+job: translation-pilot
 state: running
-container: 4cd99199f0e47e984a58248a2b0043c3e4d4160197c00298e6d3cd211eb31db2
-last_check: 2026-11-23T18:17:54.8703933+05:00
-log: logs/train_v0.log
-smoke: passed on CUDA, 20 steps, peak 5.23 GB
-progress: latest logged step 2900, peak 5.26 GB
-next: wait for completion; then evaluate, then translation pilot
+container: 776638dde459440bea07fe0c5966ff9411746540e63bf36b3a070d3badc95a6d
+log: logs/translation_pilot.log
+last_check: 2026-11-23T22:48:30.0370062+05:00
+progress: FAILED hackaprompt-3154: ValueError: validation failed
+report: results/clf_v0.md generated
+tests: 52 passed
+

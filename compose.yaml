@@ -57,8 +57,12 @@ services:
     working_dir: /app
     volumes:
       - ./data:/app/data
+      - ./scripts:/app/scripts:ro
       - ./models:/app/models
       - ./results:/app/results
+      - ./config:/app/config:ro
+    environment:
+      PEHREDAR_POLICY_PATH: /app/config/policy.yaml
     command: python -m scripts.train_classifier data/processed/train.jsonl models/clf_v1
     deploy:
       resources:
