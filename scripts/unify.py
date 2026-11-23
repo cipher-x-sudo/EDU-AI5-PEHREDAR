@@ -223,7 +223,7 @@ def main():
     llmail_counts = Counter()
     llmail_train_groups = set()
     for rel, row in rows("llmail") or []:
-        if llmail_counts["train"] >= 5000 and llmail_counts["eval"] >= 2000:
+        if llmail_counts["train"] >= 2000 and llmail_counts["eval"] >= 2000:
             break
         subject, body = row.get("subject"), row.get("body")
         if not isinstance(subject, str) or not isinstance(body, str):
@@ -234,7 +234,7 @@ def main():
         if clean != text:
             COUNTS["llmail"]["pii_redacted"] += 1
         text = clean
-        if llmail_counts["train"] < 5000:
+        if llmail_counts["train"] < 2000:
             if add("injection_train", "llmail", text, "attack", "injection",
                    row.get("scenario", "submission")):
                 llmail_counts["train"] += 1
@@ -532,7 +532,7 @@ def main():
         "wildguardmix": "ODC-By card; access granted. Adversarial harmful train rows capped at 3,000 before global balancing.",
         "hackaprompt": "MIT card; access granted. Maximum 5,000 training rows and 20% per goal after near-deduplication.",
         "spml": "MIT card; label depends on paired system prompt. Both system and user text retained together.",
-        "llmail": "MIT card; Phase2 only. Subject and body joined; PII redacted before deduplication; first 5,000 accepted for training, next 2,000 for indirect evaluation.",
+        "llmail": "MIT card; Phase2 only. Subject and body joined; PII redacted before deduplication; first 2,000 accepted for training, next 2,000 for indirect evaluation.",
         "necent_merged": "Gated; access denied. Mixed upstream licenses require per-source review.",
         "injectionshield": "Only 3 display examples and summary metrics in repository; benchmark folders are placeholders. No usable full benchmark rows. Never train.",
         "agentdojo": "Task GOAL definitions are not injected payloads; no eval rows extracted. Synthetic indirect-eval PII exemption applies if payloads become available.",

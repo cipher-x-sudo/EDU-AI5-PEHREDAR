@@ -9,14 +9,17 @@ EXAMPLES=json.loads(Path("scripts/translation_examples.json").read_text(encoding
 
 def rows():
     return [json.loads(x) for x in (ROOT/"train_public.jsonl").open(encoding="utf-8") if x.strip()]
-def valid(value, lang, original):
-    if not isinstance(value,str) or not (len(original)*.5 <= len(value) <= len(original)*2): return False
+def validate(value, lang, original):
+    reasons=[]
+    if not isinstance(value,str) or not value.strip(): return ["empty"]
+    if not (len(original)*.3 <= len(value) <= len(original)*3): reasons.append("length ratio")
     urdu=bool(re.search(r"[\u0600-\u06ff]",value)); latin=len(re.findall(r"[A-Za-z]",value))
-    if lang=="ur" and not urdu: return False
-    if lang=="roman_ur" and urdu: return False
-    if lang=="roman_ur" and latin and len(re.findall(r"\b(?:the|and|is|are|what|how|please)\b",value,re.I))>max(2,latin//20): return False
-    if lang=="mixed" and (latin < 3 or latin > len(value)*.9): return False
-    return not any(x in value.lower() for x in ("@", "cnic", "iban"))
+    if lang=="ur" and not urdu: reasons.append("script check")
+    if lang=="roman_ur" and urdu: reasons.append("script check")
+    if lang=="mixed" and (latin < 2 or latin > len(value)*.95): reasons.append("script check")
+    if any(x in value.lower() for x in ("@", "cnic", "iban")): reasons.append("PII")
+    return reasons
+valid = lambda value, lang, original: not validate(value, lang, original)
 def call(original):
     prompt="/no_think\nReturn JSON with keys roman_ur, ur, mixed. Preserve intent and target exactly. "+json.dumps({"text":original,"examples":EXAMPLES},ensure_ascii=False)
     payload={"model":MODEL,"messages":[{"role":"user","content":prompt}],"stream":False,"think":False,
@@ -25,7 +28,11 @@ def call(original):
     for attempt in range(3):
         try:
             r=requests.post(HOST+"/api/chat",json=payload,timeout=180); r.raise_for_status()
-            return json.loads(r.json()["message"]["content"])
+            raw=r.json()["message"]["content"]
+            raw=re.sub(r"<think>.*?</think>", "", raw, flags=re.S|re.I).strip()
+            raw=re.sub(r"^[^{]*", "", raw)
+            raw=raw[:raw.rfind("}")+1] if "}" in raw else raw
+            return json.loads(raw)
         except Exception as exc:
             last=exc
             if attempt < 2: time.sleep(1)
@@ -37,14 +44,18 @@ def main():
     chosen=attacks[:100]+benign[:100]; chosen.sort(key=lambda r:r["id"]); passed=failed=0; durations=[]
     warm=time.perf_counter(); call("Reply with JSON keys roman_ur, ur, mixed for: hello")
     print(f"WARMUP_SECONDS {time.perf_counter()-warm:.2f}", flush=True)
-    with OUT.open("a",encoding="utf-8") as out:
+    debug=[]
+    reasons={}
+    with OUT.open("w",encoding="utf-8") as out:
       for r in chosen:
         if r["id"] in existing: continue
         st=time.perf_counter()
         try:
-          result=call(r["text"]); good=True
+          result=call(r["text"]); debug.append((r,result))
+          good=True
           for lang in ("roman_ur","ur","mixed"):
-            if not valid(result.get(lang),lang,r["text"]): good=False
+            for reason in validate(result.get(lang),lang,r["text"]):
+              reasons[f"{lang}:{reason}"]=reasons.get(f"{lang}:{reason}",0)+1; good=False
           if not good: raise ValueError("validation failed")
           for lang in ("roman_ur","ur","mixed"):
             out.write(json.dumps({"id":f"translated-{r['id']}-{lang}","text":result[lang],"lang":lang,"label":r["label"],"type":r["type"],"source":"translated","orig_id":r["id"],"split_group":r["split_group"],"usage":"train"},ensure_ascii=False)+"\n")
@@ -62,5 +73,7 @@ def main():
       w=csv.writer(f); w.writerow(["orig_id","original","lang","translation","reviewer","verdict","note"])
       for x in sample:
         original=next((r["text"] for r in source if r["id"]==x["orig_id"]),""); w.writerow([x["orig_id"],original,x["lang"],x["text"],"","",""])
-    print(json.dumps({"attempted":passed+failed,"passed":passed,"failed":failed,"validation_rate":passed/(passed+failed) if passed+failed else 0,"seconds_per_row":sum(durations)/len(durations) if durations else 0,"pilot_stopped":True}))
+    Path("results/translation_debug.md").write_text("# Translation debug\n\n" + "\n\n".join(
+      f"## {r['id']}\n\nOriginal: {r['text']}\n\nRaw parsed output:\n```json\n{json.dumps(v,ensure_ascii=False,indent=2)}\n```" for r,v in debug[:20]), encoding="utf-8")
+    print(json.dumps({"attempted":passed+failed,"passed":passed,"failed":failed,"validation_rate":passed/(passed+failed) if passed+failed else 0,"seconds_per_row":sum(durations)/len(durations) if durations else 0,"reasons":reasons,"pilot_stopped":True}))
 if __name__=="__main__": main()
