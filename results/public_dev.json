@@ -1,48 +1,64 @@
 {
-  "pool": 12350,
-  "train": 11116,
-  "dev": 1234,
-  "source_sha256": "dda9ac2bcee1a292cc17953d36c59b2549aa23d99b585affefbd7f7bdc421193",
+  "pool": 42700,
+  "train": 38432,
+  "dev": 4268,
+  "source_sha256": "768a082e84494199bf73758db38b0c7e812e245c07d379b0ffb57b903feb571d",
   "strata": {
     "deepset_pi/attack": {
       "pool": 203,
       "dev": 20
     },
     "deepset_pi/benign": {
-      "pool": 41,
-      "dev": 4
+      "pool": 343,
+      "dev": 34
     },
     "gandalf/attack": {
       "pool": 998,
       "dev": 100
+    },
+    "hackaprompt/attack": {
+      "pool": 2922,
+      "dev": 292
     },
     "jailbreak_llms/attack": {
       "pool": 761,
       "dev": 76
     },
     "jailbreak_llms/benign": {
-      "pool": 3852,
-      "dev": 385
+      "pool": 12844,
+      "dev": 1284
     },
     "jb_class/attack": {
       "pool": 509,
       "dev": 51
     },
     "jb_class/benign": {
-      "pool": 145,
-      "dev": 14
+      "pool": 1061,
+      "dev": 106
     },
     "llmail/attack": {
-      "pool": 1235,
-      "dev": 124
+      "pool": 2922,
+      "dev": 292
     },
     "spml/attack": {
-      "pool": 1234,
-      "dev": 123
+      "pool": 2922,
+      "dev": 292
     },
     "spml/benign": {
       "pool": 3372,
       "dev": 337
+    },
+    "wildguardmix/attack": {
+      "pool": 2922,
+      "dev": 292
+    },
+    "wildjailbreak/attack": {
+      "pool": 2921,
+      "dev": 292
+    },
+    "wildjailbreak/benign": {
+      "pool": 8000,
+      "dev": 800
     }
   }
 }
