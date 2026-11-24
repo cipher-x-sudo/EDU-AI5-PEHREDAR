@@ -84,3 +84,48 @@ After adding safe ToxicChat and Aegis2 training rows: public pool 71,850 rows; t
 - Whole split groups removed: 1114.
 - Final dev_public_v1b rows: 5645.
 - `train_public.jsonl` was not modified because v1b is already trained.
+
+## v2 data regeneration
+
+- Change: WildGuardMix adversarial-harmful train rows (3,000) moved from `injection_train` to the harm pool only.
+- Pool: 44,700 rows (17,880 attack / 26,820 benign, ratio 1:1.50); v1b pool was 62,350.
+- Largest attack source: hackaprompt 25.00% (cap 25%); largest benign source: wildjailbreak 29.83% (cap 35%).
+- Group-disjoint split: train_public_v2 40,229; dev before embedding audit 4,471.
+- Eval files (external, indirect, overrefusal, multiturn, pii, urdu_benign, translation_pairs) have identical content to v1b; the v1b bytes were kept so their hashes and caches stay valid.
+
+Source | Label | Rows
+---|---|---:
+aegis2 | benign | 748
+deepset_pi | attack | 203
+deepset_pi | benign | 23
+dolly | benign | 5000
+enron | benign | 257
+gandalf | attack | 998
+hackaprompt | attack | 4470
+jailbreak_llms | attack | 761
+jailbreak_llms | benign | 3450
+jb_class | attack | 509
+jb_class | benign | 102
+llmail | attack | 2000
+oasst1 | benign | 5000
+spml | attack | 4470
+spml | benign | 3372
+toxicchat | benign | 868
+wildjailbreak | attack | 4469
+wildjailbreak | benign | 8000
+
+## v2 embedding audit
+
+- Model: `intfloat/multilingual-e5-small`; cosine threshold: `>0.95`.
+- Train rows: 40229; dev rows before audit: 4471.
+- Candidate pairs: 471.
+- Leaking dev rows removed: 473.
+- Whole split groups involved: 889; dev groups removed: 466.
+- Final dev_public_v2 rows: 3998.
+- `train_public_v2.jsonl` was not modified; leaking groups are removed from dev only.
+
+## v2 string near-duplicate repair
+
+- Criteria: `pehredar.dataset.near_duplicate_pairs` (same as `check_split`: ratio >= 0.93).
+- Train/dev pairs: 63; dev groups removed: 22; dev rows removed: 22.
+- Final dev_public_v2 rows: 3976.

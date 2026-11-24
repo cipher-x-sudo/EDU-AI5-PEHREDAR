@@ -101,3 +101,30 @@ job: v1-evaluation-fixed
 state: done
 result: saved thresholds per model, dev_public_v1b, shared 512 head+tail encoder; v0 sanity 0.6142 (old 0.5939 was 256-token path)
 tests: 53 passed
+job: unify-v2
+state: running
+started: 2026-11-24T23:36:48+05:00
+
+job: ensemble-eval-v1
+state: running
+log: logs/ensemble_eval_v1.log
+started: 2026-11-24T23:58:44+05:00
+
+job: translation-v2
+state: running (detached container pehredar-translation-v2)
+log: logs/translation_v2.log
+started: 2026-11-25T00:25:35+05:00
+plan: 2,500 attack + 2,500 benign train rows x 3 langs; Ollama stops when done
+translation-v2 2026-11-25T00:28:27+05:00: restarted as two-stage run (qwen3:8b pass, then abliterated on rejects)
+translation-v2 2026-11-25T00:56:50+05:00: progress stage1 2500/14997 sec_per_output=0.65 eta_h=2.3
+translation-v2 2026-11-25T00:58:29+05:00: progress stage1 2500/14997 sec_per_output=0.65 eta_h=2.3
+translation-v2 2026-11-25T01:26:50+05:00: progress stage1 3000/14997 sec_per_output=1.12 eta_h=3.7
+translation-v2 2026-11-25T01:28:29+05:00: progress stage1 3000/14997 sec_per_output=1.12 eta_h=3.7
+
+job: unify-v2 / split-v2 / embedding-audit-v2 / near-dup-repair-v2
+state: done
+result: pool 44,700 (17,880 attack / 26,820 benign); train_public_v2 40,229; dev_public_v2 3,976; check_split passes
+
+job: ensemble-eval-v1
+state: done
+result: results/ensemble_v1.md
