@@ -67,3 +67,10 @@ The pipeline did not open sealed human data. Its contents therefore cannot be co
 
 
 After adding safe ToxicChat and Aegis2 training rows: public pool 71,850 rows; train 64,666; dev_public 7,184; attacks 28,740; benign 43,110; ratio 1:1.5; normalized exact-overlap leakage: 0. Safe ToxicChat/Aegis2 rows were removed from eval-only outputs when duplicated. The frozen human set was not read.
+## v1b data regeneration
+
+- Public pool: 62,350 rows; train: 56,115; dev_public: 6,235.
+- Exact normalized overlap check: 0; the split is group-disjoint.
+- New benign sources: enron (851), dolly (5,000), and oasst1 (5,000).
+- BIPIA remains test-only locally; no train split was available.
+- The embedding audit was not completed after regeneration because the translation retry occupied the serialized GPU window.

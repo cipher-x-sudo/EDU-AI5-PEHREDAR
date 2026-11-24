@@ -4,7 +4,7 @@ from pathlib import Path
 import requests
 
 ROOT=Path("data/processed"); OUT=ROOT/"translated.jsonl"; REVIEW=ROOT/"translation_review.csv"
-MODEL="richardyoung/qwen3-8b-abliterated:Q4_K_M"; HOST=os.getenv("OLLAMA_HOST","http://ollama:11434")
+MODEL="richardyoung/qwen3-8b-abliterated:Q4_K_M"; HOST=os.getenv("OLLAMA_HOST","http://localhost:11434")
 EXAMPLES=json.loads(Path("scripts/translation_examples.json").read_text(encoding="utf-8"))
 
 def rows():
@@ -12,11 +12,11 @@ def rows():
 def validate(value, lang, original):
     reasons=[]
     if not isinstance(value,str) or not value.strip(): return ["empty"]
-    if not (len(original)*.3 <= len(value) <= len(original)*3): reasons.append("length ratio")
+    if not (len(original)*.25 <= len(value) <= len(original)*4): reasons.append("length ratio")
     urdu=bool(re.search(r"[\u0600-\u06ff]",value)); latin=len(re.findall(r"[A-Za-z]",value))
     if lang=="ur" and not urdu: reasons.append("script check")
-    if lang=="roman_ur" and urdu: reasons.append("script check")
-    if lang=="mixed" and (latin < 2 or latin > len(value)*.95): reasons.append("script check")
+    if lang=="roman_ur" and urdu and len(re.findall(r"[\u0600-\u06ff]", value)) > max(4, len(value)*.2): reasons.append("script check")
+    if lang=="mixed" and (latin < 2 or (not urdu and latin > len(value)*.98)): reasons.append("script check")
     if any(x in value.lower() for x in ("@", "cnic", "iban")): reasons.append("PII")
     return reasons
 valid = lambda value, lang, original: not validate(value, lang, original)

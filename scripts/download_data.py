@@ -41,6 +41,9 @@ SOURCES = {
     "smat26": ("gh", "Smat26/Roman-Urdu-Dataset", ["Dataset/Roman Urdu DataSet.csv"], "gpl-3.0", True),
     "erupd": ("gh", "bose9999/ERUPD-dataset", ["ERUPD_dataset.json"], "cc-by-4.0", True),
     "uci_roman_urdu": ("url", "https://archive.ics.uci.edu/static/public/458/roman+urdu+data+set.zip", ["roman_urdu.zip"], "cc-by-4.0", True),
+    "dolly": ("hf", "databricks/databricks-dolly-15k", ["databricks-dolly-15k.jsonl"], "cc-by-sa-3.0", True),
+    "oasst1": ("hf", "OpenAssistant/oasst1", ["data/train-00000-of-00001-b42a775f407cee45.parquet"], "apache-2.0", True),
+    "enron": ("hf", "LLM-PBE/enron-email", ["enron_email_all.jsonl"], "apache-2.0", True),
 }
 
 GITHUB_REVISIONS = {
@@ -71,6 +74,9 @@ HF_REVISIONS = {
     "hackaprompt": "25b87fbedfb86840abaf8cd09af7a029208a971a",
     "wildjailbreak": "5ddc12a7894f842b0619b8e1c7ee496b198af009",
     "wildguardmix": "d29c47f41c8b51348b5c8e8c81c039b3132b66d1",
+    "dolly": "bdd27f4d94b9c1f951818a7da7fd7aeea5dbff1a",
+    "oasst1": "fdf72ae0827c1cda404aff25b6603abec9e3399b",
+    "enron": "a4761f17a981d79bd286bfff7dd0d53645aa5027",
 }
 
 

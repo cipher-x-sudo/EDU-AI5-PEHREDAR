@@ -210,6 +210,43 @@ def main():
             label = "benign" if "regular" in rel else "attack"
             add("injection_train", name, row.get("prompt"), label,
                 "none" if label == "benign" else "jailbreak", row.get("jailbreak", label))
+    # Diverse benign email corpus. The source card is recorded in PROVENANCE.md;
+    # rows are redacted and capped before global balancing.
+    enron_seen = 0
+    for _, row in rows("enron") or []:
+        if enron_seen >= 2000:
+            break
+        subject = row.get("subject") or row.get("Subject")
+        body = row.get("body") or row.get("Body") or row.get("text") or row.get("content")
+        if not isinstance(body, str):
+            continue
+        if not subject:
+            match = re.search(r"(?im)^Subject:\s*(.+)$", body)
+            subject = match.group(1).strip() if match else "Message"
+        text = redact_pii(f"Subject: {str(subject).strip()}\nBody: {body.strip()[:1500]}")
+        if add("injection_train", "enron", text, "benign", "none", "email", extra={"email_format": True}):
+            enron_seen += 1
+    # Normal English user instructions are hard benign negatives.
+    dolly_seen = 0
+    for _, row in rows("dolly") or []:
+        if dolly_seen >= 5000:
+            break
+        text = row.get("instruction") or row.get("context")
+        if isinstance(text, str) and text.strip():
+            if add("injection_train", "dolly", text, "benign", "none", "first_user_turn",
+                   extra={"hard_negative": True}):
+                dolly_seen += 1
+    oasst_seen = 0
+    for _, row in rows("oasst1") or []:
+        if oasst_seen >= 5000:
+            break
+        if str(row.get("lang", "en")).lower() not in {"en", "english"}:
+            continue
+        text = row.get("text") or row.get("message")
+        if isinstance(text, str) and text.strip() and str(row.get("role", "prompter")).lower() in {"prompter", "user"}:
+            if add("injection_train", "oasst1", text, "benign", "none", "first_user_turn",
+                   extra={"hard_negative": True}):
+                oasst_seen += 1
     for _, row in rows("spml") or []:
         system, prompt = row.get("System Prompt"), row.get("User Prompt")
         if not isinstance(system, str) or not isinstance(prompt, str):
@@ -543,6 +580,9 @@ def main():
         "beavertails": "30k train first 10,000 rows only. Noncommercial and nonredistributable.",
         "toxicchat": "Latest 0124 config. Noncommercial and nonredistributable.",
         "uci_roman_urdu": "UCI dataset 458; overlaps Smat26 and is deduplicated.",
+        "dolly": "CC BY-SA 3.0; first instruction field used as English benign hard negatives.",
+        "oasst1": "Apache-2.0; English prompter/user messages used as benign hard negatives.",
+        "enron": "Apache-2.0 card on the pinned mirror; formatted as Subject/Body, truncated and PII-redacted.",
     }
     for folder in sorted(RAW.iterdir()):
         path = folder / "metadata.json"
