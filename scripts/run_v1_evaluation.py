@@ -10,7 +10,7 @@ import hashlib
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from evaluate import evaluate, _load_classifier
-from pehredar.clf_text import PREPROCESSING_VERSION
+from pehredar.clf_text import preprocessing_id
 from pehredar.dataset import load_jsonl
 
 DATA = Path("data/processed")
@@ -49,7 +49,7 @@ def scored(path, detector, directory, threshold):
     sha = hashlib.sha256(path.read_bytes()).hexdigest()
     raw = f"{detector}|{directory}|{sha}"
     if detector == "classifier":
-        raw += f"|{PREPROCESSING_VERSION}|{threshold!r}"
+        raw += f"|{preprocessing_id(_load_classifier(directory)[5])}|{threshold!r}"
     cache_path = Path("results/cache") / f"{hashlib.sha256(raw.encode()).hexdigest()}.json"
     if cache_path.exists():
         return json.loads(cache_path.read_text(encoding="utf-8"))
@@ -75,7 +75,7 @@ def main():
         else:
             threshold, source = rule, "fixed"
         out[model] = {"threshold": threshold, "threshold_source": source,
-                      "preprocessing": PREPROCESSING_VERSION if detector == "classifier" else None,
+                      "preprocessing": preprocessing_id(_load_classifier(directory)[5]) if detector == "classifier" else None,
                       "sets": {}}
         for set_name, filename in SETS.items():
             if set_name == DEV and model in OLD_MODELS:
@@ -124,7 +124,8 @@ def render(out):
     def f(v):
         return "n/a" if v is None else f"{v:.4f}"
     lines = ["# v1 Evaluation (v0, v1a, v1b, and baselines)", "",
-             f"Classifier preprocessing: `{PREPROCESSING_VERSION}` (raw text, 512 tokens head+tail, "
+             "Classifier preprocessing: raw text, 512 tokens head+tail, encoder version from each model's "
+             "training report (v0/v1a/v1b = version 1, "
              "shared with `train_v0.py` via `pehredar/clf_text.py`).", "",
              "v0 and v1a are not scored on `dev_public_v1b` because it may contain their training rows.", "",
              "## Thresholds", "", "| Model | Threshold | Source |", "|---|---:|---|"]

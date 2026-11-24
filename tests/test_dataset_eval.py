@@ -76,13 +76,54 @@ def test_train_and_eval_produce_identical_ids_for_long_text():
     from pehredar.clf_text import encode
 
     # train_v0.py must use the shared encoder (importing it needs torch).
-    assert "from pehredar.clf_text import encode" in Path("scripts/train_v0.py").read_text(encoding="utf-8")
+    assert "from pehredar.clf_text import CURRENT_VERSION, encode" in Path("scripts/train_v0.py").read_text(encoding="utf-8")
     tok = _FakeTokenizer()
     long_text = " ".join(str(i) for i in range(2000))
-    [evaluated] = evaluator.classifier_inputs(tok, [long_text])
-    assert evaluated == encode(tok, long_text)
-    ids = evaluated["input_ids"]
-    assert len(ids) == 512
+    for version in (1, 2):
+        [evaluated] = evaluator.classifier_inputs(tok, [long_text], version)
+        assert evaluated == encode(tok, long_text, version)
+        assert len(evaluated["input_ids"]) == 512
+
+
+def test_encoder_v1_keeps_doubled_end_token():
+    from pehredar.clf_text import encode
+    ids = encode(_FakeTokenizer(), " ".join(str(i) for i in range(2000)), 1)["input_ids"]
     assert ids[:3] == [0, 10, 11]          # head kept
-    assert ids[-3:] == [2009, 2, 2]        # tail kept (training's double </s>)
-    assert encode(tok, "1 2 3")["input_ids"] == [0, 11, 12, 13, 2]
+    assert ids[-3:] == [2009, 2, 2]        # v0/v1a/v1b training quirk
+    assert ids.count(2) == 2
+
+
+def test_encoder_v2_has_single_end_token():
+    import pytest
+    from pehredar.clf_text import encode
+    tok = _FakeTokenizer()
+    ids = encode(tok, " ".join(str(i) for i in range(2000)), 2)["input_ids"]
+    assert ids[:3] == [0, 10, 11]
+    assert ids[-3:] == [2008, 2009, 2]
+    assert ids.count(2) == 1 and len(ids) == 512
+    for version in (1, 2):                 # short text is untouched by both
+        assert encode(tok, "1 2 3", version)["input_ids"] == [0, 11, 12, 13, 2]
+    with pytest.raises(ValueError):
+        encode(tok, "1", 3)
+
+
+def test_old_model_reports_default_to_encoder_v1(tmp_path, monkeypatch):
+    import json as _json
+    import scripts.evaluate as evaluator
+    (tmp_path / "training_report.json").write_text(_json.dumps({"threshold": 0.5}), encoding="utf-8")
+
+    class _Auto:
+        @staticmethod
+        def from_pretrained(*a, **k):
+            return type("M", (), {"to": lambda self, d: None, "eval": lambda self: None})()
+    import types, sys
+    fake_tf = types.SimpleNamespace(AutoTokenizer=_Auto, AutoModelForSequenceClassification=_Auto)
+    fake_torch = types.SimpleNamespace(cuda=types.SimpleNamespace(is_available=lambda: False), device=lambda d: d)
+    monkeypatch.setitem(sys.modules, "transformers", fake_tf)
+    monkeypatch.setitem(sys.modules, "torch", fake_torch)
+    evaluator._load_classifier.cache_clear()
+    assert evaluator._load_classifier(str(tmp_path))[5] == 1
+    (tmp_path / "training_report.json").write_text(_json.dumps({"threshold": 0.5, "encoder_version": 2}), encoding="utf-8")
+    evaluator._load_classifier.cache_clear()
+    assert evaluator._load_classifier(str(tmp_path))[5] == 2
+    evaluator._load_classifier.cache_clear()

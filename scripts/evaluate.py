@@ -36,8 +36,8 @@ def score_deberta(text: str) -> float:
         return torch.softmax(model(**encoded).logits, dim=-1)[0, label].item()
 
 
-def classifier_inputs(tokenizer, texts: list[str]) -> list[dict]:
-    return [encode(tokenizer, text) for text in texts]
+def classifier_inputs(tokenizer, texts: list[str], version: int) -> list[dict]:
+    return [encode(tokenizer, text, version) for text in texts]
 
 
 def evaluate(path: Path, detector: str = "rules", classifier_dir: str | None = None) -> dict:
@@ -70,12 +70,12 @@ def evaluate(path: Path, detector: str = "rules", classifier_dir: str | None = N
         if classifier_loaded:
             pass
         else:
-            tokenizer, model, torch, clf_threshold, device = _load_classifier(classifier_dir)
+            tokenizer, model, torch, clf_threshold, device, version = _load_classifier(classifier_dir)
             # Same input as training (train_v0.py): raw text, shared 512 head+tail encoder.
             raw = [r.input_text() for r in rows]
             vals=[]
             for i in range(0, len(raw), 32):
-                enc = tokenizer.pad(classifier_inputs(tokenizer, raw[i:i+32]), padding=True, return_tensors="pt")
+                enc = tokenizer.pad(classifier_inputs(tokenizer, raw[i:i+32], version), padding=True, return_tensors="pt")
                 enc = {k: v.to(device) for k, v in enc.items()}
                 with torch.no_grad(): vals.extend(torch.softmax(model(**enc).logits, dim=-1)[:,1].tolist())
             scores_by["classifier"] = vals
@@ -118,7 +118,7 @@ def _load_classifier(directory):
     if report_path.name == "model_card.md":
         raw = raw[raw.find("{"):]
     report = json.loads(raw)
-    tokenizer=AutoTokenizer.from_pretrained(path,local_files_only=True); model=AutoModelForSequenceClassification.from_pretrained(path,local_files_only=True); device=torch.device("cuda" if torch.cuda.is_available() else "cpu"); model.to(device); model.eval(); return tokenizer,model,torch,float(report["threshold"]),device
+    tokenizer=AutoTokenizer.from_pretrained(path,local_files_only=True); model=AutoModelForSequenceClassification.from_pretrained(path,local_files_only=True); device=torch.device("cuda" if torch.cuda.is_available() else "cpu"); model.to(device); model.eval(); return tokenizer,model,torch,float(report["threshold"]),device,int(report.get("encoder_version", 1))
 
 
 if __name__ == "__main__":
