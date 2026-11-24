@@ -1,5 +1,7 @@
 # v0 Evaluation Report
 
+> **Erratum (2026-11-24):** the numbers below used the old evaluation path, which cut inputs to the first 256 tokens. Corrected numbers with the training preprocessing (512 tokens, head+tail) are in `results/clf_v1.md`. Example: v0 external_eval recall 0.5939 → 0.6142.
+
 - Fixed classifier threshold: `0.6422568559646606`
 - Threshold selected on `dev_public` only; all other sets use the same threshold.
 - Base model: FacebookAI/xlm-roberta-base; English-only training; 2 epochs; seed 42.
