@@ -25,10 +25,12 @@ def main():
     ap.add_argument("--epochs", type=int, default=2)
     ap.add_argument("--output-dir", default="models/clf_v0")
     ap.add_argument("--encoder-version", type=int, default=CURRENT_VERSION)
+    ap.add_argument("--train-file", default="train_public.jsonl")
+    ap.add_argument("--dev-file", default="dev_public.jsonl")
     args = ap.parse_args()
     random.seed(SEED); torch.manual_seed(SEED)
-    train = [r for r in load("train_public.jsonl") if r["lang"] == "en"]
-    dev = [r for r in load("dev_public.jsonl") if r["lang"] == "en"]
+    train = [r for r in load(args.train_file) if r["lang"] == "en"]
+    dev = [r for r in load(args.dev_file) if r["lang"] == "en"]
     if args.smoke:
         attack_rows = [r for r in train if r["label"] == "attack"]
         benign_rows = [r for r in train if r["label"] == "benign"]
@@ -88,7 +90,7 @@ def main():
         return 2*tp/(2*tp+fp+fn) if tp+fp+fn else 0
     threshold=max(candidates,key=lambda x:(f1(x),x))
     dest=Path(args.output_dir); dest.mkdir(parents=True,exist_ok=True); model.save_pretrained(dest); tokenizer.save_pretrained(dest)
-    report={"data_commit":"83d0563","base_model":BASE,"base_revision":getattr(model.config,"_commit_hash",None),"dataset_sha256":hashlib.sha256((ROOT/"train_public.jsonl").read_bytes()).hexdigest(),"epochs":args.epochs,"max_length":512,"truncation":"head+tail","encoder_version":args.encoder_version,"seed":SEED,"threshold":threshold,"train_count":len(train),"dev_count":len(dev),"device":str(device),"training_seconds":time.perf_counter()-start}
+    report={"data_commit":"83d0563","base_model":BASE,"base_revision":getattr(model.config,"_commit_hash",None),"dataset_sha256":hashlib.sha256((ROOT/args.train_file).read_bytes()).hexdigest(),"epochs":args.epochs,"max_length":512,"truncation":"head+tail","encoder_version":args.encoder_version,"seed":SEED,"threshold":threshold,"train_count":len(train),"dev_count":len(dev),"device":str(device),"training_seconds":time.perf_counter()-start}
     (dest/"model_card.md").write_text("# Pehredar classifier v0\n\n"+json.dumps(report,indent=2)+"\n",encoding="utf-8")
     print(json.dumps(report,indent=2))
 if __name__=="__main__": main()

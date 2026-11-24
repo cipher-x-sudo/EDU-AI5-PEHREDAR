@@ -45,8 +45,113 @@ def call(original, target, model, examples):
     obj=json.loads(raw[raw.find("{"):raw.rfind("}")+1]); return obj["text"]
 
 
+LANGS = ("roman_ur", "ur", "mixed")
+
+
+def translate(row, target, examples):
+    """Pilot-validated path: one language per call, qwen3:8b first, abliterated fallback."""
+    model = PRIMARY
+    try:
+        value = call(row["text"], target, model, examples); bad = validate(value, target, row["text"])
+    except Exception:
+        bad = ["primary unavailable"]; value = None
+    if bad:
+        model = FALLBACK; value = call(row["text"], target, model, examples); bad = validate(value, target, row["text"])
+    if bad: raise ValueError(",".join(bad))
+    return value, model
+
+
+def stratified(rows, n, seed):
+    """n rows with per-source counts proportional to the pool (largest remainder)."""
+    by = {}
+    for r in rows: by.setdefault(r["source"], []).append(r)
+    total = len(rows); quota = {s: n * len(v) / total for s, v in by.items()}
+    take = {s: int(q) for s, q in quota.items()}
+    for s in sorted(quota, key=lambda s: quota[s] - take[s], reverse=True)[:n - sum(take.values())]: take[s] += 1
+    rng = random.Random(seed); out = []
+    for s in sorted(by):
+        pool = sorted(by[s], key=lambda r: r["id"]); rng.shuffle(pool); out += pool[:take[s]]
+    return out
+
+
+def run_v2(args):
+    """Large resumable run from TRAIN rows only. Passed outputs -> translated_v2.jsonl,
+    failures -> translated_v2_failures.jsonl; finished (orig_id, lang) pairs are skipped on restart."""
+    examples = json.loads(Path("scripts/translation_examples.json").read_text(encoding="utf-8"))
+    train = [json.loads(x) for x in (ROOT/args.train_file).open(encoding="utf-8") if x.strip()]
+    train = [r for r in train if r.get("text") and len(r["text"]) <= 2000]
+    chosen = (stratified([r for r in train if r["label"] == "attack"], args.attacks, 42)
+              + stratified([r for r in train if r["label"] == "benign"], args.benign, 43))
+    out, fail = ROOT/"translated_v2.jsonl", ROOT/"translated_v2_failures.jsonl"
+    done = set()
+    for path in (out, fail):
+        if path.exists():
+            done |= {(r["orig_id"], r["lang"]) for r in map(json.loads, path.read_text(encoding="utf-8").splitlines()) if r}
+    todo = [(r, t) for r in chosen for t in LANGS if (r["id"], t) not in done]
+    print(json.dumps({"chosen_rows": len(chosen), "outputs": len(chosen) * 3, "already_done": len(done), "todo": len(todo)}), flush=True)
+    start = time.perf_counter()
+    with out.open("a", encoding="utf-8") as po, fail.open("a", encoding="utf-8") as pf:
+        for i, (row, target) in enumerate(todo, 1):
+            t = time.perf_counter()
+            base = {"orig_id": row["id"], "lang": target, "label": row["label"], "type": row["type"],
+                    "source": row["source"], "split_group": row["split_group"], "orig_split": "train",
+                    "turns": None, "usage": "train", "redistributable": bool(row.get("redistributable")),
+                    "license": row.get("license"), "orig_label": row.get("orig_label")}
+            try:
+                value, model = translate(row, target, examples)
+                po.write(json.dumps({"id": f"{row['id']}-{target}", "text": value, **base, "original": row["text"],
+                                     "model": model, "seconds": time.perf_counter() - t}, ensure_ascii=False) + "\n"); po.flush()
+            except Exception as exc:
+                pf.write(json.dumps({**base, "reason": str(exc).split(":")[0] or type(exc).__name__,
+                                     "seconds": time.perf_counter() - t}, ensure_ascii=False) + "\n"); pf.flush()
+            if i % 100 == 0 or i == len(todo):
+                rate = (time.perf_counter() - start) / i
+                print(f"progress {i}/{len(todo)} sec_per_output={rate:.2f} eta_h={(len(todo) - i) * rate / 3600:.1f}", flush=True)
+    report_v2()
+
+
+def report_v2():
+    out, fail = ROOT/"translated_v2.jsonl", ROOT/"translated_v2_failures.jsonl"
+    passed = [json.loads(x) for x in out.read_text(encoding="utf-8").splitlines() if x.strip()]
+    failed = [json.loads(x) for x in fail.read_text(encoding="utf-8").splitlines() if x.strip()] if fail.exists() else []
+    allr = passed + failed
+    def rate(key):
+        groups = {}
+        for r in allr: groups.setdefault(r[key], [0, 0])[0] += 1
+        for r in passed: groups[r[key]][1] += 1
+        return {k: {"attempted": a, "passed": p, "pass_rate": round(p / a, 4)} for k, (a, p) in sorted(groups.items())}
+    models = {}
+    for r in passed: models[r["model"]] = models.get(r["model"], 0) + 1
+    reasons = {}
+    for r in failed: reasons[f"{r['lang']}:{r['reason']}"] = reasons.get(f"{r['lang']}:{r['reason']}", 0) + 1
+    rows = len({r["orig_id"] for r in allr})
+    secs = sum(r["seconds"] for r in allr)
+    report = {"source_rows": rows, "outputs_attempted": len(allr), "passed": len(passed),
+              "pass_rate": round(len(passed) / max(1, len(allr)), 4), "by_lang": rate("lang"), "by_label": rate("label"),
+              "passed_by_model": {m: {"rows": c, "share_of_passed": round(c / max(1, len(passed)), 4)} for m, c in sorted(models.items())},
+              "seconds_per_output": round(secs / max(1, len(allr)), 2), "seconds_per_source_row": round(secs / max(1, rows), 2),
+              "failure_reasons": dict(sorted(reasons.items(), key=lambda x: -x[1]))}
+    Path("results/translation_v2.md").write_text("# Translation v2 run (train rows only)\n\nGenerated by `scripts/translate_ru.py --v2`. "
+        "Machine translations; human review pending in `data/processed/translation_review_v2.csv`.\n\n```json\n"
+        + json.dumps(report, indent=2) + "\n```\n", encoding="utf-8")
+    rng = random.Random(45); sample = []
+    cells = [(l, lab) for l in LANGS for lab in ("attack", "benign")]
+    for j, (l, lab) in enumerate(cells):
+        pool = [r for r in passed if r["lang"] == l and r["label"] == lab]
+        sample += rng.sample(pool, min(len(pool), 100 // len(cells) + (j < 100 % len(cells))))
+    with (ROOT/"translation_review_v2.csv").open("w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f); w.writerow(["id", "orig_id", "source", "label", "lang", "model", "original", "translation", "reviewer", "verdict", "note"])
+        for r in sample: w.writerow([r["id"], r["orig_id"], r["source"], r["label"], r["lang"], r["model"], r["original"], r["text"], "", "", ""])
+    print(json.dumps(report), flush=True)
+
+
 def main():
-    ap=argparse.ArgumentParser(); ap.add_argument("--limit",type=int,default=50); args=ap.parse_args()
+    ap=argparse.ArgumentParser(); ap.add_argument("--limit",type=int,default=50)
+    ap.add_argument("--v2", action="store_true"); ap.add_argument("--report-only", action="store_true")
+    ap.add_argument("--attacks", type=int, default=2500); ap.add_argument("--benign", type=int, default=2500)
+    ap.add_argument("--train-file", default="train_public_v2.jsonl"); args=ap.parse_args()
+    if args.report_only: return report_v2()
+    if args.v2: return run_v2(args)
     examples=json.loads(Path("scripts/translation_examples.json").read_text(encoding="utf-8"))
     source=[json.loads(x) for x in (ROOT/"train_public.jsonl").open(encoding="utf-8") if x.strip()]
     a=[r for r in source if r["label"]=="attack"]; b=[r for r in source if r["label"]=="benign"]

@@ -336,9 +336,11 @@ def main():
             break
         if not {"prompt", "prompt_harm_label", "adversarial"} <= row.keys():
             raise ValueError("WildGuardMix train schema requires prompt, prompt_harm_label, adversarial")
+        # Harm pool only: as injection attacks these teach "harmful topic = attack";
+        # harmful content is the Qwen3Guard judge's job (v2 data change).
         if row.get("adversarial") is True and row.get("prompt_harm_label") == "harmful":
-            if add("injection_train", "wildguardmix", row.get("prompt"),
-                   "attack", "jailbreak", "adversarial_harmful"):
+            if add("harm", "wildguardmix", row.get("prompt"), "attack", "harm",
+                   "adversarial_harmful", "train", extra={"response": row.get("response")}):
                 wildguard_count += 1
     for rel, row in rows("tensor_trust") or []:
         if "detecting-extractions" in rel:
@@ -566,7 +568,7 @@ def main():
         "red_queen": "Official GitHub/HF source; no explicit dataset license; skipped.",
         "mhj": "Gated; repository has no accessible data file until approval. Nonredistributable.",
         "wildjailbreak": "ODC-By card; access granted. Adversarial harmful and benign rows capped at 8,000 each before global balancing.",
-        "wildguardmix": "ODC-By card; access granted. Adversarial harmful train rows capped at 3,000 before global balancing.",
+        "wildguardmix": "ODC-By card; access granted. Adversarial harmful train rows (capped at 3,000) go to the harm pool only, not injection_train (v2).",
         "hackaprompt": "MIT card; access granted. Maximum 5,000 training rows and 20% per goal after near-deduplication.",
         "spml": "MIT card; label depends on paired system prompt. Both system and user text retained together.",
         "llmail": "MIT card; Phase2 only. Subject and body joined; PII redacted before deduplication; first 2,000 accepted for training, next 2,000 for indirect evaluation.",

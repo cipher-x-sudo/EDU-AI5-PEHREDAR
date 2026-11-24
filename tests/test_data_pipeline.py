@@ -27,6 +27,10 @@ def test_processed_schema_and_unique_ids():
             "dev_public.jsonl",
             "dev_public_v1b.jsonl",
             "train_public.jsonl",
+            "train_public_v2.jsonl",           # split subsets of injection_train
+            "dev_public_v2_unaudited.jsonl",
+            "dev_public_v2.jsonl",
+            "translated_v2_failures.jsonl",    # failure log, no text
         }:
             continue
         for row in records(path):
@@ -154,3 +158,17 @@ def test_training_text_does_not_repeat_secondary_evaluation():
         return
     training_texts = {norm(row["text"]) for row in records(training)}
     assert not training_texts.intersection(norm(row["text"]) for row in records(evaluation))
+
+
+def test_translation_v2_sample_is_stratified_by_source():
+    import pytest
+    pytest.importorskip("requests")
+    from collections import Counter
+    from scripts.translate_ru import stratified
+    rows = [{"id": f"a{i}", "source": "a"} for i in range(600)] + \
+           [{"id": f"b{i}", "source": "b"} for i in range(300)] + \
+           [{"id": f"c{i}", "source": "c"} for i in range(100)]
+    picked = stratified(rows, 101, 42)
+    assert len(picked) == len({r["id"] for r in picked}) == 101
+    assert Counter(r["source"] for r in picked) == {"a": 61, "b": 30, "c": 10}
+    assert picked == stratified(rows, 101, 42)  # deterministic for resume

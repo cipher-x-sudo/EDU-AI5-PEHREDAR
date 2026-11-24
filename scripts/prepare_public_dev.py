@@ -23,7 +23,9 @@ def write(path, rows):
             stream.write(json.dumps(row, ensure_ascii=True) + "\n")
 
 
-def prepare(seed=42):
+def prepare(seed=42, tag=""):
+    """tag="" writes train_public/dev_public (v1); tag="v2" writes
+    train_public_v2 and dev_public_v2_unaudited (input to the embedding audit)."""
     source = ROOT / "injection_train.jsonl"
     rows = read(source)
     for row in rows:
@@ -61,8 +63,8 @@ def prepare(seed=42):
     train = [r for r in rows if r["split_group"] not in selected]
     dev = [r for r in rows if r["split_group"] in selected]
     assert {r["split_group"] for r in train}.isdisjoint(r["split_group"] for r in dev)
-    write(ROOT / "train_public.jsonl", train)
-    write(ROOT / "dev_public.jsonl", dev)
+    write(ROOT / f"train_public{'_' + tag if tag else ''}.jsonl", train)
+    write(ROOT / (f"dev_public_{tag}_unaudited.jsonl" if tag else "dev_public.jsonl"), dev)
     return {"pool": len(rows), "train": len(train), "dev": len(dev),
             "source_sha256": hashlib.sha256(source.read_bytes()).hexdigest(),
             "strata": {f"{s}/{label}": {"pool": count, "dev": progress[s, label]}
@@ -70,4 +72,5 @@ def prepare(seed=42):
 
 
 if __name__ == "__main__":
-    print(json.dumps(prepare(), indent=2))
+    import sys
+    print(json.dumps(prepare(tag=sys.argv[1] if len(sys.argv) > 1 else ""), indent=2))
