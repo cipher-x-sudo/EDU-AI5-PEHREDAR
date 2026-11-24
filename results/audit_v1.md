@@ -75,3 +75,12 @@ After adding safe ToxicChat and Aegis2 training rows: public pool 71,850 rows; t
 - BIPIA remains test-only locally; no train split was available.
 - The embedding audit was not completed after regeneration because the translation retry occupied the serialized GPU window.
 - A deterministic string near-duplicate check found two cross-split pairs and moved their complete dev split groups to train; final train/dev counts are 56,117 / 6,233. The embedding cosine audit remains pending.
+
+## v1b embedding audit
+
+- Model: `intfloat/multilingual-e5-small`; cosine threshold: `>0.95`.
+- Candidate pairs: 585.
+- Leaking dev rows removed: 588.
+- Whole split groups removed: 1114.
+- Final dev_public_v1b rows: 5645.
+- `train_public.jsonl` was not modified because v1b is already trained.

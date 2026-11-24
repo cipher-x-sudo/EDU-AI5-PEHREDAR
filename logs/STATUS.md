@@ -56,3 +56,43 @@ epochs: 1
 job: v1-evaluation
 state: stopped
 reason: CPU DeBERTa evaluation exceeded practical runtime after dataset expansion; no complete v1 report generated
+
+job: embedding-audit-v1b
+state: running
+pid: 33148
+started: 2026-11-24T22:10:38.9682323+05:00
+output: data/processed/dev_public_v1b.jsonl
+
+job: cached-v1b-evaluation
+state: running
+pid: 38772
+started: 2026-11-24T22:22:56.6726753+05:00
+cache: results/cache
+
+job: translation-quality-50
+state: running
+pid: 31952
+started: 2026-11-24T22:42:54.5868152+05:00
+models: qwen3:8b -> abliterated fallback
+
+job: translation-quality-50
+state: done
+result: 100/150 outputs passed (66.7%); fallback abliterated produced accepted samples; Ollama stopped
+
+job: cached-v1b-evaluation
+state: done
+result: results/clf_v1.md and results/v1_evaluation.json refreshed; container exited 0; cache reused
+
+job: embedding-audit-v1b
+state: done
+result: 585 embedding candidate pairs; 588 dev rows; 1114 whole split_groups removed; dev_public_v1b=5645; train unchanged
+
+job: translation-quality-50
+state: done
+result: 50 rows / 150 outputs; 100 passed, 50 failed (66.7%); primary qwen3:8b with abliterated fallback; Ollama stopped
+
+job: docker-tests
+state: done
+result: 52 passed, 1 warning; derived dev_public_v1b excluded from global ID uniqueness check because it intentionally duplicates source rows
+
+BIPIA: test-only locally; benchmark/code/test.jsonl=50, benchmark/email/test.jsonl=50, benchmark/table/test.jsonl=100; no train split found

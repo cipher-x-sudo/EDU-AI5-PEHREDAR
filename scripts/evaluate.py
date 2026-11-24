@@ -103,7 +103,15 @@ def evaluate(path: Path, detector: str = "rules", classifier_dir: str | None = N
 def _load_classifier(directory):
     import torch
     from transformers import AutoModelForSequenceClassification, AutoTokenizer
-    path=Path(directory); report=json.loads((path/"training_report.json").read_text(encoding="utf-8")); tokenizer=AutoTokenizer.from_pretrained(path,local_files_only=True); model=AutoModelForSequenceClassification.from_pretrained(path,local_files_only=True); device=torch.device("cuda" if torch.cuda.is_available() else "cpu"); model.to(device); model.eval(); return tokenizer,model,torch,float(report["threshold"]),device
+    path=Path(directory)
+    report_path = path / "training_report.json"
+    if not report_path.exists():
+        report_path = path / "model_card.md"
+    raw = report_path.read_text(encoding="utf-8")
+    if report_path.name == "model_card.md":
+        raw = raw[raw.find("{"):]
+    report = json.loads(raw)
+    tokenizer=AutoTokenizer.from_pretrained(path,local_files_only=True); model=AutoModelForSequenceClassification.from_pretrained(path,local_files_only=True); device=torch.device("cuda" if torch.cuda.is_available() else "cpu"); model.to(device); model.eval(); return tokenizer,model,torch,float(report["threshold"]),device
 
 
 if __name__ == "__main__":

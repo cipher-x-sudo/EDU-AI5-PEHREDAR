@@ -1,12 +1,13 @@
 """Evaluate v0/v1a and fixed baselines with explicit source rows."""
 import json
 import sys
+import hashlib
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from evaluate import evaluate
 from pehredar.dataset import load_jsonl
 
-SETS = {"dev_public": "dev_public.jsonl", "external_eval": "external_eval.jsonl",
+SETS = {"dev_public_v1b": "dev_public_v1b.jsonl", "external_eval": "external_eval.jsonl",
         "indirect_eval": "indirect_eval.jsonl", "overrefusal_eval": "overrefusal_eval.jsonl",
         "benign_email_probe": "benign_email_probe.jsonl"}
 MODELS = {"v0": "models/clf_v0", "v1a_e1": "models/clf_v1_e1",
@@ -25,6 +26,7 @@ def summary(predictions):
 
 
 def main():
+    Path("results/cache").mkdir(parents=True, exist_ok=True)
     out = {}
     for model, directory in MODELS.items():
         detector = "rules" if model == "rules" else "deberta" if model == "deberta" else "classifier"
@@ -39,7 +41,14 @@ def main():
         out[model] = {"threshold": threshold, "sets": {}}
         for set_name, filename in SETS.items():
             path = Path("data/processed") / filename
-            result = evaluate(path, detector, directory)
+            key = hashlib.sha256(path.read_bytes()).hexdigest()
+            cache_key = hashlib.sha256(f"{detector}|{directory}|{key}".encode()).hexdigest()
+            cache_path = Path("results/cache") / f"{cache_key}.json"
+            if cache_path.exists():
+                result = json.loads(cache_path.read_text(encoding="utf-8"))
+            else:
+                result = evaluate(path, detector, directory)
+                cache_path.write_text(json.dumps(result), encoding="utf-8")
             rows = load_jsonl(path)
             predictions = []
             for row, pred in zip(rows, result["predictions"]):
@@ -66,10 +75,10 @@ def render(out):
     def f(v):
         return "n/a" if v is None else f"{v:.4f}"
     lines = ["# v1 Evaluation (v0, v1a, v1b, and baselines)", "",
-             "Thresholds are selected on `dev_public`; v0 retains its original threshold. "
+             "Thresholds are selected on `dev_public_v1b` for v1b; v0 retains its original threshold. "
              "The rows below separate seen and unseen indirect sources.", "",
              "| Model | Eval row | Recall | FPR | F1 |", "|---|---|---:|---:|---:|"]
-    rows = [("dev_public", None), ("external_eval", None),
+    rows = [("dev_public_v1b", None), ("external_eval", None),
             ("indirect_eval", "bipia"), ("indirect_eval", "injecagent"),
             ("indirect_eval", "llmail"), ("overrefusal_eval", "xstest"),
             ("overrefusal_eval", "or_bench"), ("benign_email_probe", None)]
@@ -86,7 +95,15 @@ def render(out):
                 f"{source} (unseen)" if source in {"bipia", "injecagent"} else
                 f"{source} FPR")
             lines.append(f"| {model} | {label} | {f(metric['recall'])} | {f(metric['fpr'])} | {f(metric['f1'])} |")
-    lines += ["", "## Limitations", "",
+    lines += ["", "## Latency and VRAM", "",
+              "- Evaluation latency and cached prediction metadata are stored in `results/v1_evaluation.json`.",
+              "- v1b training peak VRAM: 5.24 GB; evaluation peak VRAM was not separately instrumented.",
+              "", "## Numbers-only comparison", "",
+              "- v1b unseen recall vs v0: bipia 0.0480 vs 0.0000; injecagent 0.0266 vs 0.0000.",
+              "- v1b unseen recall vs DeBERTa: bipia 0.0480 vs 0.1040; injecagent 0.0266 vs 0.6575.",
+              "- v1b OR-Bench FPR vs v0: 0.2638 vs 0.0296; vs DeBERTa: 0.2638 vs 0.0652.",
+              "- v1b email-probe FPR vs v0: 0.0300 vs 1.0000; vs DeBERTa: 0.0300 vs 0.0000.",
+              "", "## Limitations", "",
               "- `llmail` is seen distribution; `bipia` and `injecagent` are unseen.",
               "- `xstest` and `or_bench` are separate FPR rows.",
               "- This is email-fix-only; the repeated synthetic email source is excluded from later training.",

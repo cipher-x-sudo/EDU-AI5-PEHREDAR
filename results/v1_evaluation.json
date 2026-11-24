@@ -1,0 +1,2312 @@
+{
+  "v0": {
+    "threshold": 0.999222993850708,
+    "sets": {
+      "dev_public_v1b": {
+        "overall": {
+          "count": 5645,
+          "tp": 1597,
+          "fn": 503,
+          "fp": 66,
+          "tn": 3479,
+          "recall": 0.7604761904761905,
+          "fpr": 0.01861777150916784,
+          "f1": 0.8487908583576933
+        },
+        "per_source": {
+          "aegis2": {
+            "count": 346,
+            "tp": 0,
+            "fn": 0,
+            "fp": 0,
+            "tn": 346,
+            "recall": null,
+            "fpr": 0.0,
+            "f1": null
+          },
+          "deepset_pi": {
+            "count": 29,
+            "tp": 2,
+            "fn": 16,
+            "fp": 0,
+            "tn": 11,
+            "recall": 0.1111111111111111,
+            "fpr": 0.0,
+            "f1": 0.2
+          },
+          "dolly": {
+            "count": 492,
+            "tp": 0,
+            "fn": 0,
+            "fp": 0,
+            "tn": 492,
+            "recall": null,
+            "fpr": 0.0,
+            "f1": null
+          },
+          "enron": {
+            "count": 76,
+            "tp": 0,
+            "fn": 0,
+            "fp": 66,
+            "tn": 10,
+            "recall": null,
+            "fpr": 0.868421052631579,
+            "f1": 0.0
+          },
+          "gandalf": {
+            "count": 99,
+            "tp": 64,
+            "fn": 35,
+            "fp": 0,
+            "tn": 0,
+            "recall": 0.6464646464646465,
+            "fpr": null,
+            "f1": 0.7852760736196319
+          },
+          "hackaprompt": {
+            "count": 380,
+            "tp": 298,
+            "fn": 82,
+            "fp": 0,
+            "tn": 0,
+            "recall": 0.7842105263157895,
+            "fpr": null,
+            "f1": 0.8790560471976401
+          },
+          "jailbreak_llms": {
+            "count": 647,
+            "tp": 0,
+            "fn": 53,
+            "fp": 0,
+            "tn": 594,
+            "recall": 0.0,
+            "fpr": 0.0,
+            "f1": 0.0
+          },
+          "jb_class": {
+            "count": 79,
+            "tp": 0,
+            "fn": 32,
+            "fp": 0,
+            "tn": 47,
+            "recall": 0.0,
+            "fpr": 0.0,
+            "f1": 0.0
+          },
+          "llmail": {
+            "count": 66,
+            "tp": 66,
+            "fn": 0,
+            "fp": 0,
+            "tn": 0,
+            "recall": 1.0,
+            "fpr": null,
+            "f1": 1.0
+          },
+          "oasst1": {
+            "count": 496,
+            "tp": 0,
+            "fn": 0,
+            "fp": 0,
+            "tn": 496,
+            "recall": null,
+            "fpr": 0.0,
+            "f1": null
+          },
+          "spml": {
+            "count": 824,
+            "tp": 432,
+            "fn": 97,
+            "fp": 0,
+            "tn": 295,
+            "recall": 0.8166351606805293,
+            "fpr": 0.0,
+            "f1": 0.899063475546306
+          },
+          "toxicchat": {
+            "count": 389,
+            "tp": 0,
+            "fn": 0,
+            "fp": 0,
+            "tn": 389,
+            "recall": null,
+            "fpr": 0.0,
+            "f1": null
+          },
+          "wildguardmix": {
+            "count": 300,
+            "tp": 227,
+            "fn": 73,
+            "fp": 0,
+            "tn": 0,
+            "recall": 0.7566666666666667,
+            "fpr": null,
+            "f1": 0.8614800759013282
+          },
+          "wildjailbreak": {
+            "count": 1422,
+            "tp": 508,
+            "fn": 115,
+            "fp": 0,
+            "tn": 799,
+            "recall": 0.8154093097913323,
+            "fpr": 0.0,
+            "f1": 0.8983200707338639
+          }
+        },
+        "per_language": {
+          "en": {
+            "count": 5644,
+            "tp": 1596,
+            "fn": 503,
+            "fp": 66,
+            "tn": 3479,
+            "recall": 0.7603620771796094,
+            "fpr": 0.01861777150916784,
+            "f1": 0.8487104493485775
+          },
+          "mixed": {
+            "count": 1,
+            "tp": 1,
+            "fn": 0,
+            "fp": 0,
+            "tn": 0,
+            "recall": 1.0,
+            "fpr": null,
+            "f1": 1.0
+          }
+        },
+        "median_latency_ms": 3.111430910540251,
+        "p95_latency_ms": 3.111430910540251
+      },
+      "external_eval": {
+        "overall": {
+          "count": 506,
+          "tp": 3,
+          "fn": 194,
+          "fp": 0,
+          "tn": 309,
+          "recall": 0.015228426395939087,
+          "fpr": 0.0,
+          "f1": 0.03
+        },
+        "per_source": {
+          "deepset_pi": {
+            "count": 116,
+            "tp": 3,
+            "fn": 57,
+            "fp": 0,
+            "tn": 56,
+            "recall": 0.05,
+            "fpr": 0.0,
+            "f1": 0.09523809523809523
+          },
+          "jb_class": {
+            "count": 390,
+            "tp": 0,
+            "fn": 137,
+            "fp": 0,
+            "tn": 253,
+            "recall": 0.0,
+            "fpr": 0.0,
+            "f1": 0.0
+          }
+        },
+        "per_language": {
+          "en": {
+            "count": 506,
+            "tp": 3,
+            "fn": 194,
+            "fp": 0,
+            "tn": 309,
+            "recall": 0.015228426395939087,
+            "fpr": 0.0,
+            "f1": 0.03
+          }
+        },
+        "median_latency_ms": 3.487029324108302,
+        "p95_latency_ms": 3.487029324108302
+      },
+      "indirect_eval": {
+        "overall": {
+          "count": 3179,
+          "tp": 1808,
+          "fn": 1371,
+          "fp": 0,
+          "tn": 0,
+          "recall": 0.5687323057565272,
+          "fpr": null,
+          "f1": 0.7250852215760979
+        },
+        "per_source": {
+          "bipia": {
+            "count": 125,
+            "tp": 0,
+            "fn": 125,
+            "fp": 0,
+            "tn": 0,
+            "recall": 0.0,
+            "fpr": null,
+            "f1": 0.0
+          },
+          "injecagent": {
+            "count": 1054,
+            "tp": 0,
+            "fn": 1054,
+            "fp": 0,
+            "tn": 0,
+            "recall": 0.0,
+            "fpr": null,
+            "f1": 0.0
+          },
+          "llmail": {
+            "count": 2000,
+            "tp": 1808,
+            "fn": 192,
+            "fp": 0,
+            "tn": 0,
+            "recall": 0.904,
+            "fpr": null,
+            "f1": 0.9495798319327731
+          }
+        },
+        "per_language": {
+          "en": {
+            "count": 3159,
+            "tp": 1788,
+            "fn": 1371,
+            "fp": 0,
+            "tn": 0,
+            "recall": 0.5660018993352327,
+            "fpr": null,
+            "f1": 0.7228623408126137
+          },
+          "mixed": {
+            "count": 20,
+            "tp": 20,
+            "fn": 0,
+            "fp": 0,
+            "tn": 0,
+            "recall": 1.0,
+            "fpr": null,
+            "f1": 1.0
+          }
+        },
+        "median_latency_ms": 3.351318064485963,
+        "p95_latency_ms": 3.351318064485963
+      },
+      "overrefusal_eval": {
+        "overall": {
+          "count": 1568,
+          "tp": 0,
+          "fn": 0,
+          "fp": 39,
+          "tn": 1529,
+          "recall": null,
+          "fpr": 0.024872448979591837,
+          "f1": 0.0
+        },
+        "per_source": {
+          "or_bench": {
+            "count": 1319,
+            "tp": 0,
+            "fn": 0,
+            "fp": 39,
+            "tn": 1280,
+            "recall": null,
+            "fpr": 0.029567854435178165,
+            "f1": 0.0
+          },
+          "xstest": {
+            "count": 249,
+            "tp": 0,
+            "fn": 0,
+            "fp": 0,
+            "tn": 249,
+            "recall": null,
+            "fpr": 0.0,
+            "f1": null
+          }
+        },
+        "per_language": {
+          "en": {
+            "count": 1568,
+            "tp": 0,
+            "fn": 0,
+            "fp": 39,
+            "tn": 1529,
+            "recall": null,
+            "fpr": 0.024872448979591837,
+            "f1": 0.0
+          }
+        },
+        "median_latency_ms": 0.6422985121176049,
+        "p95_latency_ms": 0.6422985121176049
+      },
+      "benign_email_probe": {
+        "overall": {
+          "count": 100,
+          "tp": 0,
+          "fn": 0,
+          "fp": 100,
+          "tn": 0,
+          "recall": null,
+          "fpr": 1.0,
+          "f1": 0.0
+        },
+        "per_source": {
+          "benign_email_probe": {
+            "count": 100,
+            "tp": 0,
+            "fn": 0,
+            "fp": 100,
+            "tn": 0,
+            "recall": null,
+            "fpr": 1.0,
+            "f1": 0.0
+          }
+        },
+        "per_language": {
+          "en": {
+            "count": 100,
+            "tp": 0,
+            "fn": 0,
+            "fp": 100,
+            "tn": 0,
+            "recall": null,
+            "fpr": 1.0,
+            "f1": 0.0
+          }
+        },
+        "median_latency_ms": 0.6429661599759129,
+        "p95_latency_ms": 0.6429661599759129
+      }
+    }
+  },
+  "v1a_e1": {
+    "threshold": 0.9995582699775696,
+    "sets": {
+      "dev_public_v1b": {
+        "overall": {
+          "count": 5645,
+          "tp": 278,
+          "fn": 1822,
+          "fp": 67,
+          "tn": 3478,
+          "recall": 0.13238095238095238,
+          "fpr": 0.018899858956276445,
+          "f1": 0.22740286298568507
+        },
+        "per_source": {
+          "aegis2": {
+            "count": 346,
+            "tp": 0,
+            "fn": 0,
+            "fp": 0,
+            "tn": 346,
+            "recall": null,
+            "fpr": 0.0,
+            "f1": null
+          },
+          "deepset_pi": {
+            "count": 29,
+            "tp": 0,
+            "fn": 18,
+            "fp": 0,
+            "tn": 11,
+            "recall": 0.0,
+            "fpr": 0.0,
+            "f1": 0.0
+          },
+          "dolly": {
+            "count": 492,
+            "tp": 0,
+            "fn": 0,
+            "fp": 0,
+            "tn": 492,
+            "recall": null,
+            "fpr": 0.0,
+            "f1": null
+          },
+          "enron": {
+            "count": 76,
+            "tp": 0,
+            "fn": 0,
+            "fp": 67,
+            "tn": 9,
+            "recall": null,
+            "fpr": 0.881578947368421,
+            "f1": 0.0
+          },
+          "gandalf": {
+            "count": 99,
+            "tp": 0,
+            "fn": 99,
+            "fp": 0,
+            "tn": 0,
+            "recall": 0.0,
+            "fpr": null,
+            "f1": 0.0
+          },
+          "hackaprompt": {
+            "count": 380,
+            "tp": 204,
+            "fn": 176,
+            "fp": 0,
+            "tn": 0,
+            "recall": 0.5368421052631579,
+            "fpr": null,
+            "f1": 0.6986301369863014
+          },
+          "jailbreak_llms": {
+            "count": 647,
+            "tp": 0,
+            "fn": 53,
+            "fp": 0,
+            "tn": 594,
+            "recall": 0.0,
+            "fpr": 0.0,
+            "f1": 0.0
+          },
+          "jb_class": {
+            "count": 79,
+            "tp": 0,
+            "fn": 32,
+            "fp": 0,
+            "tn": 47,
+            "recall": 0.0,
+            "fpr": 0.0,
+            "f1": 0.0
+          },
+          "llmail": {
+            "count": 66,
+            "tp": 66,
+            "fn": 0,
+            "fp": 0,
+            "tn": 0,
+            "recall": 1.0,
+            "fpr": null,
+            "f1": 1.0
+          },
+          "oasst1": {
+            "count": 496,
+            "tp": 0,
+            "fn": 0,
+            "fp": 0,
+            "tn": 496,
+            "recall": null,
+            "fpr": 0.0,
+            "f1": null
+          },
+          "spml": {
+            "count": 824,
+            "tp": 8,
+            "fn": 521,
+            "fp": 0,
+            "tn": 295,
+            "recall": 0.015122873345935728,
+            "fpr": 0.0,
+            "f1": 0.0297951582867784
+          },
+          "toxicchat": {
+            "count": 389,
+            "tp": 0,
+            "fn": 0,
+            "fp": 0,
+            "tn": 389,
+            "recall": null,
+            "fpr": 0.0,
+            "f1": null
+          },
+          "wildguardmix": {
+            "count": 300,
+            "tp": 0,
+            "fn": 300,
+            "fp": 0,
+            "tn": 0,
+            "recall": 0.0,
+            "fpr": null,
+            "f1": 0.0
+          },
+          "wildjailbreak": {
+            "count": 1422,
+            "tp": 0,
+            "fn": 623,
+            "fp": 0,
+            "tn": 799,
+            "recall": 0.0,
+            "fpr": 0.0,
+            "f1": 0.0
+          }
+        },
+        "per_language": {
+          "en": {
+            "count": 5644,
+            "tp": 277,
+            "fn": 1822,
+            "fp": 67,
+            "tn": 3478,
+            "recall": 0.13196760362077178,
+            "fpr": 0.018899858956276445,
+            "f1": 0.22677036430618092
+          },
+          "mixed": {
+            "count": 1,
+            "tp": 1,
+            "fn": 0,
+            "fp": 0,
+            "tn": 0,
+            "recall": 1.0,
+            "fpr": null,
+            "f1": 1.0
+          }
+        },
+        "median_latency_ms": 3.149092964924761,
+        "p95_latency_ms": 3.149092964924761
+      },
+      "external_eval": {
+        "overall": {
+          "count": 506,
+          "tp": 0,
+          "fn": 197,
+          "fp": 0,
+          "tn": 309,
+          "recall": 0.0,
+          "fpr": 0.0,
+          "f1": 0.0
+        },
+        "per_source": {
+          "deepset_pi": {
+            "count": 116,
+            "tp": 0,
+            "fn": 60,
+            "fp": 0,
+            "tn": 56,
+            "recall": 0.0,
+            "fpr": 0.0,
+            "f1": 0.0
+          },
+          "jb_class": {
+            "count": 390,
+            "tp": 0,
+            "fn": 137,
+            "fp": 0,
+            "tn": 253,
+            "recall": 0.0,
+            "fpr": 0.0,
+            "f1": 0.0
+          }
+        },
+        "per_language": {
+          "en": {
+            "count": 506,
+            "tp": 0,
+            "fn": 197,
+            "fp": 0,
+            "tn": 309,
+            "recall": 0.0,
+            "fpr": 0.0,
+            "f1": 0.0
+          }
+        },
+        "median_latency_ms": 3.536656782613826,
+        "p95_latency_ms": 3.536656782613826
+      },
+      "indirect_eval": {
+        "overall": {
+          "count": 3179,
+          "tp": 1824,
+          "fn": 1355,
+          "fp": 0,
+          "tn": 0,
+          "recall": 0.5737653350110098,
+          "fpr": null,
+          "f1": 0.7291625024985009
+        },
+        "per_source": {
+          "bipia": {
+            "count": 125,
+            "tp": 0,
+            "fn": 125,
+            "fp": 0,
+            "tn": 0,
+            "recall": 0.0,
+            "fpr": null,
+            "f1": 0.0
+          },
+          "injecagent": {
+            "count": 1054,
+            "tp": 0,
+            "fn": 1054,
+            "fp": 0,
+            "tn": 0,
+            "recall": 0.0,
+            "fpr": null,
+            "f1": 0.0
+          },
+          "llmail": {
+            "count": 2000,
+            "tp": 1824,
+            "fn": 176,
+            "fp": 0,
+            "tn": 0,
+            "recall": 0.912,
+            "fpr": null,
+            "f1": 0.9539748953974896
+          }
+        },
+        "per_language": {
+          "en": {
+            "count": 3159,
+            "tp": 1804,
+            "fn": 1355,
+            "fp": 0,
+            "tn": 0,
+            "recall": 0.5710667932890156,
+            "fpr": null,
+            "f1": 0.7269796494056014
+          },
+          "mixed": {
+            "count": 20,
+            "tp": 20,
+            "fn": 0,
+            "fp": 0,
+            "tn": 0,
+            "recall": 1.0,
+            "fpr": null,
+            "f1": 1.0
+          }
+        },
+        "median_latency_ms": 3.4308597983638767,
+        "p95_latency_ms": 3.4308597983638767
+      },
+      "overrefusal_eval": {
+        "overall": {
+          "count": 1568,
+          "tp": 0,
+          "fn": 0,
+          "fp": 0,
+          "tn": 1568,
+          "recall": null,
+          "fpr": 0.0,
+          "f1": null
+        },
+        "per_source": {
+          "or_bench": {
+            "count": 1319,
+            "tp": 0,
+            "fn": 0,
+            "fp": 0,
+            "tn": 1319,
+            "recall": null,
+            "fpr": 0.0,
+            "f1": null
+          },
+          "xstest": {
+            "count": 249,
+            "tp": 0,
+            "fn": 0,
+            "fp": 0,
+            "tn": 249,
+            "recall": null,
+            "fpr": 0.0,
+            "f1": null
+          }
+        },
+        "per_language": {
+          "en": {
+            "count": 1568,
+            "tp": 0,
+            "fn": 0,
+            "fp": 0,
+            "tn": 1568,
+            "recall": null,
+            "fpr": 0.0,
+            "f1": null
+          }
+        },
+        "median_latency_ms": 0.652619311861655,
+        "p95_latency_ms": 0.652619311861655
+      },
+      "benign_email_probe": {
+        "overall": {
+          "count": 100,
+          "tp": 0,
+          "fn": 0,
+          "fp": 98,
+          "tn": 2,
+          "recall": null,
+          "fpr": 0.98,
+          "f1": 0.0
+        },
+        "per_source": {
+          "benign_email_probe": {
+            "count": 100,
+            "tp": 0,
+            "fn": 0,
+            "fp": 98,
+            "tn": 2,
+            "recall": null,
+            "fpr": 0.98,
+            "f1": 0.0
+          }
+        },
+        "per_language": {
+          "en": {
+            "count": 100,
+            "tp": 0,
+            "fn": 0,
+            "fp": 98,
+            "tn": 2,
+            "recall": null,
+            "fpr": 0.98,
+            "f1": 0.0
+          }
+        },
+        "median_latency_ms": 0.6530467099946691,
+        "p95_latency_ms": 0.6530467099946691
+      }
+    }
+  },
+  "v1a_e2": {
+    "threshold": 0.999784529209137,
+    "sets": {
+      "dev_public_v1b": {
+        "overall": {
+          "count": 5645,
+          "tp": 759,
+          "fn": 1341,
+          "fp": 67,
+          "tn": 3478,
+          "recall": 0.36142857142857143,
+          "fpr": 0.018899858956276445,
+          "f1": 0.518796992481203
+        },
+        "per_source": {
+          "aegis2": {
+            "count": 346,
+            "tp": 0,
+            "fn": 0,
+            "fp": 0,
+            "tn": 346,
+            "recall": null,
+            "fpr": 0.0,
+            "f1": null
+          },
+          "deepset_pi": {
+            "count": 29,
+            "tp": 0,
+            "fn": 18,
+            "fp": 0,
+            "tn": 11,
+            "recall": 0.0,
+            "fpr": 0.0,
+            "f1": 0.0
+          },
+          "dolly": {
+            "count": 492,
+            "tp": 0,
+            "fn": 0,
+            "fp": 0,
+            "tn": 492,
+            "recall": null,
+            "fpr": 0.0,
+            "f1": null
+          },
+          "enron": {
+            "count": 76,
+            "tp": 0,
+            "fn": 0,
+            "fp": 67,
+            "tn": 9,
+            "recall": null,
+            "fpr": 0.881578947368421,
+            "f1": 0.0
+          },
+          "gandalf": {
+            "count": 99,
+            "tp": 2,
+            "fn": 97,
+            "fp": 0,
+            "tn": 0,
+            "recall": 0.020202020202020204,
+            "fpr": null,
+            "f1": 0.039603960396039604
+          },
+          "hackaprompt": {
+            "count": 380,
+            "tp": 188,
+            "fn": 192,
+            "fp": 0,
+            "tn": 0,
+            "recall": 0.49473684210526314,
+            "fpr": null,
+            "f1": 0.6619718309859155
+          },
+          "jailbreak_llms": {
+            "count": 647,
+            "tp": 0,
+            "fn": 53,
+            "fp": 0,
+            "tn": 594,
+            "recall": 0.0,
+            "fpr": 0.0,
+            "f1": 0.0
+          },
+          "jb_class": {
+            "count": 79,
+            "tp": 0,
+            "fn": 32,
+            "fp": 0,
+            "tn": 47,
+            "recall": 0.0,
+            "fpr": 0.0,
+            "f1": 0.0
+          },
+          "llmail": {
+            "count": 66,
+            "tp": 66,
+            "fn": 0,
+            "fp": 0,
+            "tn": 0,
+            "recall": 1.0,
+            "fpr": null,
+            "f1": 1.0
+          },
+          "oasst1": {
+            "count": 496,
+            "tp": 0,
+            "fn": 0,
+            "fp": 0,
+            "tn": 496,
+            "recall": null,
+            "fpr": 0.0,
+            "f1": null
+          },
+          "spml": {
+            "count": 824,
+            "tp": 221,
+            "fn": 308,
+            "fp": 0,
+            "tn": 295,
+            "recall": 0.41776937618147447,
+            "fpr": 0.0,
+            "f1": 0.5893333333333334
+          },
+          "toxicchat": {
+            "count": 389,
+            "tp": 0,
+            "fn": 0,
+            "fp": 0,
+            "tn": 389,
+            "recall": null,
+            "fpr": 0.0,
+            "f1": null
+          },
+          "wildguardmix": {
+            "count": 300,
+            "tp": 10,
+            "fn": 290,
+            "fp": 0,
+            "tn": 0,
+            "recall": 0.03333333333333333,
+            "fpr": null,
+            "f1": 0.06451612903225806
+          },
+          "wildjailbreak": {
+            "count": 1422,
+            "tp": 272,
+            "fn": 351,
+            "fp": 0,
+            "tn": 799,
+            "recall": 0.43659711075441415,
+            "fpr": 0.0,
+            "f1": 0.6078212290502794
+          }
+        },
+        "per_language": {
+          "en": {
+            "count": 5644,
+            "tp": 758,
+            "fn": 1341,
+            "fp": 67,
+            "tn": 3478,
+            "recall": 0.3611243449261553,
+            "fpr": 0.018899858956276445,
+            "f1": 0.518467852257182
+          },
+          "mixed": {
+            "count": 1,
+            "tp": 1,
+            "fn": 0,
+            "fp": 0,
+            "tn": 0,
+            "recall": 1.0,
+            "fpr": null,
+            "f1": 1.0
+          }
+        },
+        "median_latency_ms": 3.2488581300268184,
+        "p95_latency_ms": 3.2488581300268184
+      },
+      "external_eval": {
+        "overall": {
+          "count": 506,
+          "tp": 0,
+          "fn": 197,
+          "fp": 0,
+          "tn": 309,
+          "recall": 0.0,
+          "fpr": 0.0,
+          "f1": 0.0
+        },
+        "per_source": {
+          "deepset_pi": {
+            "count": 116,
+            "tp": 0,
+            "fn": 60,
+            "fp": 0,
+            "tn": 56,
+            "recall": 0.0,
+            "fpr": 0.0,
+            "f1": 0.0
+          },
+          "jb_class": {
+            "count": 390,
+            "tp": 0,
+            "fn": 137,
+            "fp": 0,
+            "tn": 253,
+            "recall": 0.0,
+            "fpr": 0.0,
+            "f1": 0.0
+          }
+        },
+        "per_language": {
+          "en": {
+            "count": 506,
+            "tp": 0,
+            "fn": 197,
+            "fp": 0,
+            "tn": 309,
+            "recall": 0.0,
+            "fpr": 0.0,
+            "f1": 0.0
+          }
+        },
+        "median_latency_ms": 3.613837707507987,
+        "p95_latency_ms": 3.613837707507987
+      },
+      "indirect_eval": {
+        "overall": {
+          "count": 3179,
+          "tp": 1701,
+          "fn": 1478,
+          "fp": 0,
+          "tn": 0,
+          "recall": 0.5350739226171752,
+          "fpr": null,
+          "f1": 0.6971311475409836
+        },
+        "per_source": {
+          "bipia": {
+            "count": 125,
+            "tp": 0,
+            "fn": 125,
+            "fp": 0,
+            "tn": 0,
+            "recall": 0.0,
+            "fpr": null,
+            "f1": 0.0
+          },
+          "injecagent": {
+            "count": 1054,
+            "tp": 0,
+            "fn": 1054,
+            "fp": 0,
+            "tn": 0,
+            "recall": 0.0,
+            "fpr": null,
+            "f1": 0.0
+          },
+          "llmail": {
+            "count": 2000,
+            "tp": 1701,
+            "fn": 299,
+            "fp": 0,
+            "tn": 0,
+            "recall": 0.8505,
+            "fpr": null,
+            "f1": 0.9192110240475547
+          }
+        },
+        "per_language": {
+          "en": {
+            "count": 3159,
+            "tp": 1686,
+            "fn": 1473,
+            "fp": 0,
+            "tn": 0,
+            "recall": 0.533713200379867,
+            "fpr": null,
+            "f1": 0.6959752321981424
+          },
+          "mixed": {
+            "count": 20,
+            "tp": 15,
+            "fn": 5,
+            "fp": 0,
+            "tn": 0,
+            "recall": 0.75,
+            "fpr": null,
+            "f1": 0.8571428571428571
+          }
+        },
+        "median_latency_ms": 3.455166000629034,
+        "p95_latency_ms": 3.455166000629034
+      },
+      "overrefusal_eval": {
+        "overall": {
+          "count": 1568,
+          "tp": 0,
+          "fn": 0,
+          "fp": 0,
+          "tn": 1568,
+          "recall": null,
+          "fpr": 0.0,
+          "f1": null
+        },
+        "per_source": {
+          "or_bench": {
+            "count": 1319,
+            "tp": 0,
+            "fn": 0,
+            "fp": 0,
+            "tn": 1319,
+            "recall": null,
+            "fpr": 0.0,
+            "f1": null
+          },
+          "xstest": {
+            "count": 249,
+            "tp": 0,
+            "fn": 0,
+            "fp": 0,
+            "tn": 249,
+            "recall": null,
+            "fpr": 0.0,
+            "f1": null
+          }
+        },
+        "per_language": {
+          "en": {
+            "count": 1568,
+            "tp": 0,
+            "fn": 0,
+            "fp": 0,
+            "tn": 1568,
+            "recall": null,
+            "fpr": 0.0,
+            "f1": null
+          }
+        },
+        "median_latency_ms": 0.6580146709174354,
+        "p95_latency_ms": 0.6580146709174354
+      },
+      "benign_email_probe": {
+        "overall": {
+          "count": 100,
+          "tp": 0,
+          "fn": 0,
+          "fp": 100,
+          "tn": 0,
+          "recall": null,
+          "fpr": 1.0,
+          "f1": 0.0
+        },
+        "per_source": {
+          "benign_email_probe": {
+            "count": 100,
+            "tp": 0,
+            "fn": 0,
+            "fp": 100,
+            "tn": 0,
+            "recall": null,
+            "fpr": 1.0,
+            "f1": 0.0
+          }
+        },
+        "per_language": {
+          "en": {
+            "count": 100,
+            "tp": 0,
+            "fn": 0,
+            "fp": 100,
+            "tn": 0,
+            "recall": null,
+            "fpr": 1.0,
+            "f1": 0.0
+          }
+        },
+        "median_latency_ms": 0.6892480800161138,
+        "p95_latency_ms": 0.6892480800161138
+      }
+    }
+  },
+  "v1b_e1": {
+    "threshold": 0.7955983877182007,
+    "sets": {
+      "dev_public_v1b": {
+        "overall": {
+          "count": 5645,
+          "tp": 1850,
+          "fn": 250,
+          "fp": 61,
+          "tn": 3484,
+          "recall": 0.8809523809523809,
+          "fpr": 0.017207334273624825,
+          "f1": 0.9224632261281476
+        },
+        "per_source": {
+          "aegis2": {
+            "count": 346,
+            "tp": 0,
+            "fn": 0,
+            "fp": 2,
+            "tn": 344,
+            "recall": null,
+            "fpr": 0.005780346820809248,
+            "f1": 0.0
+          },
+          "deepset_pi": {
+            "count": 29,
+            "tp": 5,
+            "fn": 13,
+            "fp": 0,
+            "tn": 11,
+            "recall": 0.2777777777777778,
+            "fpr": 0.0,
+            "f1": 0.43478260869565216
+          },
+          "dolly": {
+            "count": 492,
+            "tp": 0,
+            "fn": 0,
+            "fp": 0,
+            "tn": 492,
+            "recall": null,
+            "fpr": 0.0,
+            "f1": null
+          },
+          "enron": {
+            "count": 76,
+            "tp": 0,
+            "fn": 0,
+            "fp": 0,
+            "tn": 76,
+            "recall": null,
+            "fpr": 0.0,
+            "f1": null
+          },
+          "gandalf": {
+            "count": 99,
+            "tp": 95,
+            "fn": 4,
+            "fp": 0,
+            "tn": 0,
+            "recall": 0.9595959595959596,
+            "fpr": null,
+            "f1": 0.979381443298969
+          },
+          "hackaprompt": {
+            "count": 380,
+            "tp": 337,
+            "fn": 43,
+            "fp": 0,
+            "tn": 0,
+            "recall": 0.8868421052631579,
+            "fpr": null,
+            "f1": 0.9400278940027894
+          },
+          "jailbreak_llms": {
+            "count": 647,
+            "tp": 17,
+            "fn": 36,
+            "fp": 24,
+            "tn": 570,
+            "recall": 0.32075471698113206,
+            "fpr": 0.04040404040404041,
+            "f1": 0.3617021276595745
+          },
+          "jb_class": {
+            "count": 79,
+            "tp": 16,
+            "fn": 16,
+            "fp": 1,
+            "tn": 46,
+            "recall": 0.5,
+            "fpr": 0.02127659574468085,
+            "f1": 0.6530612244897959
+          },
+          "llmail": {
+            "count": 66,
+            "tp": 61,
+            "fn": 5,
+            "fp": 0,
+            "tn": 0,
+            "recall": 0.9242424242424242,
+            "fpr": null,
+            "f1": 0.9606299212598425
+          },
+          "oasst1": {
+            "count": 496,
+            "tp": 0,
+            "fn": 0,
+            "fp": 9,
+            "tn": 487,
+            "recall": null,
+            "fpr": 0.018145161290322582,
+            "f1": 0.0
+          },
+          "spml": {
+            "count": 824,
+            "tp": 504,
+            "fn": 25,
+            "fp": 0,
+            "tn": 295,
+            "recall": 0.9527410207939508,
+            "fpr": 0.0,
+            "f1": 0.9757986447241046
+          },
+          "toxicchat": {
+            "count": 389,
+            "tp": 0,
+            "fn": 0,
+            "fp": 5,
+            "tn": 384,
+            "recall": null,
+            "fpr": 0.012853470437017995,
+            "f1": 0.0
+          },
+          "wildguardmix": {
+            "count": 300,
+            "tp": 268,
+            "fn": 32,
+            "fp": 0,
+            "tn": 0,
+            "recall": 0.8933333333333333,
+            "fpr": null,
+            "f1": 0.9436619718309859
+          },
+          "wildjailbreak": {
+            "count": 1422,
+            "tp": 547,
+            "fn": 76,
+            "fp": 20,
+            "tn": 779,
+            "recall": 0.8780096308186196,
+            "fpr": 0.025031289111389236,
+            "f1": 0.9193277310924369
+          }
+        },
+        "per_language": {
+          "en": {
+            "count": 5644,
+            "tp": 1849,
+            "fn": 250,
+            "fp": 61,
+            "tn": 3484,
+            "recall": 0.8808956646021915,
+            "fpr": 0.017207334273624825,
+            "f1": 0.922424544774258
+          },
+          "mixed": {
+            "count": 1,
+            "tp": 1,
+            "fn": 0,
+            "fp": 0,
+            "tn": 0,
+            "recall": 1.0,
+            "fpr": null,
+            "f1": 1.0
+          }
+        },
+        "median_latency_ms": 3.364409470858877,
+        "p95_latency_ms": 3.364409470858877
+      },
+      "external_eval": {
+        "overall": {
+          "count": 506,
+          "tp": 96,
+          "fn": 101,
+          "fp": 0,
+          "tn": 309,
+          "recall": 0.4873096446700508,
+          "fpr": 0.0,
+          "f1": 0.6552901023890785
+        },
+        "per_source": {
+          "deepset_pi": {
+            "count": 116,
+            "tp": 10,
+            "fn": 50,
+            "fp": 0,
+            "tn": 56,
+            "recall": 0.16666666666666666,
+            "fpr": 0.0,
+            "f1": 0.2857142857142857
+          },
+          "jb_class": {
+            "count": 390,
+            "tp": 86,
+            "fn": 51,
+            "fp": 0,
+            "tn": 253,
+            "recall": 0.6277372262773723,
+            "fpr": 0.0,
+            "f1": 0.7713004484304933
+          }
+        },
+        "per_language": {
+          "en": {
+            "count": 506,
+            "tp": 96,
+            "fn": 101,
+            "fp": 0,
+            "tn": 309,
+            "recall": 0.4873096446700508,
+            "fpr": 0.0,
+            "f1": 0.6552901023890785
+          }
+        },
+        "median_latency_ms": 3.6594394486211836,
+        "p95_latency_ms": 3.6594394486211836
+      },
+      "indirect_eval": {
+        "overall": {
+          "count": 3179,
+          "tp": 1395,
+          "fn": 1784,
+          "fp": 0,
+          "tn": 0,
+          "recall": 0.43881723812519663,
+          "fpr": null,
+          "f1": 0.609969392216878
+        },
+        "per_source": {
+          "bipia": {
+            "count": 125,
+            "tp": 6,
+            "fn": 119,
+            "fp": 0,
+            "tn": 0,
+            "recall": 0.048,
+            "fpr": null,
+            "f1": 0.0916030534351145
+          },
+          "injecagent": {
+            "count": 1054,
+            "tp": 28,
+            "fn": 1026,
+            "fp": 0,
+            "tn": 0,
+            "recall": 0.026565464895635674,
+            "fpr": null,
+            "f1": 0.051756007393715345
+          },
+          "llmail": {
+            "count": 2000,
+            "tp": 1361,
+            "fn": 639,
+            "fp": 0,
+            "tn": 0,
+            "recall": 0.6805,
+            "fpr": null,
+            "f1": 0.8098780124962809
+          }
+        },
+        "per_language": {
+          "en": {
+            "count": 3159,
+            "tp": 1377,
+            "fn": 1782,
+            "fp": 0,
+            "tn": 0,
+            "recall": 0.4358974358974359,
+            "fpr": null,
+            "f1": 0.6071428571428571
+          },
+          "mixed": {
+            "count": 20,
+            "tp": 18,
+            "fn": 2,
+            "fp": 0,
+            "tn": 0,
+            "recall": 0.9,
+            "fpr": null,
+            "f1": 0.9473684210526315
+          }
+        },
+        "median_latency_ms": 3.537389776973591,
+        "p95_latency_ms": 3.537389776973591
+      },
+      "overrefusal_eval": {
+        "overall": {
+          "count": 1568,
+          "tp": 0,
+          "fn": 0,
+          "fp": 348,
+          "tn": 1220,
+          "recall": null,
+          "fpr": 0.22193877551020408,
+          "f1": 0.0
+        },
+        "per_source": {
+          "or_bench": {
+            "count": 1319,
+            "tp": 0,
+            "fn": 0,
+            "fp": 348,
+            "tn": 971,
+            "recall": null,
+            "fpr": 0.26383623957543595,
+            "f1": 0.0
+          },
+          "xstest": {
+            "count": 249,
+            "tp": 0,
+            "fn": 0,
+            "fp": 0,
+            "tn": 249,
+            "recall": null,
+            "fpr": 0.0,
+            "f1": null
+          }
+        },
+        "per_language": {
+          "en": {
+            "count": 1568,
+            "tp": 0,
+            "fn": 0,
+            "fp": 348,
+            "tn": 1220,
+            "recall": null,
+            "fpr": 0.22193877551020408,
+            "f1": 0.0
+          }
+        },
+        "median_latency_ms": 0.6791595771703994,
+        "p95_latency_ms": 0.6791595771703994
+      },
+      "benign_email_probe": {
+        "overall": {
+          "count": 100,
+          "tp": 0,
+          "fn": 0,
+          "fp": 3,
+          "tn": 97,
+          "recall": null,
+          "fpr": 0.03,
+          "f1": 0.0
+        },
+        "per_source": {
+          "benign_email_probe": {
+            "count": 100,
+            "tp": 0,
+            "fn": 0,
+            "fp": 3,
+            "tn": 97,
+            "recall": null,
+            "fpr": 0.03,
+            "f1": 0.0
+          }
+        },
+        "per_language": {
+          "en": {
+            "count": 100,
+            "tp": 0,
+            "fn": 0,
+            "fp": 3,
+            "tn": 97,
+            "recall": null,
+            "fpr": 0.03,
+            "f1": 0.0
+          }
+        },
+        "median_latency_ms": 0.6828314000085811,
+        "p95_latency_ms": 0.6828314000085811
+      }
+    }
+  },
+  "rules": {
+    "threshold": 0.75,
+    "sets": {
+      "dev_public_v1b": {
+        "overall": {
+          "count": 5645,
+          "tp": 52,
+          "fn": 2048,
+          "fp": 44,
+          "tn": 3501,
+          "recall": 0.024761904761904763,
+          "fpr": 0.012411847672778562,
+          "f1": 0.04735883424408015
+        },
+        "per_source": {
+          "aegis2": {
+            "count": 346,
+            "tp": 0,
+            "fn": 0,
+            "fp": 0,
+            "tn": 346,
+            "recall": null,
+            "fpr": 0.0,
+            "f1": null
+          },
+          "deepset_pi": {
+            "count": 29,
+            "tp": 1,
+            "fn": 17,
+            "fp": 0,
+            "tn": 11,
+            "recall": 0.05555555555555555,
+            "fpr": 0.0,
+            "f1": 0.10526315789473684
+          },
+          "dolly": {
+            "count": 492,
+            "tp": 0,
+            "fn": 0,
+            "fp": 0,
+            "tn": 492,
+            "recall": null,
+            "fpr": 0.0,
+            "f1": null
+          },
+          "enron": {
+            "count": 76,
+            "tp": 0,
+            "fn": 0,
+            "fp": 0,
+            "tn": 76,
+            "recall": null,
+            "fpr": 0.0,
+            "f1": null
+          },
+          "gandalf": {
+            "count": 99,
+            "tp": 16,
+            "fn": 83,
+            "fp": 0,
+            "tn": 0,
+            "recall": 0.16161616161616163,
+            "fpr": null,
+            "f1": 0.2782608695652174
+          },
+          "hackaprompt": {
+            "count": 380,
+            "tp": 9,
+            "fn": 371,
+            "fp": 0,
+            "tn": 0,
+            "recall": 0.02368421052631579,
+            "fpr": null,
+            "f1": 0.04627249357326478
+          },
+          "jailbreak_llms": {
+            "count": 647,
+            "tp": 0,
+            "fn": 53,
+            "fp": 44,
+            "tn": 550,
+            "recall": 0.0,
+            "fpr": 0.07407407407407407,
+            "f1": 0.0
+          },
+          "jb_class": {
+            "count": 79,
+            "tp": 0,
+            "fn": 32,
+            "fp": 0,
+            "tn": 47,
+            "recall": 0.0,
+            "fpr": 0.0,
+            "f1": 0.0
+          },
+          "llmail": {
+            "count": 66,
+            "tp": 0,
+            "fn": 66,
+            "fp": 0,
+            "tn": 0,
+            "recall": 0.0,
+            "fpr": null,
+            "f1": 0.0
+          },
+          "oasst1": {
+            "count": 496,
+            "tp": 0,
+            "fn": 0,
+            "fp": 0,
+            "tn": 496,
+            "recall": null,
+            "fpr": 0.0,
+            "f1": null
+          },
+          "spml": {
+            "count": 824,
+            "tp": 26,
+            "fn": 503,
+            "fp": 0,
+            "tn": 295,
+            "recall": 0.04914933837429111,
+            "fpr": 0.0,
+            "f1": 0.0936936936936937
+          },
+          "toxicchat": {
+            "count": 389,
+            "tp": 0,
+            "fn": 0,
+            "fp": 0,
+            "tn": 389,
+            "recall": null,
+            "fpr": 0.0,
+            "f1": null
+          },
+          "wildguardmix": {
+            "count": 300,
+            "tp": 0,
+            "fn": 300,
+            "fp": 0,
+            "tn": 0,
+            "recall": 0.0,
+            "fpr": null,
+            "f1": 0.0
+          },
+          "wildjailbreak": {
+            "count": 1422,
+            "tp": 0,
+            "fn": 623,
+            "fp": 0,
+            "tn": 799,
+            "recall": 0.0,
+            "fpr": 0.0,
+            "f1": 0.0
+          }
+        },
+        "per_language": {
+          "en": {
+            "count": 5644,
+            "tp": 52,
+            "fn": 2047,
+            "fp": 44,
+            "tn": 3501,
+            "recall": 0.024773701762744165,
+            "fpr": 0.012411847672778562,
+            "f1": 0.04738041002277904
+          },
+          "mixed": {
+            "count": 1,
+            "tp": 0,
+            "fn": 1,
+            "fp": 0,
+            "tn": 0,
+            "recall": 0.0,
+            "fpr": null,
+            "f1": 0.0
+          }
+        },
+        "median_latency_ms": 0.04762005473894275,
+        "p95_latency_ms": 0.04762005473894275
+      },
+      "external_eval": {
+        "overall": {
+          "count": 506,
+          "tp": 2,
+          "fn": 195,
+          "fp": 0,
+          "tn": 309,
+          "recall": 0.01015228426395939,
+          "fpr": 0.0,
+          "f1": 0.020100502512562814
+        },
+        "per_source": {
+          "deepset_pi": {
+            "count": 116,
+            "tp": 0,
+            "fn": 60,
+            "fp": 0,
+            "tn": 56,
+            "recall": 0.0,
+            "fpr": 0.0,
+            "f1": 0.0
+          },
+          "jb_class": {
+            "count": 390,
+            "tp": 2,
+            "fn": 135,
+            "fp": 0,
+            "tn": 253,
+            "recall": 0.014598540145985401,
+            "fpr": 0.0,
+            "f1": 0.02877697841726619
+          }
+        },
+        "per_language": {
+          "en": {
+            "count": 506,
+            "tp": 2,
+            "fn": 195,
+            "fp": 0,
+            "tn": 309,
+            "recall": 0.01015228426395939,
+            "fpr": 0.0,
+            "f1": 0.020100502512562814
+          }
+        },
+        "median_latency_ms": 0.07022481422825107,
+        "p95_latency_ms": 0.07022481422825107
+      },
+      "indirect_eval": {
+        "overall": {
+          "count": 3179,
+          "tp": 2,
+          "fn": 3177,
+          "fp": 0,
+          "tn": 0,
+          "recall": 0.0006291286568103177,
+          "fpr": null,
+          "f1": 0.0012574662055957245
+        },
+        "per_source": {
+          "bipia": {
+            "count": 125,
+            "tp": 0,
+            "fn": 125,
+            "fp": 0,
+            "tn": 0,
+            "recall": 0.0,
+            "fpr": null,
+            "f1": 0.0
+          },
+          "injecagent": {
+            "count": 1054,
+            "tp": 0,
+            "fn": 1054,
+            "fp": 0,
+            "tn": 0,
+            "recall": 0.0,
+            "fpr": null,
+            "f1": 0.0
+          },
+          "llmail": {
+            "count": 2000,
+            "tp": 2,
+            "fn": 1998,
+            "fp": 0,
+            "tn": 0,
+            "recall": 0.001,
+            "fpr": null,
+            "f1": 0.001998001998001998
+          }
+        },
+        "per_language": {
+          "en": {
+            "count": 3159,
+            "tp": 2,
+            "fn": 3157,
+            "fp": 0,
+            "tn": 0,
+            "recall": 0.0006331117442228553,
+            "fpr": null,
+            "f1": 0.0012654223347042075
+          },
+          "mixed": {
+            "count": 20,
+            "tp": 0,
+            "fn": 20,
+            "fp": 0,
+            "tn": 0,
+            "recall": 0.0,
+            "fpr": null,
+            "f1": 0.0
+          }
+        },
+        "median_latency_ms": 0.05482135797462175,
+        "p95_latency_ms": 0.05482135797462175
+      },
+      "overrefusal_eval": {
+        "overall": {
+          "count": 1568,
+          "tp": 0,
+          "fn": 0,
+          "fp": 0,
+          "tn": 1568,
+          "recall": null,
+          "fpr": 0.0,
+          "f1": null
+        },
+        "per_source": {
+          "or_bench": {
+            "count": 1319,
+            "tp": 0,
+            "fn": 0,
+            "fp": 0,
+            "tn": 1319,
+            "recall": null,
+            "fpr": 0.0,
+            "f1": null
+          },
+          "xstest": {
+            "count": 249,
+            "tp": 0,
+            "fn": 0,
+            "fp": 0,
+            "tn": 249,
+            "recall": null,
+            "fpr": 0.0,
+            "f1": null
+          }
+        },
+        "per_language": {
+          "en": {
+            "count": 1568,
+            "tp": 0,
+            "fn": 0,
+            "fp": 0,
+            "tn": 1568,
+            "recall": null,
+            "fpr": 0.0,
+            "f1": null
+          }
+        },
+        "median_latency_ms": 0.008549913267026048,
+        "p95_latency_ms": 0.008549913267026048
+      },
+      "benign_email_probe": {
+        "overall": {
+          "count": 100,
+          "tp": 0,
+          "fn": 0,
+          "fp": 0,
+          "tn": 100,
+          "recall": null,
+          "fpr": 0.0,
+          "f1": null
+        },
+        "per_source": {
+          "benign_email_probe": {
+            "count": 100,
+            "tp": 0,
+            "fn": 0,
+            "fp": 0,
+            "tn": 100,
+            "recall": null,
+            "fpr": 0.0,
+            "f1": null
+          }
+        },
+        "per_language": {
+          "en": {
+            "count": 100,
+            "tp": 0,
+            "fn": 0,
+            "fp": 0,
+            "tn": 100,
+            "recall": null,
+            "fpr": 0.0,
+            "f1": null
+          }
+        },
+        "median_latency_ms": 0.013321090009412728,
+        "p95_latency_ms": 0.013321090009412728
+      }
+    }
+  },
+  "deberta": {
+    "threshold": 0.5,
+    "sets": {
+      "dev_public_v1b": {
+        "overall": {
+          "count": 5645,
+          "tp": 1588,
+          "fn": 512,
+          "fp": 608,
+          "tn": 2937,
+          "recall": 0.7561904761904762,
+          "fpr": 0.17150916784203102,
+          "f1": 0.7392923649906891
+        },
+        "per_source": {
+          "aegis2": {
+            "count": 346,
+            "tp": 0,
+            "fn": 0,
+            "fp": 3,
+            "tn": 343,
+            "recall": null,
+            "fpr": 0.008670520231213872,
+            "f1": 0.0
+          },
+          "deepset_pi": {
+            "count": 29,
+            "tp": 9,
+            "fn": 9,
+            "fp": 0,
+            "tn": 11,
+            "recall": 0.5,
+            "fpr": 0.0,
+            "f1": 0.6666666666666666
+          },
+          "dolly": {
+            "count": 492,
+            "tp": 0,
+            "fn": 0,
+            "fp": 0,
+            "tn": 492,
+            "recall": null,
+            "fpr": 0.0,
+            "f1": null
+          },
+          "enron": {
+            "count": 76,
+            "tp": 0,
+            "fn": 0,
+            "fp": 7,
+            "tn": 69,
+            "recall": null,
+            "fpr": 0.09210526315789473,
+            "f1": 0.0
+          },
+          "gandalf": {
+            "count": 99,
+            "tp": 99,
+            "fn": 0,
+            "fp": 0,
+            "tn": 0,
+            "recall": 1.0,
+            "fpr": null,
+            "f1": 1.0
+          },
+          "hackaprompt": {
+            "count": 380,
+            "tp": 353,
+            "fn": 27,
+            "fp": 0,
+            "tn": 0,
+            "recall": 0.9289473684210526,
+            "fpr": null,
+            "f1": 0.9631650750341064
+          },
+          "jailbreak_llms": {
+            "count": 647,
+            "tp": 31,
+            "fn": 22,
+            "fp": 67,
+            "tn": 527,
+            "recall": 0.5849056603773585,
+            "fpr": 0.1127946127946128,
+            "f1": 0.4105960264900662
+          },
+          "jb_class": {
+            "count": 79,
+            "tp": 23,
+            "fn": 9,
+            "fp": 0,
+            "tn": 47,
+            "recall": 0.71875,
+            "fpr": 0.0,
+            "f1": 0.8363636363636363
+          },
+          "llmail": {
+            "count": 66,
+            "tp": 39,
+            "fn": 27,
+            "fp": 0,
+            "tn": 0,
+            "recall": 0.5909090909090909,
+            "fpr": null,
+            "f1": 0.7428571428571429
+          },
+          "oasst1": {
+            "count": 496,
+            "tp": 0,
+            "fn": 0,
+            "fp": 14,
+            "tn": 482,
+            "recall": null,
+            "fpr": 0.028225806451612902,
+            "f1": 0.0
+          },
+          "spml": {
+            "count": 824,
+            "tp": 520,
+            "fn": 9,
+            "fp": 28,
+            "tn": 267,
+            "recall": 0.9829867674858223,
+            "fpr": 0.09491525423728814,
+            "f1": 0.9656453110492108
+          },
+          "toxicchat": {
+            "count": 389,
+            "tp": 0,
+            "fn": 0,
+            "fp": 11,
+            "tn": 378,
+            "recall": null,
+            "fpr": 0.028277634961439587,
+            "f1": 0.0
+          },
+          "wildguardmix": {
+            "count": 300,
+            "tp": 147,
+            "fn": 153,
+            "fp": 0,
+            "tn": 0,
+            "recall": 0.49,
+            "fpr": null,
+            "f1": 0.6577181208053692
+          },
+          "wildjailbreak": {
+            "count": 1422,
+            "tp": 367,
+            "fn": 256,
+            "fp": 478,
+            "tn": 321,
+            "recall": 0.5890850722311396,
+            "fpr": 0.5982478097622027,
+            "f1": 0.5
+          }
+        },
+        "per_language": {
+          "en": {
+            "count": 5644,
+            "tp": 1587,
+            "fn": 512,
+            "fp": 608,
+            "tn": 2937,
+            "recall": 0.7560743211052883,
+            "fpr": 0.17150916784203102,
+            "f1": 0.7391709361900326
+          },
+          "mixed": {
+            "count": 1,
+            "tp": 1,
+            "fn": 0,
+            "fp": 0,
+            "tn": 0,
+            "recall": 1.0,
+            "fpr": null,
+            "f1": 1.0
+          }
+        },
+        "median_latency_ms": 7.645685587068305,
+        "p95_latency_ms": 7.645685587068305
+      },
+      "external_eval": {
+        "overall": {
+          "count": 506,
+          "tp": 136,
+          "fn": 61,
+          "fp": 5,
+          "tn": 304,
+          "recall": 0.6903553299492385,
+          "fpr": 0.016181229773462782,
+          "f1": 0.8047337278106509
+        },
+        "per_source": {
+          "deepset_pi": {
+            "count": 116,
+            "tp": 22,
+            "fn": 38,
+            "fp": 0,
+            "tn": 56,
+            "recall": 0.36666666666666664,
+            "fpr": 0.0,
+            "f1": 0.5365853658536586
+          },
+          "jb_class": {
+            "count": 390,
+            "tp": 114,
+            "fn": 23,
+            "fp": 5,
+            "tn": 248,
+            "recall": 0.8321167883211679,
+            "fpr": 0.019762845849802372,
+            "f1": 0.890625
+          }
+        },
+        "per_language": {
+          "en": {
+            "count": 506,
+            "tp": 136,
+            "fn": 61,
+            "fp": 5,
+            "tn": 304,
+            "recall": 0.6903553299492385,
+            "fpr": 0.016181229773462782,
+            "f1": 0.8047337278106509
+          }
+        },
+        "median_latency_ms": 11.633669132409167,
+        "p95_latency_ms": 11.633669132409167
+      },
+      "indirect_eval": {
+        "overall": {
+          "count": 3179,
+          "tp": 1547,
+          "fn": 1632,
+          "fp": 0,
+          "tn": 0,
+          "recall": 0.48663101604278075,
+          "fpr": null,
+          "f1": 0.6546762589928058
+        },
+        "per_source": {
+          "bipia": {
+            "count": 125,
+            "tp": 13,
+            "fn": 112,
+            "fp": 0,
+            "tn": 0,
+            "recall": 0.104,
+            "fpr": null,
+            "f1": 0.18840579710144928
+          },
+          "injecagent": {
+            "count": 1054,
+            "tp": 693,
+            "fn": 361,
+            "fp": 0,
+            "tn": 0,
+            "recall": 0.6574952561669829,
+            "fpr": null,
+            "f1": 0.7933600457927876
+          },
+          "llmail": {
+            "count": 2000,
+            "tp": 841,
+            "fn": 1159,
+            "fp": 0,
+            "tn": 0,
+            "recall": 0.4205,
+            "fpr": null,
+            "f1": 0.5920450545582542
+          }
+        },
+        "per_language": {
+          "en": {
+            "count": 3159,
+            "tp": 1533,
+            "fn": 1626,
+            "fp": 0,
+            "tn": 0,
+            "recall": 0.4852801519468186,
+            "fpr": null,
+            "f1": 0.6534526854219949
+          },
+          "mixed": {
+            "count": 20,
+            "tp": 14,
+            "fn": 6,
+            "fp": 0,
+            "tn": 0,
+            "recall": 0.7,
+            "fpr": null,
+            "f1": 0.8235294117647058
+          }
+        },
+        "median_latency_ms": 10.518564949041076,
+        "p95_latency_ms": 10.518564949041076
+      },
+      "overrefusal_eval": {
+        "overall": {
+          "count": 1568,
+          "tp": 0,
+          "fn": 0,
+          "fp": 86,
+          "tn": 1482,
+          "recall": null,
+          "fpr": 0.0548469387755102,
+          "f1": 0.0
+        },
+        "per_source": {
+          "or_bench": {
+            "count": 1319,
+            "tp": 0,
+            "fn": 0,
+            "fp": 86,
+            "tn": 1233,
+            "recall": null,
+            "fpr": 0.06520090978013647,
+            "f1": 0.0
+          },
+          "xstest": {
+            "count": 249,
+            "tp": 0,
+            "fn": 0,
+            "fp": 0,
+            "tn": 249,
+            "recall": null,
+            "fpr": 0.0,
+            "f1": null
+          }
+        },
+        "per_language": {
+          "en": {
+            "count": 1568,
+            "tp": 0,
+            "fn": 0,
+            "fp": 86,
+            "tn": 1482,
+            "recall": null,
+            "fpr": 0.0548469387755102,
+            "f1": 0.0
+          }
+        },
+        "median_latency_ms": 1.045821957272521,
+        "p95_latency_ms": 1.045821957272521
+      },
+      "benign_email_probe": {
+        "overall": {
+          "count": 100,
+          "tp": 0,
+          "fn": 0,
+          "fp": 0,
+          "tn": 100,
+          "recall": null,
+          "fpr": 0.0,
+          "f1": null
+        },
+        "per_source": {
+          "benign_email_probe": {
+            "count": 100,
+            "tp": 0,
+            "fn": 0,
+            "fp": 0,
+            "tn": 100,
+            "recall": null,
+            "fpr": 0.0,
+            "f1": null
+          }
+        },
+        "per_language": {
+          "en": {
+            "count": 100,
+            "tp": 0,
+            "fn": 0,
+            "fp": 0,
+            "tn": 100,
+            "recall": null,
+            "fpr": 0.0,
+            "f1": null
+          }
+        },
+        "median_latency_ms": 1.160202080027375,
+        "p95_latency_ms": 1.160202080027375
+      }
+    }
+  }
+}
