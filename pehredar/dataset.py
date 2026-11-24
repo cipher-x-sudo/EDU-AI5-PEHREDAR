@@ -1,5 +1,6 @@
 import json
 import random
+from bisect import bisect_left, bisect_right
 from difflib import SequenceMatcher
 from pathlib import Path
 from typing import Literal
@@ -60,14 +61,31 @@ def assert_disjoint(train: list[Record], test: list[Record]) -> None:
     if shared:
         example = next(iter(shared))
         raise ValueError(f"Train/test duplicate text: {train_text[example]} and {test_text[example]}")
+    for train_id, test_id in near_duplicate_pairs(train_text, test_text, first_only=True):
+        raise ValueError(f"Train/test near-duplicate text: {train_id} and {test_id}")
+
+
+def near_duplicate_pairs(train_text: dict[str, str], test_text: dict[str, str], first_only: bool = False):
+    """(train_id, test_id) pairs with SequenceMatcher ratio >= 0.93 among texts >= 30 chars whose
+    lengths differ by <= 10%. Same result as comparing every pair; the length window (bisect) and
+    real_quick_ratio/quick_ratio (upper bounds of ratio) only skip pairs that cannot match."""
+    refs = sorted((len(t), t, i) for t, i in test_text.items() if len(t) >= 30)
+    lengths = [r[0] for r in refs]
+    pairs = []
     for candidate, train_id in train_text.items():
-        if len(candidate) < 30:
+        n = len(candidate)
+        if n < 30:
             continue
-        for reference, test_id in test_text.items():
-            if len(reference) < 30 or abs(len(candidate) - len(reference)) > max(len(candidate), len(reference)) * 0.1:
+        lo, hi = bisect_left(lengths, int(n * 0.9)), bisect_right(lengths, int(n / 0.9) + 1)
+        for m, reference, test_id in refs[lo:hi]:
+            if abs(n - m) > max(n, m) * 0.1:
                 continue
-            if SequenceMatcher(None, candidate, reference, autojunk=False).ratio() >= 0.93:
-                raise ValueError(f"Train/test near-duplicate text: {train_id} and {test_id}")
+            matcher = SequenceMatcher(None, candidate, reference, autojunk=False)
+            if matcher.real_quick_ratio() >= 0.93 and matcher.quick_ratio() >= 0.93 and matcher.ratio() >= 0.93:
+                pairs.append((train_id, test_id))
+                if first_only:
+                    return pairs
+    return pairs
 
 
 def grouped_split(records: list[Record], dev_fraction: float = 0.2, seed: int = 42) -> tuple[list[Record], list[Record]]:

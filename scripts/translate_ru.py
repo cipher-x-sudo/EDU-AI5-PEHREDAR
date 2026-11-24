@@ -48,17 +48,14 @@ def call(original, target, model, examples):
 LANGS = ("roman_ur", "ur", "mixed")
 
 
-def translate(row, target, examples):
-    """Pilot-validated path: one language per call, qwen3:8b first, abliterated fallback."""
-    model = PRIMARY
+def attempt(row, target, model, examples):
+    """One validated call; returns (translation or None, failure reasons)."""
     try:
-        value = call(row["text"], target, model, examples); bad = validate(value, target, row["text"])
-    except Exception:
-        bad = ["primary unavailable"]; value = None
-    if bad:
-        model = FALLBACK; value = call(row["text"], target, model, examples); bad = validate(value, target, row["text"])
-    if bad: raise ValueError(",".join(bad))
-    return value, model
+        value = call(row["text"], target, model, examples)
+    except Exception as exc:
+        return None, [f"{model} unavailable" if isinstance(exc, requests.RequestException) else type(exc).__name__]
+    bad = validate(value, target, row["text"])
+    return (None if bad else value), bad
 
 
 def stratified(rows, n, seed):
@@ -74,46 +71,76 @@ def stratified(rows, n, seed):
     return out
 
 
+def _read(path):
+    return [json.loads(x) for x in path.read_text(encoding="utf-8").splitlines() if x.strip()] if path.exists() else []
+
+
 def run_v2(args):
-    """Large resumable run from TRAIN rows only. Passed outputs -> translated_v2.jsonl,
-    failures -> translated_v2_failures.jsonl; finished (orig_id, lang) pairs are skipped on restart."""
+    """Large resumable run from TRAIN rows only, qwen3:8b first, abliterated fallback.
+
+    Two stages so Ollama loads each 8B model once (both do not fit in 10 GB VRAM, and
+    swapping per call costs ~1 min): stage 1 tries qwen3:8b on every output and parks
+    rejects in translated_v2_pending.jsonl; stage 2 retries only those with the fallback.
+    Passed -> translated_v2.jsonl, final failures -> translated_v2_failures.jsonl.
+    Finished (orig_id, lang) pairs are skipped on restart."""
     examples = json.loads(Path("scripts/translation_examples.json").read_text(encoding="utf-8"))
     train = [json.loads(x) for x in (ROOT/args.train_file).open(encoding="utf-8") if x.strip()]
     train = [r for r in train if r.get("text") and len(r["text"]) <= 2000]
     chosen = (stratified([r for r in train if r["label"] == "attack"], args.attacks, 42)
               + stratified([r for r in train if r["label"] == "benign"], args.benign, 43))
-    out, fail = ROOT/"translated_v2.jsonl", ROOT/"translated_v2_failures.jsonl"
-    done = set()
-    for path in (out, fail):
-        if path.exists():
-            done |= {(r["orig_id"], r["lang"]) for r in map(json.loads, path.read_text(encoding="utf-8").splitlines()) if r}
-    todo = [(r, t) for r in chosen for t in LANGS if (r["id"], t) not in done]
-    print(json.dumps({"chosen_rows": len(chosen), "outputs": len(chosen) * 3, "already_done": len(done), "todo": len(todo)}), flush=True)
-    start = time.perf_counter()
+    by_id = {r["id"]: r for r in chosen}
+    out, fail, pend = ROOT/"translated_v2.jsonl", ROOT/"translated_v2_failures.jsonl", ROOT/"translated_v2_pending.jsonl"
+    key = lambda r: (r["orig_id"], r["lang"])
+    final = {key(r) for r in _read(out) + _read(fail)}
+    pending = {key(r): r for r in _read(pend)}
+    stage1 = [(by_id[i], t) for i in by_id for t in LANGS if (i, t) not in final and (i, t) not in pending]
+    print(json.dumps({"chosen_rows": len(chosen), "outputs": len(chosen) * 3, "final": len(final),
+                      "pending_fallback": len(pending), "stage1_todo": len(stage1)}), flush=True)
+
+    def base(row, target):
+        return {"orig_id": row["id"], "lang": target, "label": row["label"], "type": row["type"],
+                "source": row["source"], "split_group": row["split_group"], "orig_split": "train",
+                "turns": None, "usage": "train", "redistributable": bool(row.get("redistributable")),
+                "license": row.get("license"), "orig_label": row.get("orig_label")}
+
+    def passed(po, row, target, value, model, seconds):
+        po.write(json.dumps({"id": f"{row['id']}-{target}", "text": value, **base(row, target), "original": row["text"],
+                             "model": model, "seconds": seconds}, ensure_ascii=False) + "\n"); po.flush()
+
+    def progress(stage, i, n, start):
+        if i % 100 == 0 or i == n:
+            rate = (time.perf_counter() - start) / i
+            print(f"progress stage{stage} {i}/{n} sec_per_output={rate:.2f} eta_h={(n - i) * rate / 3600:.1f}", flush=True)
+
+    with out.open("a", encoding="utf-8") as po, pend.open("a", encoding="utf-8") as pp:
+        start = time.perf_counter()
+        for i, (row, target) in enumerate(stage1, 1):
+            t = time.perf_counter(); value, bad = attempt(row, target, PRIMARY, examples)
+            if value is not None:
+                passed(po, row, target, value, PRIMARY, time.perf_counter() - t)
+            else:
+                rec = {**base(row, target), "primary_reason": ",".join(bad), "seconds": time.perf_counter() - t}
+                pp.write(json.dumps(rec, ensure_ascii=False) + "\n"); pp.flush(); pending[(row["id"], target)] = rec
+            progress(1, i, len(stage1), start)
+    stage2 = [(by_id[i], t, rec) for (i, t), rec in pending.items() if (i, t) not in final and i in by_id]
+    print(json.dumps({"stage2_todo": len(stage2)}), flush=True)
     with out.open("a", encoding="utf-8") as po, fail.open("a", encoding="utf-8") as pf:
-        for i, (row, target) in enumerate(todo, 1):
-            t = time.perf_counter()
-            base = {"orig_id": row["id"], "lang": target, "label": row["label"], "type": row["type"],
-                    "source": row["source"], "split_group": row["split_group"], "orig_split": "train",
-                    "turns": None, "usage": "train", "redistributable": bool(row.get("redistributable")),
-                    "license": row.get("license"), "orig_label": row.get("orig_label")}
-            try:
-                value, model = translate(row, target, examples)
-                po.write(json.dumps({"id": f"{row['id']}-{target}", "text": value, **base, "original": row["text"],
-                                     "model": model, "seconds": time.perf_counter() - t}, ensure_ascii=False) + "\n"); po.flush()
-            except Exception as exc:
-                pf.write(json.dumps({**base, "reason": str(exc).split(":")[0] or type(exc).__name__,
-                                     "seconds": time.perf_counter() - t}, ensure_ascii=False) + "\n"); pf.flush()
-            if i % 100 == 0 or i == len(todo):
-                rate = (time.perf_counter() - start) / i
-                print(f"progress {i}/{len(todo)} sec_per_output={rate:.2f} eta_h={(len(todo) - i) * rate / 3600:.1f}", flush=True)
+        start = time.perf_counter()
+        for i, (row, target, rec) in enumerate(stage2, 1):
+            t = time.perf_counter(); value, bad = attempt(row, target, FALLBACK, examples)
+            seconds = rec["seconds"] + time.perf_counter() - t
+            if value is not None:
+                passed(po, row, target, value, FALLBACK, seconds)
+            else:
+                pf.write(json.dumps({**base(row, target), "reason": ",".join(bad), "primary_reason": rec["primary_reason"],
+                                     "seconds": seconds}, ensure_ascii=False) + "\n"); pf.flush()
+            progress(2, i, len(stage2), start)
     report_v2()
 
 
 def report_v2():
     out, fail = ROOT/"translated_v2.jsonl", ROOT/"translated_v2_failures.jsonl"
-    passed = [json.loads(x) for x in out.read_text(encoding="utf-8").splitlines() if x.strip()]
-    failed = [json.loads(x) for x in fail.read_text(encoding="utf-8").splitlines() if x.strip()] if fail.exists() else []
+    passed, failed = _read(out), _read(fail)
     allr = passed + failed
     def rate(key):
         groups = {}

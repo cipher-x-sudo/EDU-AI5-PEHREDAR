@@ -40,10 +40,24 @@ def classifier_inputs(tokenizer, texts: list[str], version: int) -> list[dict]:
     return [encode(tokenizer, text, version) for text in texts]
 
 
+DEBERTA_THRESHOLD = 0.5
+ENSEMBLES = {"ensemble", "ensemble_max"}
+
+
+def ensemble_risk(mode: str, lang: str, deberta: float, classifier: float, clf_threshold: float) -> float:
+    """Each score divided by its own threshold, so risk >= 1.0 means attack.
+    ensemble: English -> DeBERTa, ur/roman_ur/mixed -> classifier.
+    ensemble_max: attack if either model is over its own threshold."""
+    deb, clf = deberta / DEBERTA_THRESHOLD, classifier / clf_threshold
+    if mode == "ensemble_max":
+        return max(deb, clf)
+    return deb if lang == "en" else clf
+
+
 def evaluate(path: Path, detector: str = "rules", classifier_dir: str | None = None) -> dict:
-    if detector not in {"rules", "deberta", "classifier", "combined"}:
+    if detector not in {"rules", "deberta", "classifier", "combined", *ENSEMBLES}:
         raise ValueError(f"Unknown detector: {detector}")
-    if detector in {"classifier", "combined"} and not classifier_dir:
+    if detector in {"classifier", "combined", *ENSEMBLES} and not classifier_dir:
         raise ValueError("classifier_dir is required")
     rows = load_jsonl(path)
     texts = [normalize_text(r.input_text()) for r in rows]
@@ -55,7 +69,7 @@ def evaluate(path: Path, detector: str = "rules", classifier_dir: str | None = N
         rule_scores.append(risk); tags_all.append(tags)
     scores_by = {"rules": rule_scores}
     thresholds = [0.75] * len(rows)
-    if detector in {"classifier", "combined"}:
+    if detector in {"classifier", "combined", *ENSEMBLES}:
         if not Path(classifier_dir).exists():
             vals, clf_threshold = [], 0.5
             for text in texts:
@@ -80,18 +94,20 @@ def evaluate(path: Path, detector: str = "rules", classifier_dir: str | None = N
                 with torch.no_grad(): vals.extend(torch.softmax(model(**enc).logits, dim=-1)[:,1].tolist())
             scores_by["classifier"] = vals
             if detector == "classifier": thresholds=[clf_threshold]*len(rows)
-    if detector == "deberta":
+    if detector in {"deberta", *ENSEMBLES}:
         tokenizer, model, torch, label, device = load_deberta(); vals=[]
         for i in range(0, len(texts), 32):
             enc=tokenizer(texts[i:i+32], truncation=True, max_length=512, padding=True, return_tensors="pt")
             enc = {k: v.to(device) for k, v in enc.items()}
             with torch.no_grad(): vals.extend(torch.softmax(model(**enc).logits, dim=-1)[:,label].tolist())
-        scores_by["deberta"] = vals; thresholds=[0.5]*len(rows)
+        scores_by["deberta"] = vals; thresholds=[DEBERTA_THRESHOLD]*len(rows)
     predictions=[]
     for i,row in enumerate(rows):
         if detector == "rules": risk=rule_scores[i]
         elif detector == "deberta": risk=scores_by["deberta"][i]
         elif detector == "classifier": risk=scores_by["classifier"][i]
+        elif detector in ENSEMBLES:
+            risk=ensemble_risk(detector, row.lang, scores_by["deberta"][i], scores_by["classifier"][i], clf_threshold); thresholds[i]=1.0
         else:
             risk=max(rule_scores[i], 0.75 if scores_by["classifier"][i] >= thresholds[i] else scores_by["classifier"][i]); thresholds[i]=0.75
         predictions.append({"id":row.id,"lang":row.lang,"label":row.label,"prediction":"attack" if risk>=thresholds[i] else "benign","risk":risk,"scores":{k:v[i] for k,v in scores_by.items()},"tags":tags_all[i],"latency_ms":0.0})
@@ -117,7 +133,7 @@ def _load_classifier(directory):
     raw = report_path.read_text(encoding="utf-8")
     if report_path.name == "model_card.md":
         raw = raw[raw.find("{"):]
-    report = json.loads(raw)
+    report = json.JSONDecoder().raw_decode(raw)[0]  # model cards may have text after the JSON
     tokenizer=AutoTokenizer.from_pretrained(path,local_files_only=True); model=AutoModelForSequenceClassification.from_pretrained(path,local_files_only=True); device=torch.device("cuda" if torch.cuda.is_available() else "cpu"); model.to(device); model.eval(); return tokenizer,model,torch,float(report["threshold"]),device,int(report.get("encoder_version", 1))
 
 

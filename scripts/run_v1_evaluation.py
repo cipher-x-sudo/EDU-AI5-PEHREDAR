@@ -48,7 +48,7 @@ def scored(path, detector, directory, threshold):
     rules/DeBERTa keep their old key because their preprocessing did not change."""
     sha = hashlib.sha256(path.read_bytes()).hexdigest()
     raw = f"{detector}|{directory}|{sha}"
-    if detector == "classifier":
+    if detector in {"classifier", "ensemble", "ensemble_max"}:
         raw += f"|{preprocessing_id(_load_classifier(directory)[5])}|{threshold!r}"
     cache_path = Path("results/cache") / f"{hashlib.sha256(raw.encode()).hexdigest()}.json"
     if cache_path.exists():

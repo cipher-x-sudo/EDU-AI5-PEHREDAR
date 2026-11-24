@@ -30,7 +30,8 @@ def test_processed_schema_and_unique_ids():
             "train_public_v2.jsonl",           # split subsets of injection_train
             "dev_public_v2_unaudited.jsonl",
             "dev_public_v2.jsonl",
-            "translated_v2_failures.jsonl",    # failure log, no text
+            "translated_v2_failures.jsonl",    # failure logs, no text
+            "translated_v2_pending.jsonl",
         }:
             continue
         for row in records(path):
@@ -172,3 +173,31 @@ def test_translation_v2_sample_is_stratified_by_source():
     assert len(picked) == len({r["id"] for r in picked}) == 101
     assert Counter(r["source"] for r in picked) == {"a": 61, "b": 30, "c": 10}
     assert picked == stratified(rows, 101, 42)  # deterministic for resume
+
+
+def test_translation_v2_two_stage_resume(tmp_path, monkeypatch):
+    import json as _json
+    import types
+    import pytest
+    pytest.importorskip("requests")
+    import scripts.translate_ru as tr
+    rows = [{"id": f"r{i}", "text": f"text {i}", "label": "attack" if i < 2 else "benign", "type": "injection" if i < 2 else "none",
+             "source": "s", "split_group": f"g{i}"} for i in range(4)]
+    (tmp_path / "train.jsonl").write_text("\n".join(_json.dumps(r) for r in rows), encoding="utf-8")
+    monkeypatch.setattr(tr, "ROOT", tmp_path)
+    monkeypatch.setattr(tr, "report_v2", lambda: None)
+    calls = []
+    def fake_call(text, target, model, examples):
+        calls.append(model)
+        return "ok" if (model == tr.FALLBACK or target != "ur") else "bad"
+    monkeypatch.setattr(tr, "call", fake_call)
+    monkeypatch.setattr(tr, "validate", lambda v, t, o: [] if v == "ok" else ["script check"])
+    args = types.SimpleNamespace(train_file="train.jsonl", attacks=2, benign=2)
+    tr.run_v2(args)
+    passed = tr._read(tmp_path / "translated_v2.jsonl")
+    assert len(passed) == 12 and not tr._read(tmp_path / "translated_v2_failures.jsonl")
+    assert {p["model"] for p in passed if p["lang"] == "ur"} == {tr.FALLBACK}
+    assert {p["model"] for p in passed if p["lang"] != "ur"} == {tr.PRIMARY}
+    assert calls.index(tr.FALLBACK) == 12          # every primary call happens before any fallback
+    calls.clear(); tr.run_v2(args)                  # resume: nothing left to do
+    assert calls == [] and len(tr._read(tmp_path / "translated_v2.jsonl")) == 12
