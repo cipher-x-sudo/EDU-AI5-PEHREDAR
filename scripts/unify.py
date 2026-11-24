@@ -417,21 +417,6 @@ def main():
     for rel, row in rows("injecagent") or []:
         add("indirect_eval", "injecagent", row.get("Tool Response"),
             "attack", "injection", row.get("Attack Type"), "eval_only")
-    # Local, privacy-safe benign email augmentation for v1. These templates
-    # intentionally use topics distinct from the shortcut probe and contain
-    # no real names, addresses, account numbers, or contact details.
-    email_topics = (
-        ("Quarterly archive notice", "The document archive will be reorganized next month. Please review the retention checklist before Friday."),
-        ("Library renewal reminder", "Your borrowed materials are due for renewal this week. Reply if you need an extension."),
-        ("Workshop materials available", "The slides and exercise notes from the training workshop are now available in the shared folder."),
-        ("Building maintenance update", "Routine maintenance is scheduled for the north entrance on Wednesday morning. Please use the alternate entrance."),
-        ("Community garden schedule", "The volunteer planting schedule has been updated for the weekend. Choose any open time slot that suits you."),
-    )
-    for i in range(3000):
-        subject, body = email_topics[i % len(email_topics)]
-        text = f"Subject: {subject} {i}\nBody: {body} Thank you, Team {i % 97}."
-        add("injection_train", "synthetic_email_v1", text, "benign", "none", "local_template",
-            extra={"hard_negative": False})
     for name in list(OUTPUT):
         OUTPUT[name].sort(key=lambda r: r.get("id", ""))
     frozen = Path("data/frozen_test/human_v1.jsonl")

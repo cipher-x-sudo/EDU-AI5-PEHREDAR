@@ -25,13 +25,12 @@ injection_train | attack | jailbreak | en | jailbreak_llms | 761
 injection_train | attack | jailbreak | en | jb_class | 509
 injection_train | attack | jailbreak | en | wildguardmix | 3000
 injection_train | attack | jailbreak | en | wildjailbreak | 6234
-injection_train | benign | none | en | aegis2 | 6237
-injection_train | benign | none | en | deepset_pi | 263
-injection_train | benign | none | en | jailbreak_llms | 10078
-injection_train | benign | none | en | jb_class | 775
+injection_train | benign | none | en | aegis2 | 6866
+injection_train | benign | none | en | deepset_pi | 285
+injection_train | benign | none | en | jailbreak_llms | 10836
+injection_train | benign | none | en | jb_class | 850
 injection_train | benign | none | en | spml | 3372
-injection_train | benign | none | en | synthetic_email_v1 | 2169
-injection_train | benign | none | en | toxicchat | 6514
+injection_train | benign | none | en | toxicchat | 7199
 injection_train | benign | none | en | wildjailbreak | 8000
 injection_train | benign | none | ur | jailbreak_llms | 2
 multiturn | attack | jailbreak | en | safemtdata | 2274
@@ -51,27 +50,26 @@ urdu_benign | benign | none | roman_ur | smat26 | 19433
 
 Source | Scanned | Kept before balancing | Final classifier | Duplicate | Near duplicate | PII dropped | PII redacted | PII exempt in synthetic eval | Length | Other language | Unclear | Goal cap
 ---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:
-aegis2 | 28216 | 20555 | 6237 | 7537 | 0 | 79 | 0 | 0 | 26 | 19 | 0 | 0
+aegis2 | 28216 | 20555 | 6866 | 7537 | 0 | 79 | 0 | 0 | 26 | 19 | 0 | 0
 ai4privacy | 5017 | 5000 | 0 | 14 | 0 | 0 | 0 | 0 | 3 | 0 | 0 | 0
 beavertails | 10000 | 3379 | 0 | 6605 | 0 | 16 | 0 | 0 | 0 | 0 | 0 | 0
 bipia | 125 | 125 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0
-deepset_pi | 662 | 662 | 466 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0
+deepset_pi | 662 | 662 | 488 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0
 erupd | 65132 | 58065 | 0 | 7066 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0
 gandalf | 1000 | 998 | 998 | 1 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | 0
 hackaprompt | 28051 | 5000 | 5000 | 43 | 90092 | 1 | 0 | 0 | 1151 | 941 | 21804 | 482725
 harmbench | 320 | 317 | 0 | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0
 injecagent | 1054 | 1054 | 0 | 0 | 0 | 0 | 0 | 703 | 0 | 0 | 0 | 0
-jailbreak_llms | 15140 | 13608 | 10841 | 1197 | 0 | 99 | 0 | 0 | 189 | 47 | 0 | 0
-jb_class | 1998 | 1961 | 1284 | 27 | 0 | 6 | 0 | 0 | 3 | 1 | 0 | 0
+jailbreak_llms | 15140 | 13608 | 11599 | 1197 | 0 | 99 | 0 | 0 | 189 | 47 | 0 | 0
+jb_class | 1998 | 1961 | 1359 | 27 | 0 | 6 | 0 | 0 | 3 | 1 | 0 | 0
 llmail | 11225 | 4000 | 2000 | 7221 | 0 | 0 | 9830 | 0 | 4 | 0 | 0 | 0
 or_bench | 1319 | 1319 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0
 safemtdata | 2280 | 2274 | 0 | 0 | 0 | 4 | 0 | 0 | 2 | 0 | 0 | 0
 smat26 | 20228 | 19466 | 0 | 560 | 0 | 11 | 0 | 0 | 191 | 0 | 0 | 0
 spml | 16012 | 15913 | 9607 | 98 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 0
 synthetic | 3 | 3 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0
-synthetic_email_v1 | 3000 | 3000 | 2169 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0
 tom_gibbs_multiturn | 6840 | 6839 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | 78 | 0
-toxicchat | 10165 | 9628 | 6514 | 516 | 0 | 16 | 0 | 0 | 0 | 5 | 0 | 0
+toxicchat | 10165 | 9628 | 7199 | 516 | 0 | 16 | 0 | 0 | 0 | 5 | 0 | 0
 uci_roman_urdu | 20229 | 0 | 0 | 20026 | 0 | 11 | 0 | 0 | 192 | 0 | 0 | 0
 wildguardmix | 3202 | 3000 | 3000 | 200 | 0 | 2 | 0 | 0 | 0 | 0 | 0 | 0
 wildjailbreak | 16026 | 16000 | 14234 | 2 | 0 | 6 | 0 | 0 | 18 | 0 | 0 | 0
@@ -90,13 +88,12 @@ attack | llmail | 2000 | 8.02%
 attack | spml | 6235 | 25.00%
 attack | wildguardmix | 3000 | 12.03%
 attack | wildjailbreak | 6234 | 25.00%
-benign | aegis2 | 6237 | 16.67%
-benign | deepset_pi | 263 | 0.70%
-benign | jailbreak_llms | 10080 | 26.94%
-benign | jb_class | 775 | 2.07%
+benign | aegis2 | 6866 | 18.35%
+benign | deepset_pi | 285 | 0.76%
+benign | jailbreak_llms | 10838 | 28.97%
+benign | jb_class | 850 | 2.27%
 benign | spml | 3372 | 9.01%
-benign | synthetic_email_v1 | 2169 | 5.80%
-benign | toxicchat | 6514 | 17.41%
+benign | toxicchat | 7199 | 19.24%
 benign | wildjailbreak | 8000 | 21.38%
 
 Classifier training pool: 24940 attack, 37410 benign.
