@@ -62,3 +62,27 @@ def test_combined_evaluation_uses_saved_classifier_threshold(tmp_path, monkeypat
     report = evaluator.evaluate(path, "combined", "models/clf_v1")
     assert report["predictions"][0]["prediction"] == "attack"
     assert report["predictions"][0]["scores"]["classifier"] == 0.67
+
+
+class _FakeTokenizer:
+    """Word-level stand-in: <s>=0, </s>=2, word n -> n + 10."""
+    def __call__(self, value, add_special_tokens=True, truncation=False):
+        return {"input_ids": [0] + [int(w) + 10 for w in value.split()] + [2]}
+
+
+def test_train_and_eval_produce_identical_ids_for_long_text():
+    from pathlib import Path
+    import scripts.evaluate as evaluator
+    from pehredar.clf_text import encode
+
+    # train_v0.py must use the shared encoder (importing it needs torch).
+    assert "from pehredar.clf_text import encode" in Path("scripts/train_v0.py").read_text(encoding="utf-8")
+    tok = _FakeTokenizer()
+    long_text = " ".join(str(i) for i in range(2000))
+    [evaluated] = evaluator.classifier_inputs(tok, [long_text])
+    assert evaluated == encode(tok, long_text)
+    ids = evaluated["input_ids"]
+    assert len(ids) == 512
+    assert ids[:3] == [0, 10, 11]          # head kept
+    assert ids[-3:] == [2009, 2, 2]        # tail kept (training's double </s>)
+    assert encode(tok, "1 2 3")["input_ids"] == [0, 11, 12, 13, 2]

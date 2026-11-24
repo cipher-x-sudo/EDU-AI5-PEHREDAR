@@ -15,13 +15,7 @@ def load(name):
 def text(row):
     return row.get("text") or "\n".join(t["content"] for t in (row.get("turns") or []))
 
-def encode(tokenizer, value):
-    ids = tokenizer(value, add_special_tokens=True, truncation=False)["input_ids"]
-    if len(ids) <= 512: return {"input_ids": ids, "attention_mask": [1]*len(ids)}
-    keep = 510
-    head, tail = keep // 2, keep - keep // 2
-    ids = [ids[0]] + ids[1:1+head] + ids[-tail:] + [ids[-1]]
-    return {"input_ids": ids, "attention_mask": [1]*len(ids)}
+from pehredar.clf_text import encode
 
 def main():
     ap = argparse.ArgumentParser()

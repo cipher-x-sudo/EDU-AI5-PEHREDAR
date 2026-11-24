@@ -7,6 +7,7 @@ from functools import lru_cache
 from pathlib import Path
 
 from pehredar.classifier import score_classifier
+from pehredar.clf_text import encode
 from pehredar.dataset import load_jsonl
 from pehredar.normalizer import normalize_text
 from pehredar.rules import score_rules
@@ -33,6 +34,10 @@ def score_deberta(text: str) -> float:
     encoded = {k: v.to(device) for k, v in encoded.items()}
     with torch.no_grad():
         return torch.softmax(model(**encoded).logits, dim=-1)[0, label].item()
+
+
+def classifier_inputs(tokenizer, texts: list[str]) -> list[dict]:
+    return [encode(tokenizer, text) for text in texts]
 
 
 def evaluate(path: Path, detector: str = "rules", classifier_dir: str | None = None) -> dict:
@@ -66,9 +71,11 @@ def evaluate(path: Path, detector: str = "rules", classifier_dir: str | None = N
             pass
         else:
             tokenizer, model, torch, clf_threshold, device = _load_classifier(classifier_dir)
+            # Same input as training (train_v0.py): raw text, shared 512 head+tail encoder.
+            raw = [r.input_text() for r in rows]
             vals=[]
-            for i in range(0, len(texts), 64):
-                enc=tokenizer(texts[i:i+64], truncation=True, max_length=256, padding=True, return_tensors="pt")
+            for i in range(0, len(raw), 32):
+                enc = tokenizer.pad(classifier_inputs(tokenizer, raw[i:i+32]), padding=True, return_tensors="pt")
                 enc = {k: v.to(device) for k, v in enc.items()}
                 with torch.no_grad(): vals.extend(torch.softmax(model(**enc).logits, dim=-1)[:,1].tolist())
             scores_by["classifier"] = vals

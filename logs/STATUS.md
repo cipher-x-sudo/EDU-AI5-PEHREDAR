@@ -96,3 +96,8 @@ state: done
 result: 52 passed, 1 warning; derived dev_public_v1b excluded from global ID uniqueness check because it intentionally duplicates source rows
 
 BIPIA: test-only locally; benchmark/code/test.jsonl=50, benchmark/email/test.jsonl=50, benchmark/table/test.jsonl=100; no train split found
+
+job: v1-evaluation-fixed
+state: done
+result: saved thresholds per model, dev_public_v1b, shared 512 head+tail encoder; v0 sanity 0.6142 (old 0.5939 was 256-token path)
+tests: 53 passed
