@@ -74,3 +74,4 @@ After adding safe ToxicChat and Aegis2 training rows: public pool 71,850 rows; t
 - New benign sources: enron (851), dolly (5,000), and oasst1 (5,000).
 - BIPIA remains test-only locally; no train split was available.
 - The embedding audit was not completed after regeneration because the translation retry occupied the serialized GPU window.
+- A deterministic string near-duplicate check found two cross-split pairs and moved their complete dev split groups to train; final train/dev counts are 56,117 / 6,233. The embedding cosine audit remains pending.
