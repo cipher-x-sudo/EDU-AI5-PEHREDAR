@@ -64,7 +64,7 @@ python -m scripts.check_split data/processed/train.jsonl data/frozen_test/human_
 docker compose run --rm --build training
 ```
 
-The training script keeps related examples in one split, chooses its threshold on development examples, and saves the model, tokenizer, preprocessing version, dataset hash, and report together. The frozen set is refused as a training input. Training has not run because the project does not yet have reviewed labeled examples. To serve a trained model in Docker, change the `gateway` build target in `compose.yaml` to `classifier-gateway`, add `PEHREDAR_CLASSIFIER_DIR=/app/models/clf_v1` to `.env`, and rebuild. The classifier gateway requires enough host RAM and may have a large image.
+The training script keeps related examples in one split, chooses its threshold on development examples, and saves the model, tokenizer, preprocessing version, dataset hash, and report together. The frozen set is refused as a training input. Training has not run because the project does not yet have reviewed labeled examples. To serve the L2 classifiers, run the GPU gateway instead of `gateway`: `docker compose stop gateway` then `docker compose --profile gpu up -d gateway-gpu`. It loads ProtectAI DeBERTa and `models/clf_v2_e2` once at startup (`PEHREDAR_L2=1`) and routes by the policy key `l2.mode`: `routed` (default; English to DeBERTa, other languages to v2), `deberta`, `v2` or `max`. `GET /v1/models` shows what loaded. See `results/gateway_v1.md` for its measured behaviour.
 
 ## Host development (optional)
 
