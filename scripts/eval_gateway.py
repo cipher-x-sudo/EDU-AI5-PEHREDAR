@@ -40,7 +40,8 @@ def pct(xs, p):
 
 def main():
     from fastapi.testclient import TestClient
-    import pehredar.app as gateway
+    import importlib
+    gateway = importlib.import_module("pehredar.app")
     rows_out = []
     with TestClient(gateway.app) as client:
         l2_status = gateway.L2_MODELS.status() if gateway.L2_MODELS else None
