@@ -1,0 +1,1661 @@
+{
+  "candidates": {
+    "v2_e1": {
+      "dir": "models/clf_v2_e1",
+      "threshold": 0.897162914276123,
+      "f1_threshold": 0.7774910926818848,
+      "epochs": 1,
+      "training_seconds": 617,
+      "peak_vram_gb": 5.26,
+      "train_count": 45791,
+      "encoder_version": 2,
+      "dev_at_threshold": {
+        "overall": {
+          "attacks": 2130,
+          "benign": 4006,
+          "tp": 1914,
+          "fp": 81,
+          "recall": 0.8986,
+          "recall_ci": [
+            0.885,
+            0.9107
+          ],
+          "fpr": 0.0202,
+          "fpr_ci": [
+            0.0163,
+            0.0251
+          ]
+        },
+        "per_lang": {
+          "en": {
+            "attacks": 1451,
+            "benign": 2525,
+            "tp": 1313,
+            "fp": 35,
+            "recall": 0.9049,
+            "recall_ci": [
+              0.8887,
+              0.9189
+            ],
+            "fpr": 0.0139,
+            "fpr_ci": [
+              0.01,
+              0.0192
+            ]
+          },
+          "roman_ur": {
+            "attacks": 300,
+            "benign": 647,
+            "tp": 266,
+            "fp": 23,
+            "recall": 0.8867,
+            "recall_ci": [
+              0.8458,
+              0.9178
+            ],
+            "fpr": 0.0355,
+            "fpr_ci": [
+              0.0238,
+              0.0528
+            ]
+          },
+          "mixed": {
+            "attacks": 379,
+            "benign": 834,
+            "tp": 335,
+            "fp": 23,
+            "recall": 0.8839,
+            "recall_ci": [
+              0.8477,
+              0.9124
+            ],
+            "fpr": 0.0276,
+            "fpr_ci": [
+              0.0184,
+              0.041
+            ]
+          }
+        }
+      },
+      "unseen": {
+        "attacks": 1179,
+        "benign": 0,
+        "tp": 278,
+        "fp": 0,
+        "recall": 0.2358,
+        "recall_ci": [
+          0.2124,
+          0.2609
+        ],
+        "fpr": null,
+        "fpr_ci": null
+      },
+      "or_bench": {
+        "attacks": 0,
+        "benign": 1319,
+        "tp": 0,
+        "fp": 182,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.138,
+        "fpr_ci": [
+          0.1204,
+          0.1576
+        ]
+      }
+    },
+    "v2_e2": {
+      "dir": "models/clf_v2_e2",
+      "threshold": 0.738341212272644,
+      "f1_threshold": 0.6219249963760376,
+      "epochs": 2,
+      "training_seconds": 1221,
+      "peak_vram_gb": 5.26,
+      "train_count": 45791,
+      "encoder_version": 2,
+      "dev_at_threshold": {
+        "overall": {
+          "attacks": 2130,
+          "benign": 4006,
+          "tp": 1963,
+          "fp": 81,
+          "recall": 0.9216,
+          "recall_ci": [
+            0.9094,
+            0.9323
+          ],
+          "fpr": 0.0202,
+          "fpr_ci": [
+            0.0163,
+            0.0251
+          ]
+        },
+        "per_lang": {
+          "en": {
+            "attacks": 1451,
+            "benign": 2525,
+            "tp": 1363,
+            "fp": 49,
+            "recall": 0.9394,
+            "recall_ci": [
+              0.9259,
+              0.9505
+            ],
+            "fpr": 0.0194,
+            "fpr_ci": [
+              0.0147,
+              0.0256
+            ]
+          },
+          "roman_ur": {
+            "attacks": 300,
+            "benign": 647,
+            "tp": 262,
+            "fp": 13,
+            "recall": 0.8733,
+            "recall_ci": [
+              0.8309,
+              0.9063
+            ],
+            "fpr": 0.0201,
+            "fpr_ci": [
+              0.0118,
+              0.0341
+            ]
+          },
+          "mixed": {
+            "attacks": 379,
+            "benign": 834,
+            "tp": 338,
+            "fp": 19,
+            "recall": 0.8918,
+            "recall_ci": [
+              0.8565,
+              0.9193
+            ],
+            "fpr": 0.0228,
+            "fpr_ci": [
+              0.0146,
+              0.0353
+            ]
+          }
+        }
+      },
+      "unseen": {
+        "attacks": 1179,
+        "benign": 0,
+        "tp": 496,
+        "fp": 0,
+        "recall": 0.4207,
+        "recall_ci": [
+          0.3928,
+          0.4491
+        ],
+        "fpr": null,
+        "fpr_ci": null
+      },
+      "or_bench": {
+        "attacks": 0,
+        "benign": 1319,
+        "tp": 0,
+        "fp": 268,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.2032,
+        "fpr_ci": [
+          0.1823,
+          0.2257
+        ]
+      }
+    }
+  },
+  "chosen": "v2_e2",
+  "why": "v2_e2: or_bench FPR 0.2032 vs v2_e1 0.138; unseen recall 0.4207 [0.3928, 0.4491] vs v2_e1 0.2358 [0.2124, 0.2609] (equal or better: CIs overlap or higher)",
+  "models": {
+    "deberta": {
+      "detector": "deberta",
+      "dir": null,
+      "threshold": 0.5
+    },
+    "v1b": {
+      "detector": "classifier",
+      "dir": "models/clf_v1b",
+      "threshold": 0.4375453293323517
+    },
+    "v2": {
+      "detector": "classifier",
+      "dir": "models/clf_v2_e2",
+      "threshold": 0.738341212272644
+    },
+    "ensemble_routed": {
+      "detector": "ensemble",
+      "dir": "models/clf_v2_e2",
+      "threshold": 1.0
+    },
+    "ensemble_max": {
+      "detector": "ensemble_max",
+      "dir": "models/clf_v2_e2",
+      "threshold": 1.0
+    }
+  },
+  "main": {
+    "deberta": {
+      "external_eval": {
+        "attacks": 197,
+        "benign": 309,
+        "tp": 136,
+        "fp": 5,
+        "recall": 0.6904,
+        "recall_ci": [
+          0.6227,
+          0.7508
+        ],
+        "fpr": 0.0162,
+        "fpr_ci": [
+          0.0069,
+          0.0373
+        ]
+      },
+      "bipia (unseen)": {
+        "attacks": 125,
+        "benign": 0,
+        "tp": 13,
+        "fp": 0,
+        "recall": 0.104,
+        "recall_ci": [
+          0.0618,
+          0.1698
+        ],
+        "fpr": null,
+        "fpr_ci": null
+      },
+      "injecagent (unseen)": {
+        "attacks": 1054,
+        "benign": 0,
+        "tp": 693,
+        "fp": 0,
+        "recall": 0.6575,
+        "recall_ci": [
+          0.6283,
+          0.6855
+        ],
+        "fpr": null,
+        "fpr_ci": null
+      },
+      "llmail (seen)": {
+        "attacks": 2000,
+        "benign": 0,
+        "tp": 841,
+        "fp": 0,
+        "recall": 0.4205,
+        "recall_ci": [
+          0.399,
+          0.4423
+        ],
+        "fpr": null,
+        "fpr_ci": null
+      },
+      "xstest FPR": {
+        "attacks": 0,
+        "benign": 249,
+        "tp": 0,
+        "fp": 0,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.0,
+        "fpr_ci": [
+          0,
+          0.0152
+        ]
+      },
+      "or_bench FPR": {
+        "attacks": 0,
+        "benign": 1319,
+        "tp": 0,
+        "fp": 86,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.0652,
+        "fpr_ci": [
+          0.0531,
+          0.0798
+        ]
+      },
+      "benign_email_probe FPR": {
+        "attacks": 0,
+        "benign": 100,
+        "tp": 0,
+        "fp": 0,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.0,
+        "fpr_ci": [
+          0,
+          0.037
+        ]
+      },
+      "external_translated (roman_ur+mixed)": {
+        "attacks": 88,
+        "benign": 270,
+        "tp": 47,
+        "fp": 19,
+        "recall": 0.5341,
+        "recall_ci": [
+          0.4306,
+          0.6347
+        ],
+        "fpr": 0.0704,
+        "fpr_ci": [
+          0.0455,
+          0.1073
+        ]
+      },
+      "overrefusal_translated FPR (roman_ur+mixed)": {
+        "attacks": 0,
+        "benign": 2581,
+        "tp": 0,
+        "fp": 965,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.3739,
+        "fpr_ci": [
+          0.3554,
+          0.3927
+        ]
+      },
+      "dev_translated_v2 (threshold set) (roman_ur+mixed)": {
+        "attacks": 679,
+        "benign": 1481,
+        "tp": 564,
+        "fp": 379,
+        "recall": 0.8306,
+        "recall_ci": [
+          0.8006,
+          0.857
+        ],
+        "fpr": 0.2559,
+        "fpr_ci": [
+          0.2343,
+          0.2787
+        ]
+      }
+    },
+    "v1b": {
+      "external_eval": {
+        "attacks": 197,
+        "benign": 309,
+        "tp": 130,
+        "fp": 7,
+        "recall": 0.6599,
+        "recall_ci": [
+          0.5912,
+          0.7224
+        ],
+        "fpr": 0.0227,
+        "fpr_ci": [
+          0.011,
+          0.046
+        ]
+      },
+      "bipia (unseen)": {
+        "attacks": 125,
+        "benign": 0,
+        "tp": 15,
+        "fp": 0,
+        "recall": 0.12,
+        "recall_ci": [
+          0.0741,
+          0.1886
+        ],
+        "fpr": null,
+        "fpr_ci": null
+      },
+      "injecagent (unseen)": {
+        "attacks": 1054,
+        "benign": 0,
+        "tp": 87,
+        "fp": 0,
+        "recall": 0.0825,
+        "recall_ci": [
+          0.0674,
+          0.1007
+        ],
+        "fpr": null,
+        "fpr_ci": null
+      },
+      "llmail (seen)": {
+        "attacks": 2000,
+        "benign": 0,
+        "tp": 1691,
+        "fp": 0,
+        "recall": 0.8455,
+        "recall_ci": [
+          0.829,
+          0.8607
+        ],
+        "fpr": null,
+        "fpr_ci": null
+      },
+      "xstest FPR": {
+        "attacks": 0,
+        "benign": 249,
+        "tp": 0,
+        "fp": 0,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.0,
+        "fpr_ci": [
+          0,
+          0.0152
+        ]
+      },
+      "or_bench FPR": {
+        "attacks": 0,
+        "benign": 1319,
+        "tp": 0,
+        "fp": 495,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.3753,
+        "fpr_ci": [
+          0.3496,
+          0.4017
+        ]
+      },
+      "benign_email_probe FPR": {
+        "attacks": 0,
+        "benign": 100,
+        "tp": 0,
+        "fp": 25,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.25,
+        "fpr_ci": [
+          0.1755,
+          0.343
+        ]
+      },
+      "external_translated (roman_ur+mixed)": {
+        "attacks": 88,
+        "benign": 270,
+        "tp": 36,
+        "fp": 8,
+        "recall": 0.4091,
+        "recall_ci": [
+          0.3123,
+          0.5135
+        ],
+        "fpr": 0.0296,
+        "fpr_ci": [
+          0.0151,
+          0.0574
+        ]
+      },
+      "overrefusal_translated FPR (roman_ur+mixed)": {
+        "attacks": 0,
+        "benign": 2581,
+        "tp": 0,
+        "fp": 523,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.2026,
+        "fpr_ci": [
+          0.1876,
+          0.2186
+        ]
+      },
+      "dev_translated_v2 (threshold set) (roman_ur+mixed)": {
+        "attacks": 679,
+        "benign": 1481,
+        "tp": 597,
+        "fp": 62,
+        "recall": 0.8792,
+        "recall_ci": [
+          0.8526,
+          0.9016
+        ],
+        "fpr": 0.0419,
+        "fpr_ci": [
+          0.0328,
+          0.0533
+        ]
+      }
+    },
+    "v2": {
+      "external_eval": {
+        "attacks": 197,
+        "benign": 309,
+        "tp": 160,
+        "fp": 14,
+        "recall": 0.8122,
+        "recall_ci": [
+          0.7519,
+          0.8606
+        ],
+        "fpr": 0.0453,
+        "fpr_ci": [
+          0.0272,
+          0.0746
+        ]
+      },
+      "bipia (unseen)": {
+        "attacks": 125,
+        "benign": 0,
+        "tp": 9,
+        "fp": 0,
+        "recall": 0.072,
+        "recall_ci": [
+          0.0383,
+          0.1312
+        ],
+        "fpr": null,
+        "fpr_ci": null
+      },
+      "injecagent (unseen)": {
+        "attacks": 1054,
+        "benign": 0,
+        "tp": 487,
+        "fp": 0,
+        "recall": 0.462,
+        "recall_ci": [
+          0.4321,
+          0.4922
+        ],
+        "fpr": null,
+        "fpr_ci": null
+      },
+      "llmail (seen)": {
+        "attacks": 2000,
+        "benign": 0,
+        "tp": 1759,
+        "fp": 0,
+        "recall": 0.8795,
+        "recall_ci": [
+          0.8645,
+          0.893
+        ],
+        "fpr": null,
+        "fpr_ci": null
+      },
+      "xstest FPR": {
+        "attacks": 0,
+        "benign": 249,
+        "tp": 0,
+        "fp": 0,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.0,
+        "fpr_ci": [
+          0,
+          0.0152
+        ]
+      },
+      "or_bench FPR": {
+        "attacks": 0,
+        "benign": 1319,
+        "tp": 0,
+        "fp": 268,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.2032,
+        "fpr_ci": [
+          0.1823,
+          0.2257
+        ]
+      },
+      "benign_email_probe FPR": {
+        "attacks": 0,
+        "benign": 100,
+        "tp": 0,
+        "fp": 75,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.75,
+        "fpr_ci": [
+          0.657,
+          0.8245
+        ]
+      },
+      "external_translated (roman_ur+mixed)": {
+        "attacks": 88,
+        "benign": 270,
+        "tp": 55,
+        "fp": 11,
+        "recall": 0.625,
+        "recall_ci": [
+          0.5206,
+          0.7189
+        ],
+        "fpr": 0.0407,
+        "fpr_ci": [
+          0.0229,
+          0.0715
+        ]
+      },
+      "overrefusal_translated FPR (roman_ur+mixed)": {
+        "attacks": 0,
+        "benign": 2581,
+        "tp": 0,
+        "fp": 470,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.1821,
+        "fpr_ci": [
+          0.1677,
+          0.1975
+        ]
+      },
+      "dev_translated_v2 (threshold set) (roman_ur+mixed)": {
+        "attacks": 679,
+        "benign": 1481,
+        "tp": 600,
+        "fp": 32,
+        "recall": 0.8837,
+        "recall_ci": [
+          0.8573,
+          0.9056
+        ],
+        "fpr": 0.0216,
+        "fpr_ci": [
+          0.0153,
+          0.0303
+        ]
+      }
+    },
+    "ensemble_routed": {
+      "external_eval": {
+        "attacks": 197,
+        "benign": 309,
+        "tp": 136,
+        "fp": 5,
+        "recall": 0.6904,
+        "recall_ci": [
+          0.6227,
+          0.7508
+        ],
+        "fpr": 0.0162,
+        "fpr_ci": [
+          0.0069,
+          0.0373
+        ]
+      },
+      "bipia (unseen)": {
+        "attacks": 125,
+        "benign": 0,
+        "tp": 13,
+        "fp": 0,
+        "recall": 0.104,
+        "recall_ci": [
+          0.0618,
+          0.1698
+        ],
+        "fpr": null,
+        "fpr_ci": null
+      },
+      "injecagent (unseen)": {
+        "attacks": 1054,
+        "benign": 0,
+        "tp": 693,
+        "fp": 0,
+        "recall": 0.6575,
+        "recall_ci": [
+          0.6283,
+          0.6855
+        ],
+        "fpr": null,
+        "fpr_ci": null
+      },
+      "llmail (seen)": {
+        "attacks": 2000,
+        "benign": 0,
+        "tp": 847,
+        "fp": 0,
+        "recall": 0.4235,
+        "recall_ci": [
+          0.402,
+          0.4453
+        ],
+        "fpr": null,
+        "fpr_ci": null
+      },
+      "xstest FPR": {
+        "attacks": 0,
+        "benign": 249,
+        "tp": 0,
+        "fp": 0,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.0,
+        "fpr_ci": [
+          0,
+          0.0152
+        ]
+      },
+      "or_bench FPR": {
+        "attacks": 0,
+        "benign": 1319,
+        "tp": 0,
+        "fp": 86,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.0652,
+        "fpr_ci": [
+          0.0531,
+          0.0798
+        ]
+      },
+      "benign_email_probe FPR": {
+        "attacks": 0,
+        "benign": 100,
+        "tp": 0,
+        "fp": 0,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.0,
+        "fpr_ci": [
+          0,
+          0.037
+        ]
+      },
+      "external_translated (roman_ur+mixed)": {
+        "attacks": 88,
+        "benign": 270,
+        "tp": 55,
+        "fp": 11,
+        "recall": 0.625,
+        "recall_ci": [
+          0.5206,
+          0.7189
+        ],
+        "fpr": 0.0407,
+        "fpr_ci": [
+          0.0229,
+          0.0715
+        ]
+      },
+      "overrefusal_translated FPR (roman_ur+mixed)": {
+        "attacks": 0,
+        "benign": 2581,
+        "tp": 0,
+        "fp": 470,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.1821,
+        "fpr_ci": [
+          0.1677,
+          0.1975
+        ]
+      },
+      "dev_translated_v2 (threshold set) (roman_ur+mixed)": {
+        "attacks": 679,
+        "benign": 1481,
+        "tp": 600,
+        "fp": 32,
+        "recall": 0.8837,
+        "recall_ci": [
+          0.8573,
+          0.9056
+        ],
+        "fpr": 0.0216,
+        "fpr_ci": [
+          0.0153,
+          0.0303
+        ]
+      }
+    },
+    "ensemble_max": {
+      "external_eval": {
+        "attacks": 197,
+        "benign": 309,
+        "tp": 169,
+        "fp": 18,
+        "recall": 0.8579,
+        "recall_ci": [
+          0.8022,
+          0.8998
+        ],
+        "fpr": 0.0583,
+        "fpr_ci": [
+          0.0372,
+          0.0902
+        ]
+      },
+      "bipia (unseen)": {
+        "attacks": 125,
+        "benign": 0,
+        "tp": 21,
+        "fp": 0,
+        "recall": 0.168,
+        "recall_ci": [
+          0.1126,
+          0.2432
+        ],
+        "fpr": null,
+        "fpr_ci": null
+      },
+      "injecagent (unseen)": {
+        "attacks": 1054,
+        "benign": 0,
+        "tp": 826,
+        "fp": 0,
+        "recall": 0.7837,
+        "recall_ci": [
+          0.7578,
+          0.8075
+        ],
+        "fpr": null,
+        "fpr_ci": null
+      },
+      "llmail (seen)": {
+        "attacks": 2000,
+        "benign": 0,
+        "tp": 1771,
+        "fp": 0,
+        "recall": 0.8855,
+        "recall_ci": [
+          0.8708,
+          0.8987
+        ],
+        "fpr": null,
+        "fpr_ci": null
+      },
+      "xstest FPR": {
+        "attacks": 0,
+        "benign": 249,
+        "tp": 0,
+        "fp": 0,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.0,
+        "fpr_ci": [
+          0,
+          0.0152
+        ]
+      },
+      "or_bench FPR": {
+        "attacks": 0,
+        "benign": 1319,
+        "tp": 0,
+        "fp": 300,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.2274,
+        "fpr_ci": [
+          0.2056,
+          0.2508
+        ]
+      },
+      "benign_email_probe FPR": {
+        "attacks": 0,
+        "benign": 100,
+        "tp": 0,
+        "fp": 75,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.75,
+        "fpr_ci": [
+          0.657,
+          0.8245
+        ]
+      },
+      "external_translated (roman_ur+mixed)": {
+        "attacks": 88,
+        "benign": 270,
+        "tp": 65,
+        "fp": 26,
+        "recall": 0.7386,
+        "recall_ci": [
+          0.6382,
+          0.8191
+        ],
+        "fpr": 0.0963,
+        "fpr_ci": [
+          0.0666,
+          0.1374
+        ]
+      },
+      "overrefusal_translated FPR (roman_ur+mixed)": {
+        "attacks": 0,
+        "benign": 2581,
+        "tp": 0,
+        "fp": 1167,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.4522,
+        "fpr_ci": [
+          0.433,
+          0.4714
+        ]
+      },
+      "dev_translated_v2 (threshold set) (roman_ur+mixed)": {
+        "attacks": 679,
+        "benign": 1481,
+        "tp": 644,
+        "fp": 394,
+        "recall": 0.9485,
+        "recall_ci": [
+          0.9292,
+          0.9627
+        ],
+        "fpr": 0.266,
+        "fpr_ci": [
+          0.2442,
+          0.2891
+        ]
+      }
+    }
+  },
+  "per_language": {
+    "roman_ur": {
+      "deberta": {
+        "external_translated": {
+          "attacks": 40,
+          "benign": 115,
+          "tp": 20,
+          "fp": 8,
+          "recall": 0.5,
+          "recall_ci": [
+            0.352,
+            0.648
+          ],
+          "fpr": 0.0696,
+          "fpr_ci": [
+            0.0357,
+            0.1313
+          ]
+        },
+        "overrefusal_translated FPR": {
+          "attacks": 0,
+          "benign": 1147,
+          "tp": 0,
+          "fp": 469,
+          "recall": null,
+          "recall_ci": null,
+          "fpr": 0.4089,
+          "fpr_ci": [
+            0.3808,
+            0.4376
+          ]
+        },
+        "dev_translated_v2 (threshold set)": {
+          "attacks": 300,
+          "benign": 647,
+          "tp": 249,
+          "fp": 157,
+          "recall": 0.83,
+          "recall_ci": [
+            0.7834,
+            0.8683
+          ],
+          "fpr": 0.2427,
+          "fpr_ci": [
+            0.2112,
+            0.2771
+          ]
+        }
+      },
+      "v1b": {
+        "external_translated": {
+          "attacks": 40,
+          "benign": 115,
+          "tp": 16,
+          "fp": 3,
+          "recall": 0.4,
+          "recall_ci": [
+            0.2635,
+            0.554
+          ],
+          "fpr": 0.0261,
+          "fpr_ci": [
+            0.0089,
+            0.0739
+          ]
+        },
+        "overrefusal_translated FPR": {
+          "attacks": 0,
+          "benign": 1147,
+          "tp": 0,
+          "fp": 242,
+          "recall": null,
+          "recall_ci": null,
+          "fpr": 0.211,
+          "fpr_ci": [
+            0.1884,
+            0.2355
+          ]
+        },
+        "dev_translated_v2 (threshold set)": {
+          "attacks": 300,
+          "benign": 647,
+          "tp": 260,
+          "fp": 28,
+          "recall": 0.8667,
+          "recall_ci": [
+            0.8235,
+            0.9005
+          ],
+          "fpr": 0.0433,
+          "fpr_ci": [
+            0.0301,
+            0.0618
+          ]
+        }
+      },
+      "v2": {
+        "external_translated": {
+          "attacks": 40,
+          "benign": 115,
+          "tp": 22,
+          "fp": 4,
+          "recall": 0.55,
+          "recall_ci": [
+            0.3983,
+            0.6929
+          ],
+          "fpr": 0.0348,
+          "fpr_ci": [
+            0.0136,
+            0.086
+          ]
+        },
+        "overrefusal_translated FPR": {
+          "attacks": 0,
+          "benign": 1147,
+          "tp": 0,
+          "fp": 197,
+          "recall": null,
+          "recall_ci": null,
+          "fpr": 0.1718,
+          "fpr_ci": [
+            0.151,
+            0.1947
+          ]
+        },
+        "dev_translated_v2 (threshold set)": {
+          "attacks": 300,
+          "benign": 647,
+          "tp": 262,
+          "fp": 13,
+          "recall": 0.8733,
+          "recall_ci": [
+            0.8309,
+            0.9063
+          ],
+          "fpr": 0.0201,
+          "fpr_ci": [
+            0.0118,
+            0.0341
+          ]
+        }
+      },
+      "ensemble_routed": {
+        "external_translated": {
+          "attacks": 40,
+          "benign": 115,
+          "tp": 22,
+          "fp": 4,
+          "recall": 0.55,
+          "recall_ci": [
+            0.3983,
+            0.6929
+          ],
+          "fpr": 0.0348,
+          "fpr_ci": [
+            0.0136,
+            0.086
+          ]
+        },
+        "overrefusal_translated FPR": {
+          "attacks": 0,
+          "benign": 1147,
+          "tp": 0,
+          "fp": 197,
+          "recall": null,
+          "recall_ci": null,
+          "fpr": 0.1718,
+          "fpr_ci": [
+            0.151,
+            0.1947
+          ]
+        },
+        "dev_translated_v2 (threshold set)": {
+          "attacks": 300,
+          "benign": 647,
+          "tp": 262,
+          "fp": 13,
+          "recall": 0.8733,
+          "recall_ci": [
+            0.8309,
+            0.9063
+          ],
+          "fpr": 0.0201,
+          "fpr_ci": [
+            0.0118,
+            0.0341
+          ]
+        }
+      },
+      "ensemble_max": {
+        "external_translated": {
+          "attacks": 40,
+          "benign": 115,
+          "tp": 27,
+          "fp": 12,
+          "recall": 0.675,
+          "recall_ci": [
+            0.5202,
+            0.7992
+          ],
+          "fpr": 0.1043,
+          "fpr_ci": [
+            0.0607,
+            0.1736
+          ]
+        },
+        "overrefusal_translated FPR": {
+          "attacks": 0,
+          "benign": 1147,
+          "tp": 0,
+          "fp": 546,
+          "recall": null,
+          "recall_ci": null,
+          "fpr": 0.476,
+          "fpr_ci": [
+            0.4472,
+            0.505
+          ]
+        },
+        "dev_translated_v2 (threshold set)": {
+          "attacks": 300,
+          "benign": 647,
+          "tp": 284,
+          "fp": 163,
+          "recall": 0.9467,
+          "recall_ci": [
+            0.9151,
+            0.9669
+          ],
+          "fpr": 0.2519,
+          "fpr_ci": [
+            0.22,
+            0.2868
+          ]
+        }
+      }
+    },
+    "mixed": {
+      "deberta": {
+        "external_translated": {
+          "attacks": 48,
+          "benign": 155,
+          "tp": 27,
+          "fp": 11,
+          "recall": 0.5625,
+          "recall_ci": [
+            0.4227,
+            0.693
+          ],
+          "fpr": 0.071,
+          "fpr_ci": [
+            0.0401,
+            0.1226
+          ]
+        },
+        "overrefusal_translated FPR": {
+          "attacks": 0,
+          "benign": 1434,
+          "tp": 0,
+          "fp": 496,
+          "recall": null,
+          "recall_ci": null,
+          "fpr": 0.3459,
+          "fpr_ci": [
+            0.3217,
+            0.3709
+          ]
+        },
+        "dev_translated_v2 (threshold set)": {
+          "attacks": 379,
+          "benign": 834,
+          "tp": 315,
+          "fp": 222,
+          "recall": 0.8311,
+          "recall_ci": [
+            0.7901,
+            0.8655
+          ],
+          "fpr": 0.2662,
+          "fpr_ci": [
+            0.2373,
+            0.2972
+          ]
+        }
+      },
+      "v1b": {
+        "external_translated": {
+          "attacks": 48,
+          "benign": 155,
+          "tp": 20,
+          "fp": 5,
+          "recall": 0.4167,
+          "recall_ci": [
+            0.2885,
+            0.5572
+          ],
+          "fpr": 0.0323,
+          "fpr_ci": [
+            0.0139,
+            0.0733
+          ]
+        },
+        "overrefusal_translated FPR": {
+          "attacks": 0,
+          "benign": 1434,
+          "tp": 0,
+          "fp": 281,
+          "recall": null,
+          "recall_ci": null,
+          "fpr": 0.196,
+          "fpr_ci": [
+            0.1762,
+            0.2173
+          ]
+        },
+        "dev_translated_v2 (threshold set)": {
+          "attacks": 379,
+          "benign": 834,
+          "tp": 337,
+          "fp": 34,
+          "recall": 0.8892,
+          "recall_ci": [
+            0.8536,
+            0.917
+          ],
+          "fpr": 0.0408,
+          "fpr_ci": [
+            0.0293,
+            0.0564
+          ]
+        }
+      },
+      "v2": {
+        "external_translated": {
+          "attacks": 48,
+          "benign": 155,
+          "tp": 33,
+          "fp": 7,
+          "recall": 0.6875,
+          "recall_ci": [
+            0.5467,
+            0.8005
+          ],
+          "fpr": 0.0452,
+          "fpr_ci": [
+            0.022,
+            0.0903
+          ]
+        },
+        "overrefusal_translated FPR": {
+          "attacks": 0,
+          "benign": 1434,
+          "tp": 0,
+          "fp": 273,
+          "recall": null,
+          "recall_ci": null,
+          "fpr": 0.1904,
+          "fpr_ci": [
+            0.1709,
+            0.2115
+          ]
+        },
+        "dev_translated_v2 (threshold set)": {
+          "attacks": 379,
+          "benign": 834,
+          "tp": 338,
+          "fp": 19,
+          "recall": 0.8918,
+          "recall_ci": [
+            0.8565,
+            0.9193
+          ],
+          "fpr": 0.0228,
+          "fpr_ci": [
+            0.0146,
+            0.0353
+          ]
+        }
+      },
+      "ensemble_routed": {
+        "external_translated": {
+          "attacks": 48,
+          "benign": 155,
+          "tp": 33,
+          "fp": 7,
+          "recall": 0.6875,
+          "recall_ci": [
+            0.5467,
+            0.8005
+          ],
+          "fpr": 0.0452,
+          "fpr_ci": [
+            0.022,
+            0.0903
+          ]
+        },
+        "overrefusal_translated FPR": {
+          "attacks": 0,
+          "benign": 1434,
+          "tp": 0,
+          "fp": 273,
+          "recall": null,
+          "recall_ci": null,
+          "fpr": 0.1904,
+          "fpr_ci": [
+            0.1709,
+            0.2115
+          ]
+        },
+        "dev_translated_v2 (threshold set)": {
+          "attacks": 379,
+          "benign": 834,
+          "tp": 338,
+          "fp": 19,
+          "recall": 0.8918,
+          "recall_ci": [
+            0.8565,
+            0.9193
+          ],
+          "fpr": 0.0228,
+          "fpr_ci": [
+            0.0146,
+            0.0353
+          ]
+        }
+      },
+      "ensemble_max": {
+        "external_translated": {
+          "attacks": 48,
+          "benign": 155,
+          "tp": 38,
+          "fp": 14,
+          "recall": 0.7917,
+          "recall_ci": [
+            0.6574,
+            0.8827
+          ],
+          "fpr": 0.0903,
+          "fpr_ci": [
+            0.0546,
+            0.1459
+          ]
+        },
+        "overrefusal_translated FPR": {
+          "attacks": 0,
+          "benign": 1434,
+          "tp": 0,
+          "fp": 621,
+          "recall": null,
+          "recall_ci": null,
+          "fpr": 0.4331,
+          "fpr_ci": [
+            0.4076,
+            0.4588
+          ]
+        },
+        "dev_translated_v2 (threshold set)": {
+          "attacks": 379,
+          "benign": 834,
+          "tp": 360,
+          "fp": 231,
+          "recall": 0.9499,
+          "recall_ci": [
+            0.923,
+            0.9677
+          ],
+          "fpr": 0.277,
+          "fpr_ci": [
+            0.2477,
+            0.3083
+          ]
+        }
+      }
+    }
+  },
+  "appendix_ur": {
+    "deberta": {
+      "external_translated": {
+        "attacks": 62,
+        "benign": 165,
+        "tp": 60,
+        "fp": 141,
+        "recall": 0.9677,
+        "recall_ci": [
+          0.8898,
+          0.9911
+        ],
+        "fpr": 0.8545,
+        "fpr_ci": [
+          0.7927,
+          0.9003
+        ]
+      },
+      "overrefusal_translated FPR": {
+        "attacks": 0,
+        "benign": 1473,
+        "tp": 0,
+        "fp": 1421,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.9647,
+        "fpr_ci": [
+          0.954,
+          0.973
+        ]
+      },
+      "dev_translated_v2 (threshold set)": {
+        "attacks": 393,
+        "benign": 771,
+        "tp": 370,
+        "fp": 704,
+        "recall": 0.9415,
+        "recall_ci": [
+          0.9137,
+          0.9607
+        ],
+        "fpr": 0.9131,
+        "fpr_ci": [
+          0.8911,
+          0.931
+        ]
+      }
+    },
+    "v1b": {
+      "external_translated": {
+        "attacks": 62,
+        "benign": 165,
+        "tp": 12,
+        "fp": 4,
+        "recall": 0.1935,
+        "recall_ci": [
+          0.1143,
+          0.3085
+        ],
+        "fpr": 0.0242,
+        "fpr_ci": [
+          0.0095,
+          0.0607
+        ]
+      },
+      "overrefusal_translated FPR": {
+        "attacks": 0,
+        "benign": 1473,
+        "tp": 0,
+        "fp": 179,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.1215,
+        "fpr_ci": [
+          0.1058,
+          0.1392
+        ]
+      },
+      "dev_translated_v2 (threshold set)": {
+        "attacks": 393,
+        "benign": 771,
+        "tp": 252,
+        "fp": 18,
+        "recall": 0.6412,
+        "recall_ci": [
+          0.5926,
+          0.6871
+        ],
+        "fpr": 0.0233,
+        "fpr_ci": [
+          0.0148,
+          0.0366
+        ]
+      }
+    },
+    "v2": {
+      "external_translated": {
+        "attacks": 62,
+        "benign": 165,
+        "tp": 35,
+        "fp": 13,
+        "recall": 0.5645,
+        "recall_ci": [
+          0.4409,
+          0.6806
+        ],
+        "fpr": 0.0788,
+        "fpr_ci": [
+          0.0466,
+          0.1301
+        ]
+      },
+      "overrefusal_translated FPR": {
+        "attacks": 0,
+        "benign": 1473,
+        "tp": 0,
+        "fp": 269,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.1826,
+        "fpr_ci": [
+          0.1637,
+          0.2032
+        ]
+      },
+      "dev_translated_v2 (threshold set)": {
+        "attacks": 393,
+        "benign": 771,
+        "tp": 304,
+        "fp": 31,
+        "recall": 0.7735,
+        "recall_ci": [
+          0.7296,
+          0.8122
+        ],
+        "fpr": 0.0402,
+        "fpr_ci": [
+          0.0285,
+          0.0565
+        ]
+      }
+    },
+    "ensemble_routed": {
+      "external_translated": {
+        "attacks": 62,
+        "benign": 165,
+        "tp": 35,
+        "fp": 13,
+        "recall": 0.5645,
+        "recall_ci": [
+          0.4409,
+          0.6806
+        ],
+        "fpr": 0.0788,
+        "fpr_ci": [
+          0.0466,
+          0.1301
+        ]
+      },
+      "overrefusal_translated FPR": {
+        "attacks": 0,
+        "benign": 1473,
+        "tp": 0,
+        "fp": 269,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.1826,
+        "fpr_ci": [
+          0.1637,
+          0.2032
+        ]
+      },
+      "dev_translated_v2 (threshold set)": {
+        "attacks": 393,
+        "benign": 771,
+        "tp": 304,
+        "fp": 31,
+        "recall": 0.7735,
+        "recall_ci": [
+          0.7296,
+          0.8122
+        ],
+        "fpr": 0.0402,
+        "fpr_ci": [
+          0.0285,
+          0.0565
+        ]
+      }
+    },
+    "ensemble_max": {
+      "external_translated": {
+        "attacks": 62,
+        "benign": 165,
+        "tp": 62,
+        "fp": 142,
+        "recall": 1.0,
+        "recall_ci": [
+          0.9417,
+          1
+        ],
+        "fpr": 0.8606,
+        "fpr_ci": [
+          0.7995,
+          0.9053
+        ]
+      },
+      "overrefusal_translated FPR": {
+        "attacks": 0,
+        "benign": 1473,
+        "tp": 0,
+        "fp": 1433,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.9728,
+        "fpr_ci": [
+          0.9632,
+          0.98
+        ]
+      },
+      "dev_translated_v2 (threshold set)": {
+        "attacks": 393,
+        "benign": 771,
+        "tp": 386,
+        "fp": 707,
+        "recall": 0.9822,
+        "recall_ci": [
+          0.9637,
+          0.9913
+        ],
+        "fpr": 0.917,
+        "fpr_ci": [
+          0.8954,
+          0.9345
+        ]
+      }
+    }
+  }
+}

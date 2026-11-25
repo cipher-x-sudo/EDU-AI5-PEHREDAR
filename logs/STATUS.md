@@ -245,3 +245,9 @@ plan: XLM-R base, encoder v2, train_v2.jsonl (45,791 rows: en + roman_ur + mixed
 job: filter-chain-v3 + script check
 state: done (2026-11-26T02:11:08+05:00)
 result: results/labse_filter_v3.md, results/translation_refilter_v3.md, results/v2_data.md; script check removed translated_v2 130, dev_translated_v2 44, external_translated 10, overrefusal_translated 41; roman_ur+mixed estimate 49/61 = 80.3% -> train v2 without ur (team decision)
+v2-train-eval 2026-11-26T02:41:20+05:00: logs/v2_e2.log step=11400 loss=0.0187 vram_gb=5.26
+v2-train-eval 2026-11-26T02:54:59+05:00: container exited (code 0)
+
+job: v2-train-eval
+state: done (2026-11-26T02:56:13+05:00)
+result: v2_e1 617 s, v2_e2 1221 s, peak VRAM 5.26 GB; chosen v2_e2 (threshold 0.7383 at 2% dev FPR); results/clf_v2.md, results/clf_v2.json; no model promoted
