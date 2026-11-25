@@ -251,3 +251,11 @@ v2-train-eval 2026-11-26T02:54:59+05:00: container exited (code 0)
 job: v2-train-eval
 state: done (2026-11-26T02:56:13+05:00)
 result: v2_e1 617 s, v2_e2 1221 s, peak VRAM 5.26 GB; chosen v2_e2 (threshold 0.7383 at 2% dev FPR); results/clf_v2.md, results/clf_v2.json; no model promoted
+
+job: gateway-eval-v1
+state: running (detached container pehredar-gateway-eval)
+log: logs/gateway_eval_v1.log
+started: 2026-11-26T03:09:18+05:00
+plan: all rows of 10 eval sets through /v1/check/input with L2 routed + Qwen3Guard judge
+gateway-eval-v1 2026-11-26T03:09:38+05:00: first start failed (DB path mangled by Git Bash); restarted
+gateway-eval-v1 2026-11-26T03:28:17+05:00: done; 6,292 requests, 117 judge calls; results/gateway_v1.md

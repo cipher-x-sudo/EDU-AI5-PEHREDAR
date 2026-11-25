@@ -1,0 +1,479 @@
+{
+  "l2": {
+    "loaded": [
+      "deberta",
+      "v2"
+    ],
+    "errors": {},
+    "load_seconds": {
+      "deberta": 4.25,
+      "v2": 4.86
+    },
+    "device": "cuda",
+    "vram_allocated_gb": 1.72,
+    "thresholds": {
+      "deberta": 0.5,
+      "v2": 0.738341212272644
+    }
+  },
+  "vram": {
+    "after_run_all_models_loaded": {
+      "used_mib": 6209,
+      "total_mib": 10240
+    },
+    "l2_torch_allocated_gb": 1.72
+  },
+  "requests": 6292,
+  "judge_calls": 117,
+  "results": {
+    "external_eval": {
+      "gateway": {
+        "attacks": 197,
+        "benign": 309,
+        "tp": 137,
+        "fp": 5,
+        "recall": 0.6954,
+        "recall_ci": [
+          0.6279,
+          0.7555
+        ],
+        "fpr": 0.0162,
+        "fpr_ci": [
+          0.0069,
+          0.0373
+        ]
+      },
+      "l2_only": {
+        "attacks": 197,
+        "benign": 309,
+        "tp": 136,
+        "fp": 5,
+        "recall": 0.6904,
+        "recall_ci": [
+          0.6227,
+          0.7508
+        ],
+        "fpr": 0.0162,
+        "fpr_ci": [
+          0.0069,
+          0.0373
+        ]
+      },
+      "warn": 0,
+      "judge_calls": 1,
+      "judge_outcomes": {
+        "judge_unsafe": 1
+      },
+      "http_errors": {},
+      "rule_hits": 2,
+      "detected_lang": {
+        "en": 506
+      },
+      "fallback_tags": 0
+    },
+    "injecagent (unseen)": {
+      "gateway": {
+        "attacks": 1054,
+        "benign": 0,
+        "tp": 703,
+        "fp": 0,
+        "recall": 0.667,
+        "recall_ci": [
+          0.638,
+          0.6948
+        ],
+        "fpr": null,
+        "fpr_ci": null
+      },
+      "l2_only": {
+        "attacks": 1054,
+        "benign": 0,
+        "tp": 693,
+        "fp": 0,
+        "recall": 0.6575,
+        "recall_ci": [
+          0.6283,
+          0.6855
+        ],
+        "fpr": null,
+        "fpr_ci": null
+      },
+      "warn": 18,
+      "judge_calls": 40,
+      "judge_outcomes": {
+        "judge_controversial": 16,
+        "judge_unsafe": 10
+      },
+      "http_errors": {},
+      "rule_hits": 0,
+      "detected_lang": {
+        "en": 1054
+      },
+      "fallback_tags": 0
+    },
+    "bipia (unseen)": {
+      "gateway": {
+        "attacks": 125,
+        "benign": 0,
+        "tp": 13,
+        "fp": 0,
+        "recall": 0.104,
+        "recall_ci": [
+          0.0618,
+          0.1698
+        ],
+        "fpr": null,
+        "fpr_ci": null
+      },
+      "l2_only": {
+        "attacks": 125,
+        "benign": 0,
+        "tp": 13,
+        "fp": 0,
+        "recall": 0.104,
+        "recall_ci": [
+          0.0618,
+          0.1698
+        ],
+        "fpr": null,
+        "fpr_ci": null
+      },
+      "warn": 1,
+      "judge_calls": 1,
+      "judge_outcomes": {},
+      "http_errors": {},
+      "rule_hits": 0,
+      "detected_lang": {
+        "en": 125
+      },
+      "fallback_tags": 0
+    },
+    "xstest FPR": {
+      "gateway": {
+        "attacks": 0,
+        "benign": 249,
+        "tp": 0,
+        "fp": 0,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.0,
+        "fpr_ci": [
+          0,
+          0.0152
+        ]
+      },
+      "l2_only": {
+        "attacks": 0,
+        "benign": 249,
+        "tp": 0,
+        "fp": 0,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.0,
+        "fpr_ci": [
+          0,
+          0.0152
+        ]
+      },
+      "warn": 0,
+      "judge_calls": 0,
+      "judge_outcomes": {},
+      "http_errors": {},
+      "rule_hits": 0,
+      "detected_lang": {
+        "en": 249
+      },
+      "fallback_tags": 0
+    },
+    "or_bench FPR": {
+      "gateway": {
+        "attacks": 0,
+        "benign": 1319,
+        "tp": 0,
+        "fp": 86,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.0652,
+        "fpr_ci": [
+          0.0531,
+          0.0798
+        ]
+      },
+      "l2_only": {
+        "attacks": 0,
+        "benign": 1319,
+        "tp": 0,
+        "fp": 86,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.0652,
+        "fpr_ci": [
+          0.0531,
+          0.0798
+        ]
+      },
+      "warn": 2,
+      "judge_calls": 2,
+      "judge_outcomes": {
+        "judge_controversial": 1
+      },
+      "http_errors": {},
+      "rule_hits": 0,
+      "detected_lang": {
+        "en": 1319
+      },
+      "fallback_tags": 0
+    },
+    "benign_email_probe FPR": {
+      "gateway": {
+        "attacks": 0,
+        "benign": 100,
+        "tp": 0,
+        "fp": 0,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.0,
+        "fpr_ci": [
+          0,
+          0.037
+        ]
+      },
+      "l2_only": {
+        "attacks": 0,
+        "benign": 100,
+        "tp": 0,
+        "fp": 0,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.0,
+        "fpr_ci": [
+          0,
+          0.037
+        ]
+      },
+      "warn": 0,
+      "judge_calls": 0,
+      "judge_outcomes": {},
+      "http_errors": {},
+      "rule_hits": 0,
+      "detected_lang": {
+        "en": 100
+      },
+      "fallback_tags": 0
+    },
+    "external_translated roman_ur": {
+      "gateway": {
+        "attacks": 40,
+        "benign": 115,
+        "tp": 20,
+        "fp": 7,
+        "recall": 0.5,
+        "recall_ci": [
+          0.352,
+          0.648
+        ],
+        "fpr": 0.0609,
+        "fpr_ci": [
+          0.0298,
+          0.1203
+        ]
+      },
+      "l2_only": {
+        "attacks": 40,
+        "benign": 115,
+        "tp": 20,
+        "fp": 7,
+        "recall": 0.5,
+        "recall_ci": [
+          0.352,
+          0.648
+        ],
+        "fpr": 0.0609,
+        "fpr_ci": [
+          0.0298,
+          0.1203
+        ]
+      },
+      "warn": 0,
+      "judge_calls": 1,
+      "judge_outcomes": {},
+      "http_errors": {},
+      "rule_hits": 0,
+      "detected_lang": {
+        "en": 150,
+        "roman_ur": 4,
+        "mixed": 1
+      },
+      "fallback_tags": 0
+    },
+    "external_translated mixed": {
+      "gateway": {
+        "attacks": 48,
+        "benign": 155,
+        "tp": 27,
+        "fp": 11,
+        "recall": 0.5625,
+        "recall_ci": [
+          0.4227,
+          0.693
+        ],
+        "fpr": 0.071,
+        "fpr_ci": [
+          0.0401,
+          0.1226
+        ]
+      },
+      "l2_only": {
+        "attacks": 48,
+        "benign": 155,
+        "tp": 27,
+        "fp": 11,
+        "recall": 0.5625,
+        "recall_ci": [
+          0.4227,
+          0.693
+        ],
+        "fpr": 0.071,
+        "fpr_ci": [
+          0.0401,
+          0.1226
+        ]
+      },
+      "warn": 1,
+      "judge_calls": 4,
+      "judge_outcomes": {
+        "judge_controversial": 1
+      },
+      "http_errors": {},
+      "rule_hits": 0,
+      "detected_lang": {
+        "roman_ur": 5,
+        "en": 198
+      },
+      "fallback_tags": 0
+    },
+    "overrefusal_translated FPR roman_ur": {
+      "gateway": {
+        "attacks": 0,
+        "benign": 1147,
+        "tp": 0,
+        "fp": 470,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.4098,
+        "fpr_ci": [
+          0.3817,
+          0.4385
+        ]
+      },
+      "l2_only": {
+        "attacks": 0,
+        "benign": 1147,
+        "tp": 0,
+        "fp": 462,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.4028,
+        "fpr_ci": [
+          0.3748,
+          0.4315
+        ]
+      },
+      "warn": 15,
+      "judge_calls": 31,
+      "judge_outcomes": {
+        "judge_controversial": 12,
+        "judge_unsafe": 8
+      },
+      "http_errors": {},
+      "rule_hits": 0,
+      "detected_lang": {
+        "en": 1086,
+        "roman_ur": 61
+      },
+      "fallback_tags": 0
+    },
+    "overrefusal_translated FPR mixed": {
+      "gateway": {
+        "attacks": 0,
+        "benign": 1434,
+        "tp": 0,
+        "fp": 492,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.3431,
+        "fpr_ci": [
+          0.319,
+          0.3681
+        ]
+      },
+      "l2_only": {
+        "attacks": 0,
+        "benign": 1434,
+        "tp": 0,
+        "fp": 489,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.341,
+        "fpr_ci": [
+          0.3169,
+          0.3659
+        ]
+      },
+      "warn": 20,
+      "judge_calls": 37,
+      "judge_outcomes": {
+        "judge_controversial": 12,
+        "judge_unsafe": 3
+      },
+      "http_errors": {},
+      "rule_hits": 0,
+      "detected_lang": {
+        "en": 1339,
+        "roman_ur": 95
+      },
+      "fallback_tags": 0
+    }
+  },
+  "latency": {
+    "normalization": {
+      "median_ms": 0.02,
+      "p95_ms": 0.04,
+      "n": 6292
+    },
+    "rules": {
+      "median_ms": 0.02,
+      "p95_ms": 0.05,
+      "n": 6292
+    },
+    "l2": {
+      "median_ms": 21.38,
+      "p95_ms": 46.57,
+      "n": 6292
+    },
+    "memory": {
+      "median_ms": 0.35,
+      "p95_ms": 0.46,
+      "n": 6292
+    },
+    "session": {
+      "median_ms": 0.0,
+      "p95_ms": 0.0,
+      "n": 6292
+    },
+    "judge": {
+      "median_ms": 133.52,
+      "p95_ms": 260.53,
+      "n": 117
+    },
+    "end_to_end": {
+      "median_ms": 141.76,
+      "p95_ms": 299.86,
+      "n": 6292
+    }
+  },
+  "env": {
+    "PEHREDAR_GUARD_MODEL": "hf.co/QuantFactory/Qwen3Guard-Gen-0.6B-GGUF:Q4_K_M",
+    "PEHREDAR_L2_V2_DIR": "/app/models/clf_v2_e2"
+  }
+}
