@@ -259,3 +259,10 @@ started: 2026-11-26T03:09:18+05:00
 plan: all rows of 10 eval sets through /v1/check/input with L2 routed + Qwen3Guard judge
 gateway-eval-v1 2026-11-26T03:09:38+05:00: first start failed (DB path mangled by Git Bash); restarted
 gateway-eval-v1 2026-11-26T03:28:17+05:00: done; 6,292 requests, 117 judge calls; results/gateway_v1.md
+
+job: canary-v1
+state: running (detached container pehredar-canary-v1)
+log: logs/canary_v1.log
+started: 2026-11-26T03:32:13+05:00
+plan: 300 attack prompts (100 en / roman_ur / mixed) to the protected model bare and through the gateway
+canary-v1 2026-11-26T03:48:05+05:00: done; bare leaks 81/300, gateway leaks 0/300; results/output_guard_v1.md; VRAM all models loaded 9,286/10,240 MiB (results/vram_all_models_v1.json); ollama stopped
