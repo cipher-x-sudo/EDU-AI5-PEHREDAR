@@ -231,3 +231,7 @@ log: logs/meaning_scores_v3.log
 started: 2026-11-26T01:42:00+05:00
 plan: LaBSE cosine original vs translation for all rows of the 4 translated files (pre-v3 backups); report only, nothing filtered
 meaning-scores-v3 2026-11-26T01:53:34+05:00: done (exit 0, ~10.5 min incl. LaBSE download); 21,713 rows scored; result results/meaning_check_v3.md; nothing filtered
+
+job: labse-filter-v3
+state: done (2026-11-26T02:00:53+05:00)
+result: results/labse_filter_v3.md; roman_ur threshold 0.5168 applied (translated_v2 -406, dev_translated_v2 -156, external_translated -36, overrefusal_translated -286); post-filter estimate 71.6% good on v3 sample -> training gate STOP (< 75%); v2 training not started
