@@ -188,3 +188,15 @@ job: translation-v2
 state: done (exit 0)
 finished: 2026-11-25T13:58:38+05:00
 ollama: stopped
+
+job: translation-eval-v2
+state: running (detached container pehredar-translation-eval)
+log: logs/translation_eval_v2.log
+started: 2026-11-25T17:52:00+05:00
+plan: dev_translated_v2 (700 attack + 1,050 benign dev rows), external_translated (425), overrefusal_translated (1,566), each x 3 langs, eval only; Ollama stops when done
+translation-eval-v2 2026-11-25T17:53:33+05:00: first start failed (OLLAMA_HOST not set, outputs deleted); restarted with OLLAMA_HOST
+
+job: phase-b-review-support
+state: done
+result: results/translation_v2_stats.md; data/processed/translation_review_v2_abliterated.csv (30 rows)
+phase-c-gate 2026-11-25T17:56:17+05:00: NOT passed (no verdicts in translation_review_v2.csv 0/100 or translation_review_v2_abliterated.csv 0/30); v2 training not started
