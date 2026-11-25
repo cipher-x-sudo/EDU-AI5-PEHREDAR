@@ -186,3 +186,10 @@ def test_fast_near_duplicate_pairs_match_brute_force():
              if len(c) >= 30 and len(r) >= 30 and abs(len(c) - len(r)) <= max(len(c), len(r)) * 0.1
              and SequenceMatcher(None, c, r, autojunk=False).ratio() >= 0.93]
     assert brute and sorted(near_duplicate_pairs(train, test)) == sorted(brute)
+
+
+def test_wilson_interval():
+    from scripts.run_v2_evaluation import wilson
+    assert wilson(0, 10) == [0.0, 0.2775]
+    assert wilson(5, 10) == [0.2366, 0.7634]
+    assert wilson(0, 0) is None

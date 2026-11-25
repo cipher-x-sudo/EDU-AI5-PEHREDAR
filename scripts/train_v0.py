@@ -1,5 +1,5 @@
 """Train/evaluate the English-only XLM-R v0 baseline on public data."""
-import argparse, hashlib, json, random, statistics, time
+import argparse, hashlib, json, os, random, statistics, time
 from pathlib import Path
 import torch
 from torch.utils.data import DataLoader, Dataset
@@ -92,7 +92,7 @@ def main():
         return 2*tp/(2*tp+fp+fn) if tp+fp+fn else 0
     threshold=max(candidates,key=lambda x:(f1(x),x))
     dest=Path(args.output_dir); dest.mkdir(parents=True,exist_ok=True); model.save_pretrained(dest); tokenizer.save_pretrained(dest)
-    report={"data_commit":"83d0563","base_model":BASE,"base_revision":getattr(model.config,"_commit_hash",None),"dataset_sha256":hashlib.sha256((ROOT/args.train_file).read_bytes()).hexdigest(),"epochs":args.epochs,"max_length":512,"truncation":"head+tail","encoder_version":args.encoder_version,"seed":SEED,"threshold":threshold,"train_count":len(train),"dev_count":len(dev),"device":str(device),"training_seconds":time.perf_counter()-start,"train_file":args.train_file,"dev_file":args.dev_file,"langs":sorted(langs),"peak_vram_gb":round(torch.cuda.max_memory_allocated()/2**30,2) if device.type=="cuda" else None}
+    report={"data_commit":os.getenv("PEHREDAR_DATA_COMMIT","83d0563"),"base_model":BASE,"base_revision":getattr(model.config,"_commit_hash",None),"dataset_sha256":hashlib.sha256((ROOT/args.train_file).read_bytes()).hexdigest(),"epochs":args.epochs,"max_length":512,"truncation":"head+tail","encoder_version":args.encoder_version,"seed":SEED,"threshold":threshold,"train_count":len(train),"dev_count":len(dev),"device":str(device),"training_seconds":time.perf_counter()-start,"train_file":args.train_file,"dev_file":args.dev_file,"langs":sorted(langs),"peak_vram_gb":round(torch.cuda.max_memory_allocated()/2**30,2) if device.type=="cuda" else None}
     (dest/"model_card.md").write_text("# Pehredar classifier v0\n\n"+json.dumps(report,indent=2)+"\n",encoding="utf-8")
     print(json.dumps(report,indent=2))
 if __name__=="__main__": main()
