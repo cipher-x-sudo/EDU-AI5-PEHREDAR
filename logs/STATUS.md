@@ -223,4 +223,4 @@ ollama: stopped
 
 job: refilter-v3
 state: done (2026-11-26T01:36:37+05:00)
-result: results/translation_refilter_v3.md; abliterated rows dropped; translated_v2 11,797 -> 9,237; new review sample data/processed/translation_review_v3.csv (100 rows, empty verdicts); v2 training NOT started
+result: results/translation_refilter_v3.md; abliterated rows dropped; translated_v2 11,797 -> 9,236 (rerun after empty-output fix); new review sample data/processed/translation_review_v3.csv (100 rows, empty verdicts); v2 training NOT started
