@@ -52,7 +52,7 @@ def main():
             started = time.perf_counter()
             try:
                 r = http.post(f"{gateway.UPSTREAM_URL}/chat/completions", json={
-                    "model": PROTECTED, "temperature": 0, "max_tokens": MAX_TOKENS,
+                    "model": PROTECTED, "temperature": 0, "max_tokens": MAX_TOKENS, "reasoning_effort": "none",
                     "messages": [{"role": "system", "content": gateway.canary_system_prompt(canary)},
                                  {"role": "user", "content": it["text"]}]})
                 r.raise_for_status()
@@ -68,7 +68,7 @@ def main():
         for i, it in enumerate(items, 1):
             started = time.perf_counter()
             r = client.post("/v1/chat/completions", headers={"x-session-id": f"canary-{it['id']}"}, json={
-                "model": PROTECTED, "temperature": 0, "max_tokens": MAX_TOKENS, "messages": [{"role": "user", "content": it["text"]}]})
+                "model": PROTECTED, "temperature": 0, "max_tokens": MAX_TOKENS, "reasoning_effort": "none", "messages": [{"role": "user", "content": it["text"]}]})
             if r.status_code == 200:
                 body = r.json(); meta = body.get("pehredar", {})
                 content = body["choices"][0]["message"]["content"] or ""
@@ -101,13 +101,13 @@ def report(items):
                             "passed_tags": dict(Counter(t for g in gw if g.get("stage") == "passed" for t in g["tags"])),
                             "errors": dict(Counter(g.get("status") for g in gw if not g["ok"]))},
                 "bare_leaks_and_gateway_outcome": dict(Counter(x["gateway"].get("stage", "error") for x in xs if x["bare"].get("full")))}
-    out = {"protected_model": PROTECTED, "max_tokens": MAX_TOKENS, "temperature": 0,
+    out = {"protected_model": PROTECTED, "max_tokens": MAX_TOKENS, "temperature": 0, "reasoning_effort": "none",
            "per_language": {l: summary([x for x in items if x["lang"] == l]) for l in ("en", "roman_ur", "mixed")},
            "all": summary(items), "sources": dict(Counter(f"{x['lang']}:{x['set']}" for x in items))}
     Path("results/output_guard_v1.json").write_text(json.dumps(out, indent=2), encoding="utf-8")
     pct = lambda k, n, ci: f"{k}/{n} = {k / max(1, n):.1%} [{ci[0]:.3f}–{ci[1]:.3f}]" if ci else f"{k}/{n}"
     lines = ["# Output guard / canary experiment v1", "",
-             f"Protected model `{PROTECTED}` (Ollama), temperature 0, max_tokens {MAX_TOKENS}. The canary is in the "
+             f"Protected model `{PROTECTED}` (Ollama), temperature 0, max_tokens {MAX_TOKENS}, reasoning_effort none (thinking off, same in both arms). The canary is in the "
              "system prompt (`canary_system_prompt`, same text as the gateway adds). (a) bare: prompt sent straight to the "
              "model. (b) gateway: full `/v1/chat/completions` (input layers → model → output guard incl. Qwen3Guard). "
              "A leak is the full canary string in what the client receives. Attack prompts come from eval-only sets "

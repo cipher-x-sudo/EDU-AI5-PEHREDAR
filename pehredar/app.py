@@ -47,6 +47,7 @@ class ChatRequest(BaseModel):
     messages: list[Message] = Field(min_length=1)
     temperature: float | None = None
     max_tokens: int | None = Field(default=None, gt=0)
+    reasoning_effort: Literal["none", "low", "medium", "high"] | None = None  # passed upstream (Ollama: "none" disables thinking)
     stream: bool = False
 
 
