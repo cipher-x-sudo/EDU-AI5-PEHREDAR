@@ -128,3 +128,63 @@ result: pool 44,700 (17,880 attack / 26,820 benign); train_public_v2 40,229; dev
 job: ensemble-eval-v1
 state: done
 result: results/ensemble_v1.md
+translation-v2 2026-11-25T01:56:51+05:00: progress stage1 3600/14997 sec_per_output=1.45 eta_h=4.6
+translation-v2 2026-11-25T01:58:29+05:00: progress stage1 3600/14997 sec_per_output=1.45 eta_h=4.6
+translation-v2 2026-11-25T02:26:51+05:00: progress stage1 4200/14997 sec_per_output=1.64 eta_h=4.9
+translation-v2 2026-11-25T02:28:30+05:00: progress stage1 4300/14997 sec_per_output=1.66 eta_h=4.9
+translation-v2 2026-11-25T02:56:52+05:00: progress stage1 4900/14997 sec_per_output=1.78 eta_h=5.0
+translation-v2 2026-11-25T02:58:30+05:00: progress stage1 5000/14997 sec_per_output=1.79 eta_h=5.0
+translation-v2 2026-11-25T03:26:52+05:00: progress stage1 5600/14997 sec_per_output=1.88 eta_h=4.9
+translation-v2 2026-11-25T03:28:30+05:00: progress stage1 5600/14997 sec_per_output=1.88 eta_h=4.9
+translation-v2 2026-11-25T03:56:53+05:00: progress stage1 6000/14997 sec_per_output=2.04 eta_h=5.1
+translation-v2 2026-11-25T03:58:31+05:00: progress stage1 6000/14997 sec_per_output=2.04 eta_h=5.1
+translation-v2 2026-11-25T04:26:53+05:00: progress stage1 6400/14997 sec_per_output=2.21 eta_h=5.3
+translation-v2 2026-11-25T04:28:31+05:00: progress stage1 6400/14997 sec_per_output=2.21 eta_h=5.3
+translation-v2 2026-11-25T04:56:54+05:00: progress stage1 6800/14997 sec_per_output=2.34 eta_h=5.3
+translation-v2 2026-11-25T04:58:31+05:00: progress stage1 6800/14997 sec_per_output=2.34 eta_h=5.3
+translation-v2 2026-11-25T05:26:54+05:00: progress stage1 7200/14997 sec_per_output=2.46 eta_h=5.3
+translation-v2 2026-11-25T05:28:32+05:00: progress stage1 7200/14997 sec_per_output=2.46 eta_h=5.3
+translation-v2 2026-11-25T05:56:55+05:00: progress stage1 8600/14997 sec_per_output=2.29 eta_h=4.1
+translation-v2 2026-11-25T05:58:32+05:00: progress stage1 8700/14997 sec_per_output=2.28 eta_h=4.0
+translation-v2 2026-11-25T06:26:55+05:00: progress stage1 9500/14997 sec_per_output=2.25 eta_h=3.4
+translation-v2 2026-11-25T06:28:32+05:00: progress stage1 9500/14997 sec_per_output=2.25 eta_h=3.4
+translation-v2 2026-11-25T06:56:56+05:00: progress stage1 10500/14997 sec_per_output=2.22 eta_h=2.8
+translation-v2 2026-11-25T06:58:33+05:00: progress stage1 10600/14997 sec_per_output=2.20 eta_h=2.7
+translation-v2 2026-11-25T07:26:56+05:00: progress stage1 12600/14997 sec_per_output=1.99 eta_h=1.3
+translation-v2 2026-11-25T07:28:33+05:00: progress stage1 12600/14997 sec_per_output=1.99 eta_h=1.3
+translation-v2 2026-11-25T07:56:57+05:00: progress stage1 13000/14997 sec_per_output=2.05 eta_h=1.1
+translation-v2 2026-11-25T07:58:33+05:00: progress stage1 13000/14997 sec_per_output=2.05 eta_h=1.1
+translation-v2 2026-11-25T08:26:57+05:00: progress stage1 13500/14997 sec_per_output=2.12 eta_h=0.9
+translation-v2 2026-11-25T08:28:34+05:00: progress stage1 13500/14997 sec_per_output=2.12 eta_h=0.9
+translation-v2 2026-11-25T08:56:58+05:00: progress stage1 13900/14997 sec_per_output=2.19 eta_h=0.7
+translation-v2 2026-11-25T08:58:34+05:00: progress stage1 13900/14997 sec_per_output=2.19 eta_h=0.7
+translation-v2 2026-11-25T09:26:58+05:00: progress stage1 14300/14997 sec_per_output=2.24 eta_h=0.4
+translation-v2 2026-11-25T09:28:34+05:00: progress stage1 14300/14997 sec_per_output=2.24 eta_h=0.4
+translation-v2 2026-11-25T09:56:58+05:00: progress stage1 14800/14997 sec_per_output=2.30 eta_h=0.1
+translation-v2 2026-11-25T09:58:35+05:00: progress stage1 14800/14997 sec_per_output=2.30 eta_h=0.1
+translation-v2 2026-11-25T10:26:59+05:00: progress stage2 1200/4525 sec_per_output=0.57 eta_h=0.5
+translation-v2 2026-11-25T10:28:35+05:00: progress stage2 1200/4525 sec_per_output=0.57 eta_h=0.5
+translation-v2 2026-11-25T10:56:59+05:00: progress stage2 1900/4525 sec_per_output=1.46 eta_h=1.1
+translation-v2 2026-11-25T10:58:35+05:00: progress stage2 1900/4525 sec_per_output=1.46 eta_h=1.1
+translation-v2 2026-11-25T11:27:00+05:00: progress stage2 2400/4525 sec_per_output=1.76 eta_h=1.0
+translation-v2 2026-11-25T11:28:36+05:00: progress stage2 2500/4525 sec_per_output=1.86 eta_h=1.0
+translation-v2 2026-11-25T11:57:00+05:00: progress stage2 2900/4525 sec_per_output=2.16 eta_h=1.0
+translation-v2 2026-11-25T11:58:36+05:00: progress stage2 2900/4525 sec_per_output=2.16 eta_h=1.0
+translation-v2 2026-11-25T12:27:01+05:00: progress stage2 3500/4525 sec_per_output=2.34 eta_h=0.7
+translation-v2 2026-11-25T12:28:36+05:00: progress stage2 3500/4525 sec_per_output=2.34 eta_h=0.7
+translation-v2 2026-11-25T12:57:01+05:00: progress stage2 4000/4525 sec_per_output=2.46 eta_h=0.4
+translation-v2 2026-11-25T12:58:37+05:00: progress stage2 4000/4525 sec_per_output=2.46 eta_h=0.4
+translation-v2 2026-11-25T13:27:02+05:00: progress stage2 4300/4525 sec_per_output=2.66 eta_h=0.2
+translation-v2 2026-11-25T13:28:37+05:00: progress stage2 4400/4525 sec_per_output=2.71 eta_h=0.1
+translation-v2 2026-11-25T13:57:02+05:00: progress stage2 4525/4525 sec_per_output=2.75 eta_h=0.0
+
+job: translation-v2
+state: done (exit 0)
+finished: 2026-11-25T13:57:05+05:00
+ollama: stopped
+translation-v2 2026-11-25T13:58:37+05:00: progress stage2 4525/4525 sec_per_output=2.75 eta_h=0.0
+
+job: translation-v2
+state: done (exit 0)
+finished: 2026-11-25T13:58:38+05:00
+ollama: stopped
