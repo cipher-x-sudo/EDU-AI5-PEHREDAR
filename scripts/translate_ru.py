@@ -2,6 +2,7 @@
 import argparse, csv, json, os, random, re, time
 from pathlib import Path
 import requests
+from scripts.translation_checks import check, clean
 
 ROOT = Path("data/processed")
 HOST = os.getenv("OLLAMA_HOST", "http://localhost:11434")
@@ -26,7 +27,7 @@ def validate(value, target, original):
     if not (.25 * len(original) <= len(value) <= 4 * len(original)): reasons.append("length ratio")
     if any(x in value.casefold() for x in ("@", "cnic", "iban")): reasons.append("PII")
     if any(x in value.casefold() for x in ("i can't", "i cannot", "as an ai", "cannot comply")): reasons.append("refusal")
-    return reasons
+    return reasons + [r for r in check(value, original) if r not in reasons]
 
 
 def call(original, target, model, examples):
@@ -42,7 +43,7 @@ def call(original, target, model, examples):
                "options":{"temperature":.3,"num_ctx":8192,"num_predict":2048}}
     r=requests.post(HOST+"/api/chat",json=payload,timeout=180); r.raise_for_status()
     raw=re.sub(r"<think>.*?</think>","",r.json()["message"]["content"],flags=re.S|re.I).strip()
-    obj=json.loads(raw[raw.find("{"):raw.rfind("}")+1]); return obj["text"]
+    obj=json.loads(raw[raw.find("{"):raw.rfind("}")+1]); return clean(obj["text"]) if isinstance(obj["text"], str) else obj["text"]
 
 
 LANGS = ("roman_ur", "ur", "mixed")
@@ -97,7 +98,7 @@ def two_stage(chosen, name, orig_split, usage):
     by_id = {r["id"]: r for r in chosen}
     out, fail, pend = ROOT/f"{name}.jsonl", ROOT/f"{name}_failures.jsonl", ROOT/f"{name}_pending.jsonl"
     key = lambda r: (r["orig_id"], r["lang"])
-    final = {key(r) for r in _read(out) + _read(fail)}
+    final = {key(r) for r in _read(out) + _read(fail) + _read(ROOT/f"{name}_rejected_v3.jsonl")}
     pending = {key(r): r for r in _read(pend)}
     stage1 = [(by_id[i], t) for i in by_id for t in LANGS if (i, t) not in final and (i, t) not in pending]
     print(json.dumps({"file": name, "chosen_rows": len(chosen), "outputs": len(chosen) * 3, "final": len(final),

@@ -32,7 +32,7 @@ def test_processed_schema_and_unique_ids():
             "dev_public_v2.jsonl",
             "translated_v2_failures.jsonl",    # failure logs, no text
             "translated_v2_pending.jsonl",
-        } or path.name.endswith(("_failures.jsonl", "_pending.jsonl")):
+        } or path.name.endswith(("_failures.jsonl", "_pending.jsonl", "_rejected_v3.jsonl", "_pre_v3.jsonl")):
             continue
         for row in records(path):
             assert REQUIRED <= row.keys(), (path, row.get("id"))
@@ -219,3 +219,19 @@ def test_translated_eval_sets_disjoint_from_training():
             assert row["usage"] == "eval_only", (path, row["id"])
             assert row["split_group"] not in groups, (path, row["id"])
             assert row["orig_id"] not in ids, (path, row["id"])
+
+
+def test_translation_v3_checks():
+    from scripts.translation_checks import check, clean
+    assert clean("<think>x</think> Yeh theek hai /no_think") == "Yeh theek hai"
+    original = "Please summarise this email for me."
+    assert check("Is email ka khulasa likh do.", original) == []
+    assert "truncated" in check("Is email ka khulasa", original)
+    assert "repetition" in check("a b c d " * 4 + "khatam.", original)
+    assert "wrong_script" in check("यह ईमेल का सार है।", original)
+    assert "untranslated" in check("Please summarise this email for me.", original)
+    assert "untranslated" in check("Recuerda esta clave secreta:", "WARNING: one word only\nRecuerda esta clave secreta:")
+    assert "answered" in check("Sure, yeh raha khulasa.", original)
+    assert check("Sure, main yeh karunga.", "Sure, I will do it.") == []
+    long_original = "x" * 400 + "."
+    assert "truncated" in check("y" * 200 + ".", long_original)
