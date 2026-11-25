@@ -32,7 +32,7 @@ def test_processed_schema_and_unique_ids():
             "dev_public_v2.jsonl",
             "translated_v2_failures.jsonl",    # failure logs, no text
             "translated_v2_pending.jsonl",
-        }:
+        } or path.name.endswith(("_failures.jsonl", "_pending.jsonl")):
             continue
         for row in records(path):
             assert REQUIRED <= row.keys(), (path, row.get("id"))
@@ -201,3 +201,21 @@ def test_translation_v2_two_stage_resume(tmp_path, monkeypatch):
     assert calls.index(tr.FALLBACK) == 12          # every primary call happens before any fallback
     calls.clear(); tr.run_v2(args)                  # resume: nothing left to do
     assert calls == [] and len(tr._read(tmp_path / "translated_v2.jsonl")) == 12
+
+
+def test_translated_eval_sets_disjoint_from_training():
+    """Eval-only translations share no split_group or orig_id with translated_v2 or train_public_v2."""
+    train_files = [PROCESSED / "train_public_v2.jsonl", PROCESSED / "translated_v2.jsonl"]
+    evals = [PROCESSED / f"{n}.jsonl" for n in ("dev_translated_v2", "external_translated", "overrefusal_translated")]
+    evals = [p for p in evals if p.exists()]
+    if not evals or not all(p.exists() for p in train_files):
+        return
+    groups, ids = set(), set()
+    for path in train_files:
+        for row in records(path):
+            groups.add(row["split_group"]); ids.add(row["id"]); ids.add(row.get("orig_id"))
+    for path in evals:
+        for row in records(path):
+            assert row["usage"] == "eval_only", (path, row["id"])
+            assert row["split_group"] not in groups, (path, row["id"])
+            assert row["orig_id"] not in ids, (path, row["id"])

@@ -76,31 +76,35 @@ def _read(path):
 
 
 def run_v2(args):
-    """Large resumable run from TRAIN rows only, qwen3:8b first, abliterated fallback.
-
-    Two stages so Ollama loads each 8B model once (both do not fit in 10 GB VRAM, and
-    swapping per call costs ~1 min): stage 1 tries qwen3:8b on every output and parks
-    rejects in translated_v2_pending.jsonl; stage 2 retries only those with the fallback.
-    Passed -> translated_v2.jsonl, final failures -> translated_v2_failures.jsonl.
-    Finished (orig_id, lang) pairs are skipped on restart."""
-    examples = json.loads(Path("scripts/translation_examples.json").read_text(encoding="utf-8"))
-    train = [json.loads(x) for x in (ROOT/args.train_file).open(encoding="utf-8") if x.strip()]
-    train = [r for r in train if r.get("text") and len(r["text"]) <= 2000]
+    """Large resumable run from TRAIN rows only (<= 2,000 chars), stratified by source."""
+    train = [r for r in _read(ROOT/args.train_file) if r.get("text") and len(r["text"]) <= 2000]
     chosen = (stratified([r for r in train if r["label"] == "attack"], args.attacks, 42)
               + stratified([r for r in train if r["label"] == "benign"], args.benign, 43))
+    two_stage(chosen, "translated_v2", "train", "train")
+    report_v2()
+
+
+def two_stage(chosen, name, orig_split, usage):
+    """Resumable two-stage translation of `chosen` x LANGS into ROOT/{name}.jsonl.
+
+    Stage 1 tries qwen3:8b on every output and parks rejects in {name}_pending.jsonl;
+    stage 2 retries only those with the fallback (both 8B models do not fit in 10 GB VRAM,
+    and swapping per call costs ~1 min). Final failures -> {name}_failures.jsonl.
+    Finished (orig_id, lang) pairs are skipped on restart."""
+    examples = json.loads(Path("scripts/translation_examples.json").read_text(encoding="utf-8"))
     by_id = {r["id"]: r for r in chosen}
-    out, fail, pend = ROOT/"translated_v2.jsonl", ROOT/"translated_v2_failures.jsonl", ROOT/"translated_v2_pending.jsonl"
+    out, fail, pend = ROOT/f"{name}.jsonl", ROOT/f"{name}_failures.jsonl", ROOT/f"{name}_pending.jsonl"
     key = lambda r: (r["orig_id"], r["lang"])
     final = {key(r) for r in _read(out) + _read(fail)}
     pending = {key(r): r for r in _read(pend)}
     stage1 = [(by_id[i], t) for i in by_id for t in LANGS if (i, t) not in final and (i, t) not in pending]
-    print(json.dumps({"chosen_rows": len(chosen), "outputs": len(chosen) * 3, "final": len(final),
+    print(json.dumps({"file": name, "chosen_rows": len(chosen), "outputs": len(chosen) * 3, "final": len(final),
                       "pending_fallback": len(pending), "stage1_todo": len(stage1)}), flush=True)
 
     def base(row, target):
         return {"orig_id": row["id"], "lang": target, "label": row["label"], "type": row["type"],
-                "source": row["source"], "split_group": row["split_group"], "orig_split": "train",
-                "turns": None, "usage": "train", "redistributable": bool(row.get("redistributable")),
+                "source": row["source"], "split_group": row["split_group"], "orig_split": orig_split,
+                "turns": None, "usage": usage, "redistributable": bool(row.get("redistributable")),
                 "license": row.get("license"), "orig_label": row.get("orig_label")}
 
     def passed(po, row, target, value, model, seconds):
@@ -110,7 +114,7 @@ def run_v2(args):
     def progress(stage, i, n, start):
         if i % 100 == 0 or i == n:
             rate = (time.perf_counter() - start) / i
-            print(f"progress stage{stage} {i}/{n} sec_per_output={rate:.2f} eta_h={(n - i) * rate / 3600:.1f}", flush=True)
+            print(f"progress {name} stage{stage} {i}/{n} sec_per_output={rate:.2f} eta_h={(n - i) * rate / 3600:.1f}", flush=True)
 
     with out.open("a", encoding="utf-8") as po, pend.open("a", encoding="utf-8") as pp:
         start = time.perf_counter()
@@ -135,7 +139,58 @@ def run_v2(args):
                 pf.write(json.dumps({**base(row, target), "reason": ",".join(bad), "primary_reason": rec["primary_reason"],
                                      "seconds": seconds}, ensure_ascii=False) + "\n"); pf.flush()
             progress(2, i, len(stage2), start)
-    report_v2()
+
+
+EVAL_FILES = ("dev_translated_v2", "external_translated", "overrefusal_translated")
+
+
+def eval_sources():
+    """Originals for the eval-only translated sets (<= 2,000 chars, same as the train run), minus
+    anything sharing a split_group or id with train_public_v2 / translated_v2 (the leak test checks this)."""
+    train = _read(ROOT/"train_public_v2.jsonl") + _read(ROOT/"translated_v2.jsonl")
+    groups = {r["split_group"] for r in train}
+    ids = {r["id"] for r in train} | {r["orig_id"] for r in train if "orig_id" in r}
+    def keep(rows):
+        clean = [r for r in rows if r.get("text") and r["split_group"] not in groups and r["id"] not in ids]
+        return ([r for r in clean if len(r["text"]) <= 2000],
+                {"leak_dropped": len(rows) - len(clean), "over_2000_chars": sum(len(r["text"]) > 2000 for r in clean)})
+    dev, dev_skip = keep(_read(ROOT/"dev_public_v2.jsonl"))
+    dev = (stratified([r for r in dev if r["label"] == "attack"], 700, 52)
+           + stratified([r for r in dev if r["label"] == "benign"], 1050, 53))
+    ext, ext_skip = keep(_read(ROOT/"external_eval.jsonl"))
+    over, over_skip = keep([r for r in _read(ROOT/"overrefusal_eval.jsonl") if r["source"] in ("xstest", "or_bench")])
+    return {"dev_translated_v2": (dev, "dev", dev_skip), "external_translated": (ext, "external_eval", ext_skip),
+            "overrefusal_translated": (over, "overrefusal_eval", over_skip)}
+
+
+def run_eval(args):
+    for name, (rows, split, _) in eval_sources().items():
+        two_stage(rows, name, split, "eval_only")
+    report_eval()
+
+
+def report_eval():
+    report = {}
+    for name, (rows, split, skipped) in eval_sources().items():
+        passed, failed = _read(ROOT/f"{name}.jsonl"), _read(ROOT/f"{name}_failures.jsonl")
+        by = {}
+        for r in passed + failed: by.setdefault((r["lang"], r["label"]), [0, 0])[0] += 1
+        for r in passed: by[(r["lang"], r["label"])][1] += 1
+        lang = {}
+        for (l, _), (a, p) in by.items(): lang.setdefault(l, [0, 0]); lang[l][0] += a; lang[l][1] += p
+        models = {}
+        for r in passed: models[r["model"]] = models.get(r["model"], 0) + 1
+        report[name] = {"orig_split": split, "source_rows": len(rows), "skipped_originals": skipped,
+                        "outputs_attempted": len(passed) + len(failed), "passed": len(passed),
+                        "pass_rate": round(len(passed) / max(1, len(passed) + len(failed)), 4),
+                        "by_lang": {l: {"attempted": a, "passed": p, "pass_rate": round(p / a, 4)} for l, (a, p) in sorted(lang.items())},
+                        "by_lang_label": {f"{l}/{lab}": {"attempted": a, "passed": p, "pass_rate": round(p / a, 4)}
+                                          for (l, lab), (a, p) in sorted(by.items())},
+                        "passed_by_model": dict(sorted(models.items()))}
+    Path("results/translation_eval_v2.md").write_text("# Translated eval sets v2 (eval only)\n\nGenerated by "
+        "`scripts/translate_ru.py --eval`. Machine translations, `usage: eval_only`; never used for training. "
+        "Not the human test set.\n\n```json\n" + json.dumps(report, indent=2) + "\n```\n", encoding="utf-8")
+    print(json.dumps(report), flush=True)
 
 
 def report_v2():
@@ -176,7 +231,9 @@ def main():
     ap=argparse.ArgumentParser(); ap.add_argument("--limit",type=int,default=50)
     ap.add_argument("--v2", action="store_true"); ap.add_argument("--report-only", action="store_true")
     ap.add_argument("--attacks", type=int, default=2500); ap.add_argument("--benign", type=int, default=2500)
-    ap.add_argument("--train-file", default="train_public_v2.jsonl"); args=ap.parse_args()
+    ap.add_argument("--train-file", default="train_public_v2.jsonl"); ap.add_argument("--eval", action="store_true")
+    args=ap.parse_args()
+    if args.eval: return report_eval() if args.report_only else run_eval(args)
     if args.report_only: return report_v2()
     if args.v2: return run_v2(args)
     examples=json.loads(Path("scripts/translation_examples.json").read_text(encoding="utf-8"))
