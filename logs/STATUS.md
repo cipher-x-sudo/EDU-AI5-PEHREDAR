@@ -235,3 +235,13 @@ meaning-scores-v3 2026-11-26T01:53:34+05:00: done (exit 0, ~10.5 min incl. LaBSE
 job: labse-filter-v3
 state: done (2026-11-26T02:00:53+05:00)
 result: results/labse_filter_v3.md; roman_ur threshold 0.5168 applied (translated_v2 -406, dev_translated_v2 -156, external_translated -36, overrefusal_translated -286); post-filter estimate 71.6% good on v3 sample -> training gate STOP (< 75%); v2 training not started
+
+job: v2-train-eval
+state: running (detached container pehredar-v2-train)
+logs: logs/v2_e1.log, logs/v2_e2.log, logs/v2_eval.log
+started: 2026-11-26T02:10:55+05:00
+plan: XLM-R base, encoder v2, train_v2.jsonl (45,791 rows: en + roman_ur + mixed), v2_e1 (1 epoch) then v2_e2 (2 epochs), then run_v2_evaluation.py; data commit 8060b35
+
+job: filter-chain-v3 + script check
+state: done (2026-11-26T02:11:08+05:00)
+result: results/labse_filter_v3.md, results/translation_refilter_v3.md, results/v2_data.md; script check removed translated_v2 130, dev_translated_v2 44, external_translated 10, overrefusal_translated 41; roman_ur+mixed estimate 49/61 = 80.3% -> train v2 without ur (team decision)
