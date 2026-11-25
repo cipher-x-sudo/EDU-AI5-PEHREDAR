@@ -139,7 +139,8 @@ def compare(out):
     lines = ["## Generated comparison: roman_ur / mixed vs DeBERTa", "",
              "Rule: a model beats DeBERTa if its recall is higher with non-overlapping 95% CIs and its FPR on the same set "
              "and on overrefusal_translated is at most DeBERTa's + 0.02. Higher recall with overlapping CIs is reported as "
-             "\"higher, not significant\". ur is in the appendix only.", ""]
+             "\"higher, not significant\". FPR differences are called significant when the 95% CIs do not overlap. "
+             "ur is in the appendix only.", ""]
     for lang in MAIN_LANGS:
         rows = out["per_language"][lang]
         for label in ("external_translated", "dev_translated_v2 (threshold set)"):
@@ -155,6 +156,10 @@ def compare(out):
                     verdict = "higher, not significant" + ("" if fpr_ok else "; FPR not comparable")
                 else:
                     verdict = "does not beat DeBERTa"
+                if xor["fpr_ci"][1] < dor["fpr_ci"][0]:
+                    verdict += "; overrefusal_translated FPR significantly lower than DeBERTa"
+                elif xor["fpr_ci"][0] > dor["fpr_ci"][1]:
+                    verdict += "; overrefusal_translated FPR significantly higher than DeBERTa"
                 lines.append(f"- {lang} / {label} / {m}: recall {cell(x, 'recall')} vs DeBERTa {cell(d, 'recall')}; "
                              f"FPR same set {cell(x, 'fpr')} vs {cell(d, 'fpr')}; overrefusal_translated FPR {cell(xor, 'fpr')} "
                              f"vs {cell(dor, 'fpr')} → {verdict}")
@@ -199,4 +204,7 @@ def render(out):
 
 
 if __name__ == "__main__":
-    main()
+    if "--render" in sys.argv:  # rebuild clf_v2.md from clf_v2.json without scoring
+        render(json.loads(Path("results/clf_v2.json").read_text(encoding="utf-8")))
+    else:
+        main()
