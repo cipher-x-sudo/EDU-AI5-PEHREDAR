@@ -236,3 +236,13 @@ def test_translation_v3_checks():
     assert check("Sure, main yeh karunga.", "Sure, I will do it.") == []
     long_original = "x" * 400 + "."
     assert "truncated" in check("y" * 200 + ".", long_original)
+
+
+def test_meaning_threshold_caps_good_removed():
+    from scripts.meaning_scores import threshold
+    good = [{"verdict": "good", "score": s, "v3_caught": False, "model": "m", "meaning": False} for s in (.2, .6, .7, .8) * 5]
+    bad = [{"verdict": "bad", "score": s, "v3_caught": False, "model": "m", "meaning": True} for s in (.1, .3, .5, .9)]
+    t = threshold(good + bad)
+    assert t["threshold_reject_below"] == .2 and t["good_removed"] == "0/20" and t["bad_removed"] == "1/4"
+    t = threshold(good[:4] * 6 + bad)  # 24 good -> at most 1 removed
+    assert t["good_removed"] == "0/24"
