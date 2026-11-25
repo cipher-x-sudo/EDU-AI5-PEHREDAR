@@ -224,3 +224,10 @@ ollama: stopped
 job: refilter-v3
 state: done (2026-11-26T01:36:37+05:00)
 result: results/translation_refilter_v3.md; abliterated rows dropped; translated_v2 11,797 -> 9,236 (rerun after empty-output fix); new review sample data/processed/translation_review_v3.csv (100 rows, empty verdicts); v2 training NOT started
+
+job: meaning-scores-v3
+state: running (detached container pehredar-meaning-v3)
+log: logs/meaning_scores_v3.log
+started: 2026-11-26T01:42:00+05:00
+plan: LaBSE cosine original vs translation for all rows of the 4 translated files (pre-v3 backups); report only, nothing filtered
+meaning-scores-v3 2026-11-26T01:53:34+05:00: done (exit 0, ~10.5 min incl. LaBSE download); 21,713 rows scored; result results/meaning_check_v3.md; nothing filtered
