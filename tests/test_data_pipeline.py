@@ -32,6 +32,7 @@ def test_processed_schema_and_unique_ids():
             "dev_public_v2.jsonl",
             "translated_v2_failures.jsonl",    # failure logs, no text
             "translated_v2_pending.jsonl",
+            "meaning_scores_v3.jsonl",         # scores only, no text
         } or path.name.endswith(("_failures.jsonl", "_pending.jsonl", "_rejected_v3.jsonl", "_pre_v3.jsonl")):
             continue
         for row in records(path):
