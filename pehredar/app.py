@@ -8,11 +8,13 @@ import time
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Literal
+from contextlib import asynccontextmanager
 
 import httpx
 from fastapi import FastAPI, HTTPException, Header
 from pydantic import BaseModel, Field
-from .normalizer import normalize_text, detect_language
+from .normalizer import normalize_text
+from .langid import detect as detect_language
 from .rules import score_rules
 from .output_guard import check_output
 from .policy import Policy, load_policy
@@ -20,7 +22,7 @@ from .state import update_escalation
 from .judge import classify_safety
 from .memory import is_known_attack, learn_canary_miss
 from .review import enqueue, pending, submit
-from .classifier import score_classifier
+from .l2 import L2, L2Unavailable, from_env as load_l2
 
 ROOT = Path(__file__).resolve().parent.parent
 DB_PATH = Path(os.getenv("PEHREDAR_DB_PATH", str(ROOT / "pehredar.db")))
@@ -28,7 +30,6 @@ UPSTREAM_URL = os.getenv("PEHREDAR_UPSTREAM_URL", "http://127.0.0.1:11434/v1").r
 CANARY = os.getenv("PEHREDAR_CANARY", "")
 GUARD_MODEL = os.getenv("PEHREDAR_GUARD_MODEL", "")
 ADMIN_TOKEN = os.getenv("PEHREDAR_ADMIN_TOKEN", "")
-CLASSIFIER_DIR = os.getenv("PEHREDAR_CLASSIFIER_DIR", "")
 MODELS_DIR = Path(os.getenv("PEHREDAR_MODELS_DIR", str(ROOT / "models")))
 
 class Message(BaseModel):
@@ -40,6 +41,7 @@ class ChatRequest(BaseModel):
     model: str = "demo"
     messages: list[Message] = Field(min_length=1)
     temperature: float | None = None
+    max_tokens: int | None = Field(default=None, gt=0)
     stream: bool = False
 
 
@@ -54,7 +56,17 @@ class Decision(BaseModel):
     layer_latency_ms: dict[str, float] = Field(default_factory=dict)
 
 
-app = FastAPI(title="Pehredar", version="0.1.0")
+L2_MODELS: L2 | None = None  # loaded once at startup when PEHREDAR_L2=1
+
+
+@asynccontextmanager
+async def lifespan(_app):
+    global L2_MODELS
+    L2_MODELS = load_l2()
+    yield
+
+
+app = FastAPI(title="Pehredar", version="0.1.0", lifespan=lifespan)
 POLICY = load_policy()
 
 
@@ -99,7 +111,7 @@ def put_policy(policy: Policy, authorization: str | None = Header(default=None))
 def list_models() -> dict:
     candidates = sorted(path.name for path in MODELS_DIR.glob("clf_v*")
                         if path.is_dir() and (path / "training_report.json").is_file())
-    return {"active": Path(CLASSIFIER_DIR).name if CLASSIFIER_DIR else None, "candidates": candidates}
+    return {"l2_mode": POLICY.l2.mode, "l2": L2_MODELS.status() if L2_MODELS else None, "candidates": candidates}
 
 
 def log_decision(decision: Decision) -> None:
@@ -159,17 +171,19 @@ def inspect_text(text: str, session_id: str | None = None, record: bool = True) 
     risk = rules_risk
     scores = {"rules": rules_risk}
     latencies = {"normalization": round(normalization_ms, 3), "rules": round(rules_ms, 3)}
-    if CLASSIFIER_DIR:
+    language = detect_language(normalized)
+    if L2_MODELS is not None:
         started = time.perf_counter()
         try:
-            classifier_risk, classifier_threshold = score_classifier(normalized, CLASSIFIER_DIR)
-        except Exception as exc:
-            raise HTTPException(status_code=503, detail="Classifier is unavailable.") from exc
-        scores["classifier"] = classifier_risk
-        latencies["classifier"] = round((time.perf_counter() - started) * 1000, 3)
-        risk = max(risk, POLICY.thresholds.block if classifier_risk >= classifier_threshold else classifier_risk)
-        if classifier_risk >= classifier_threshold:
-            tags.append("classifier_attack")
+            l2 = L2_MODELS.score(normalized, language, POLICY.l2.mode)
+        except L2Unavailable as exc:
+            raise HTTPException(status_code=503, detail="L2 classifier is unavailable.") from exc
+        latencies["l2"] = round((time.perf_counter() - started) * 1000, 3)
+        scores.update({f"l2_{name}": value for name, value in l2["scores"].items()})
+        tags += l2["tags"]
+        if l2["hit"]:
+            tags.append("l2_attack")
+        risk = max(risk, POLICY.thresholds.block if l2["hit"] else max(l2["scores"].values()))
     started = time.perf_counter()
     known = is_known_attack(DB_PATH, normalized)
     latencies["memory"] = round((time.perf_counter() - started) * 1000, 3)
@@ -184,7 +198,7 @@ def inspect_text(text: str, session_id: str | None = None, record: bool = True) 
     action = "block" if risk >= POLICY.thresholds.block else "warn" if risk >= POLICY.thresholds.warn else "allow"
     decision = Decision(
         action=action, risk=risk, tags=tags, normalized_text=normalized,
-        language=detect_language(normalized), escalation_score=escalation,
+        language=language, escalation_score=escalation,
         component_scores=scores, layer_latency_ms=latencies,
     )
     if record:
@@ -197,12 +211,35 @@ def health() -> dict[str, str]:
     return {"status": "ok", "service": "pehredar", "version": app.version}
 
 
-@app.post("/v1/check/input")
-def check_input(request: ChatRequest) -> Decision:
+async def apply_judge(decision: Decision, messages: list[Message]) -> Decision:
+    """L3: Qwen3Guard judge for uncertain cases (judge_low <= risk < block)."""
+    if not (GUARD_MODEL and POLICY.thresholds.judge_low <= decision.risk < POLICY.thresholds.block):
+        return decision
+    recent = "\n".join(f"{m.role}: {m.content}" for m in messages[-6:])
+    started = time.perf_counter()
     try:
-        return inspect_text("\n".join(m.content for m in request.messages if m.role in {"user", "tool"}))
+        safety = await classify_safety(recent, GUARD_MODEL, UPSTREAM_URL)
+    except (httpx.HTTPError, ValueError, KeyError, IndexError, TypeError) as exc:
+        raise HTTPException(status_code=503, detail="Guard model is unavailable.") from exc
+    decision.layer_latency_ms["judge"] = round((time.perf_counter() - started) * 1000, 3)
+    decision.component_scores["judge"] = {"safe": 0.0, "controversial": POLICY.thresholds.warn, "unsafe": 1.0}[safety]
+    if safety == "unsafe":
+        return decision.model_copy(update={"action": "block", "risk": 1.0, "tags": decision.tags + ["judge_unsafe"]})
+    if safety == "controversial":
+        return decision.model_copy(update={"action": "warn", "risk": max(decision.risk, POLICY.thresholds.warn),
+                                           "tags": decision.tags + ["judge_controversial"]})
+    return decision
+
+
+@app.post("/v1/check/input")
+async def check_input(request: ChatRequest) -> Decision:
+    try:
+        decision = inspect_text("\n".join(m.content for m in request.messages if m.role in {"user", "tool"}), record=False)
     except ValueError as exc:
         raise HTTPException(status_code=413, detail=str(exc)) from exc
+    decision = await apply_judge(decision, request.messages)
+    log_decision(decision)
+    return decision
 
 
 class OutputRequest(BaseModel):
@@ -236,22 +273,11 @@ async def chat_completions(request: ChatRequest, x_session_id: str | None = Head
         )
     except ValueError as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
-    if GUARD_MODEL and POLICY.thresholds.judge_low <= decision.risk < POLICY.thresholds.block:
-        recent = "\n".join(f"{m.role}: {m.content}" for m in request.messages[-6:])
-        started = time.perf_counter()
-        try:
-            safety = await classify_safety(recent, GUARD_MODEL, UPSTREAM_URL)
-        except (httpx.HTTPError, ValueError, KeyError, IndexError, TypeError) as exc:
-            raise HTTPException(status_code=503, detail="Guard model is unavailable.") from exc
-        decision.layer_latency_ms["judge"] = round((time.perf_counter() - started) * 1000, 3)
-        decision.component_scores["judge"] = {"safe": 0.0, "controversial": POLICY.thresholds.warn, "unsafe": 1.0}[safety]
-        if safety == "unsafe":
-            decision = decision.model_copy(update={"action": "block", "risk": 1.0, "tags": decision.tags + ["judge_unsafe"]})
-        elif safety == "controversial":
-            decision = decision.model_copy(update={"action": "warn", "risk": max(decision.risk, POLICY.thresholds.warn), "tags": decision.tags + ["judge_controversial"]})
+    decision = await apply_judge(decision, request.messages)
     log_decision(decision)
     if decision.action == "block":
-        return {"id": "pehredar-blocked", "object": "chat.completion", "model": request.model, "choices": [{"index": 0, "message": {"role": "assistant", "content": "Request blocked by Pehredar."}, "finish_reason": "content_filter"}]}
+        return {"id": "pehredar-blocked", "object": "chat.completion", "model": request.model, "choices": [{"index": 0, "message": {"role": "assistant", "content": "Request blocked by Pehredar."}, "finish_reason": "content_filter"}],
+                "pehredar": {"stage": "input", "action": "block", "tags": decision.tags}}
     if not CANARY:
         raise HTTPException(status_code=503, detail="Pehredar canary is not configured.")
     payload = request.model_dump(exclude_none=True)
@@ -278,7 +304,8 @@ async def chat_completions(request: ChatRequest, x_session_id: str | None = Head
     if output_result["action"] == "block":
         if "canary_leak" in output_result["tags"]:
             learn_canary_miss(DB_PATH, decision.normalized_text, x_session_id)
-        return {"id": "pehredar-blocked", "object": "chat.completion", "model": request.model, "choices": [{"index": 0, "message": {"role": "assistant", "content": "Response blocked by Pehredar."}, "finish_reason": "content_filter"}]}
+        return {"id": "pehredar-blocked", "object": "chat.completion", "model": request.model, "choices": [{"index": 0, "message": {"role": "assistant", "content": "Response blocked by Pehredar."}, "finish_reason": "content_filter"}],
+                "pehredar": {"stage": "output", "action": "block", "tags": output_result["tags"], "input_action": decision.action}}
     content = output_result["text"]
     return {
         "id": str(result.get("id", "pehredar-completion")),
@@ -289,4 +316,6 @@ async def chat_completions(request: ChatRequest, x_session_id: str | None = Head
             "message": {"role": "assistant", "content": content},
             "finish_reason": result["choices"][0].get("finish_reason", "stop"),
         }],
+        "pehredar": {"stage": "passed", "action": output_result["action"], "tags": output_result["tags"],
+                     "input_action": decision.action, "input_tags": decision.tags},
     }

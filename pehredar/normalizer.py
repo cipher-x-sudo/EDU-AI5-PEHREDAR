@@ -4,8 +4,6 @@ import unicodedata
 
 INVISIBLE = dict.fromkeys(map(ord, "\u200b\u200c\u200d\u2060\ufeff"), None)
 ENCODED = re.compile(r"\b(base64|hex):([A-Za-z0-9+/=]+)(?![A-Za-z0-9+/=])", re.I)
-ROMAN_URDU = re.compile(r"\b(?:apni|apna|mujhe|dikhao|batao|bhool|hidayaat|nahi|nahin|nai|karo)\b", re.I)
-ENGLISH = re.compile(r"\b(?:the|what|how|please|show|ignore|instructions|system|prompt)\b", re.I)
 VERSION = "l0-1"
 
 
@@ -31,16 +29,3 @@ def normalize_text(text: str) -> str:
             break
         text = updated
     return re.sub(r"\s+", " ", text).strip()
-
-
-def detect_language(text: str) -> str:
-    has_urdu = bool(re.search(r"[\u0600-\u06ff]", text))
-    has_roman = bool(ROMAN_URDU.search(text))
-    has_english = bool(ENGLISH.search(text))
-    if (has_urdu and (has_english or has_roman)) or (has_roman and has_english):
-        return "mixed"
-    if has_urdu:
-        return "ur"
-    if has_roman:
-        return "roman_ur"
-    return "en"

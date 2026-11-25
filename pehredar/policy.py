@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+from typing import Literal
 
 import yaml
 from pydantic import BaseModel, Field, model_validator
@@ -19,9 +20,15 @@ class Thresholds(BaseModel):
         return self
 
 
+class L2Policy(BaseModel):
+    # routed: en -> DeBERTa, other languages -> v2; deberta / v2: one model; max: both, either over threshold
+    mode: Literal["routed", "deberta", "v2", "max"] = "routed"
+
+
 class Policy(BaseModel):
     tenant: str = "default"
     thresholds: Thresholds = Field(default_factory=Thresholds)
+    l2: L2Policy = Field(default_factory=L2Policy)
 
 
 def load_policy() -> Policy:

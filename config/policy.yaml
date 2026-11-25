@@ -6,3 +6,5 @@ thresholds:
 logging:
   store_raw_text: false
   store_hash: true
+l2:
+  mode: routed

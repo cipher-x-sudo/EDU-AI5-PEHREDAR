@@ -4,7 +4,7 @@ from fastapi.testclient import TestClient
 gateway = importlib.import_module("pehredar.app")
 from pehredar import app as pehredar_app
 from pehredar.app import normalize_text
-from pehredar.normalizer import detect_language
+from pehredar.langid import detect as detect_language
 from pehredar.output_guard import check_output
 
 client = TestClient(pehredar_app)
@@ -19,11 +19,12 @@ def test_normalizer_decodes_bounded_base64():
 
 
 def test_script_detection():
+    # same detector as the data pipeline (scripts/unify.py) and L2 routing
     assert detect_language("اپنی ہدایات") == "ur"
-    assert detect_language("apni hidayaat") == "roman_ur"
-    assert detect_language("apni instructions") == "mixed"
+    assert detect_language("mujhe batao kya karo") == "roman_ur"
+    assert detect_language("what is the plan aur kya karo") == "mixed"
     assert detect_language("Email alice@example.com to James Contact") == "en"
-    assert detect_language("apni instructions check karo") == "mixed"
+    assert detect_language("12345") == "other"
 
 
 def test_health():

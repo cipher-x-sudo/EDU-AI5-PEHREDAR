@@ -27,12 +27,46 @@ services:
       PEHREDAR_DB_PATH: /state/pehredar.db
       PEHREDAR_POLICY_PATH: /app/config/policy.yaml
       PEHREDAR_GUARD_MODEL: hf.co/QuantFactory/Qwen3Guard-Gen-0.6B-GGUF:Q4_K_M
-      PEHREDAR_CLASSIFIER_DIR: ${PEHREDAR_CLASSIFIER_DIR:-}
       PEHREDAR_MODELS_DIR: /app/models
     volumes:
       - ./config:/app/config:ro
       - ./models:/app/models:ro
       - gateway_state:/state
+    depends_on:
+      - ollama
+    restart: unless-stopped
+
+  # Gateway with L2 on GPU (docker compose --profile gpu up gateway-gpu); stop `gateway` first (same port).
+  gateway-gpu:
+    profiles: [gpu]
+    build:
+      context: .
+      target: gateway-gpu
+    env_file:
+      - .env
+    ports:
+      - "127.0.0.1:8000:8000"
+    environment:
+      PEHREDAR_UPSTREAM_URL: http://ollama:11434/v1
+      PEHREDAR_DB_PATH: /state/pehredar.db
+      PEHREDAR_POLICY_PATH: /app/config/policy.yaml
+      PEHREDAR_GUARD_MODEL: hf.co/QuantFactory/Qwen3Guard-Gen-0.6B-GGUF:Q4_K_M
+      PEHREDAR_MODELS_DIR: /app/models
+      PEHREDAR_L2: "1"
+      PEHREDAR_L2_V2_DIR: /app/models/clf_v2_e2
+      HF_HUB_OFFLINE: "1"
+    volumes:
+      - ./config:/app/config:ro
+      - ./models:/app/models:ro
+      - ./models/hf_cache:/root/.cache/huggingface:ro
+      - gateway_state:/state
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
     depends_on:
       - ollama
     restart: unless-stopped
