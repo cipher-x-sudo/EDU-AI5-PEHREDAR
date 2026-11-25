@@ -200,3 +200,23 @@ job: phase-b-review-support
 state: done
 result: results/translation_v2_stats.md; data/processed/translation_review_v2_abliterated.csv (30 rows)
 phase-c-gate 2026-11-25T17:56:17+05:00: NOT passed (no verdicts in translation_review_v2.csv 0/100 or translation_review_v2_abliterated.csv 0/30); v2 training not started
+translation-eval-v2 2026-11-25T18:25:12+05:00: progress dev_translated_v2 stage1 1200/5250 sec_per_output=1.50 eta_h=1.7
+translation-eval-v2 2026-11-25T18:55:12+05:00: progress dev_translated_v2 stage1 1700/5250 sec_per_output=2.04 eta_h=2.0
+translation-eval-v2 2026-11-25T19:25:13+05:00: progress dev_translated_v2 stage1 2100/5250 sec_per_output=2.58 eta_h=2.3
+translation-eval-v2 2026-11-25T19:55:13+05:00: progress dev_translated_v2 stage1 3300/5250 sec_per_output=2.17 eta_h=1.2
+translation-eval-v2 2026-11-25T20:25:14+05:00: progress dev_translated_v2 stage1 4400/5250 sec_per_output=2.03 eta_h=0.5
+translation-eval-v2 2026-11-25T20:55:14+05:00: progress dev_translated_v2 stage1 4800/5250 sec_per_output=2.23 eta_h=0.3
+translation-eval-v2 2026-11-25T21:25:15+05:00: progress dev_translated_v2 stage1 5200/5250 sec_per_output=2.40 eta_h=0.0
+translation-eval-v2 2026-11-25T21:55:16+05:00: progress dev_translated_v2 stage2 600/1314 sec_per_output=2.31 eta_h=0.5
+translation-eval-v2 2026-11-25T22:25:17+05:00: progress dev_translated_v2 stage2 1100/1314 sec_per_output=3.08 eta_h=0.2
+translation-eval-v2 2026-11-25T22:55:18+05:00: progress external_translated stage1 500/1275 sec_per_output=1.60 eta_h=0.3
+translation-eval-v2 2026-11-25T23:25:18+05:00: progress external_translated stage1 1100/1275 sec_per_output=2.43 eta_h=0.1
+translation-eval-v2 2026-11-25T23:55:20+05:00: progress external_translated stage2 400/513 sec_per_output=2.80 eta_h=0.1
+translation-eval-v2 2026-11-26T00:25:20+05:00: progress overrefusal_translated stage1 1400/4698 sec_per_output=1.00 eta_h=0.9
+translation-eval-v2 2026-11-26T00:55:21+05:00: progress overrefusal_translated stage1 3400/4698 sec_per_output=0.95 eta_h=0.3
+translation-eval-v2 2026-11-26T01:25:21+05:00: progress overrefusal_translated stage2 294/294 sec_per_output=1.62 eta_h=0.0
+
+job: translation-eval-v2
+state: done (exit 0)
+finished: 2026-11-26T01:25:24+05:00
+ollama: stopped
