@@ -26,6 +26,8 @@ def _repetitive(text: str) -> bool:
 
 def check(value: str, original: str, done_reason: str | None = None) -> list[str]:
     """Failure reasons from the v3 checks (empty list = keep). `value` should already be clean()ed."""
+    if len(value.strip()) < 3:  # e.g. output was only "/no_think"
+        return ["empty"]
     reasons = []
     o = original.strip()
     if done_reason == "length" or (

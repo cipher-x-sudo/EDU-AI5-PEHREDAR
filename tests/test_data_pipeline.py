@@ -224,6 +224,7 @@ def test_translated_eval_sets_disjoint_from_training():
 def test_translation_v3_checks():
     from scripts.translation_checks import check, clean
     assert clean("<think>x</think> Yeh theek hai /no_think") == "Yeh theek hai"
+    assert check(clean("/no_think"), "(only output key") == ["empty"]
     original = "Please summarise this email for me."
     assert check("Is email ka khulasa likh do.", original) == []
     assert "truncated" in check("Is email ka khulasa", original)
