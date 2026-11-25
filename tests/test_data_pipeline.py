@@ -33,7 +33,9 @@ def test_processed_schema_and_unique_ids():
             "translated_v2_failures.jsonl",    # failure logs, no text
             "translated_v2_pending.jsonl",
             "meaning_scores_v3.jsonl",         # scores only, no text
-        } or path.name.endswith(("_failures.jsonl", "_pending.jsonl", "_rejected_v3.jsonl", "_pre_v3.jsonl", "_rejected_labse.jsonl", "_pre_labse.jsonl")):
+            "train_v2.jsonl",                  # compositions of the files above
+            "dev_v2_threshold.jsonl",
+        } or path.name.endswith(("_failures.jsonl", "_pending.jsonl", "_rejected_v3.jsonl", "_pre_v3.jsonl", "_rejected_labse.jsonl", "_pre_labse.jsonl", "_rejected_script.jsonl")):
             continue
         for row in records(path):
             assert REQUIRED <= row.keys(), (path, row.get("id"))
@@ -247,3 +249,12 @@ def test_meaning_threshold_caps_good_removed():
     assert t["threshold_reject_below"] == .2 and t["good_removed"] == "0/20" and t["bad_removed"] == "1/4"
     t = threshold(good[:4] * 6 + bad)  # 24 good -> at most 1 removed
     assert t["good_removed"] == "0/24"
+
+
+def test_foreign_script_check():
+    from scripts.translation_checks import foreign_scripts
+    assert foreign_scripts("Yeh sawal hai 123 ✅", "This is a question") == []
+    assert foreign_scripts("یہ سوال ہے۔", "This is a question") == []
+    assert foreign_scripts("Yeh сорок hai", "This is a question") == ["CYRILLIC"]
+    assert foreign_scripts("Yeh 只要 hai", "This is a question") == ["CJK"]
+    assert foreign_scripts("Yeh 只要 hai", "Translate 只要 please") == []  # script already in the original

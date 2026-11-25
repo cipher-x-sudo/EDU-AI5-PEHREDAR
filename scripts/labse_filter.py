@@ -1,22 +1,23 @@
-"""roman_ur LaBSE filter: summarise v3 verdicts, refit the roman_ur threshold on all reviewed rows,
-apply it (roman_ur only) when it removes clearly more bad than good, and estimate post-filter quality.
+"""roman_ur LaBSE filter: fit + report. Applying happens in scripts/refilter_translations.py (the one entry
+point for the filter chain: v3 checks -> this threshold -> script check), so
 
-  python scripts/labse_filter.py          # fit, apply if the rule holds, report
-  python scripts/labse_filter.py --dry    # fit and report only
+  python scripts/labse_filter.py      # same as running refilter_translations.py
 
-Apply: first run backs up {name}.jsonl to {name}_pre_labse.jsonl and always reads that backup (idempotent);
-removed rows -> {name}_rejected_labse.jsonl. Writes results/labse_filter_v3.md."""
-import csv, json, re, shutil, sys
+Fit: largest threshold on all reviewed roman_ur rows (v2 main, v2 abliterated, v3) that removes at most
+floor(5%) of good rows; used only if bad removed >= 5 and >= 3x good removed.
+Report: v3 verdicts, fit, rows removed per file, post-filter quality on the v3 sample, training gate.
+Writes results/labse_filter_v3.md."""
+import csv, json, re, sys
 from collections import Counter
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from meaning_scores import FALLBACK, FILES, MAX_GOOD_REMOVED, dist, read, threshold
-from translation_checks import check, clean
+from meaning_scores import FILES, MAX_GOOD_REMOVED, dist, read, threshold
+from translation_checks import check, clean, foreign_scripts
 
 ROOT = Path("data/processed")
 REVIEWS = ("translation_review_v2.csv", "translation_review_v2_abliterated.csv", "translation_review_v3.csv")
 LANG = "roman_ur"
-CLEARLY = 3  # apply only if bad removed >= CLEARLY x good removed (and at least 5 bad)
+CLEARLY = 3
 
 
 def reviewed():
@@ -24,10 +25,28 @@ def reviewed():
     rows = []
     for f in REVIEWS:
         for r in csv.DictReader((ROOT/f).open(encoding="utf-8-sig")):
+            text = clean(r["translation"])
             rows.append({"file": f, "id": r["id"], "lang": r["lang"], "label": r["label"], "model": r["model"],
-                         "verdict": r["verdict"].strip().lower(), "meaning": "[meaning]" in r["note"].lower(), "note": r["note"],
-                         "v3_caught": bool(check(clean(r["translation"]), r["original"])), "score": scores[r["id"]]})
+                         "cell": f"{r['lang']}/{r['label']}", "verdict": r["verdict"].strip().lower(),
+                         "meaning": "[meaning]" in r["note"].lower(), "note": r["note"],
+                         "v3_caught": bool(check(text, r["original"])), "script_caught": bool(foreign_scripts(text, r["original"])),
+                         "score": scores[r["id"]]})
     return rows
+
+
+def fit():
+    ru = [r for r in reviewed() if r["lang"] == LANG]
+    res = threshold(ru)
+    t = res["threshold_reject_below"]
+    good_rm = sum(r["verdict"] == "good" and r["score"] < t for r in ru)
+    bad_rm = sum(r["verdict"] == "bad" and r["score"] < t for r in ru)
+    rule = bad_rm >= 5 and bad_rm >= CLEARLY * good_rm
+    return {**res, "reviewed_rows": len(ru), "by_file": dict(Counter(r["file"] for r in ru)),
+            "good_scores": dist([r["score"] for r in ru if r["verdict"] == "good"]),
+            "bad_scores": dist([r["score"] for r in ru if r["verdict"] == "bad"]),
+            "bad_meaning_scores": dist([r["score"] for r in ru if r["verdict"] == "bad" and r["meaning"]]),
+            "max_good_removed_share": MAX_GOOD_REMOVED, "apply_rule": f"bad removed >= 5 and >= {CLEARLY} x good removed",
+            "rule_holds": rule, "threshold": t if rule else None}
 
 
 def verdicts(rows):
@@ -36,65 +55,42 @@ def verdicts(rows):
         for r in rows: out.setdefault(r[key], Counter())[r["verdict"]] += 1
         return {k: {"good": c["good"], "bad": c["bad"], "good_share": round(c["good"] / sum(c.values()), 4)} for k, c in sorted(out.items())}
     return {"rows": len(rows), "good": sum(r["verdict"] == "good" for r in rows), "bad": sum(r["verdict"] == "bad" for r in rows),
-            "by_lang": share("lang"), "by_label": share("label"),
-            "by_lang_label": share("cell"),
+            "by_lang": share("lang"), "by_label": share("label"), "by_lang_label": share("cell"),
             "bad_note_tags": dict(Counter(t for r in rows for t in re.findall(r"\[[a-z-]+\]", r["note"].lower())).most_common())}
 
 
-def apply(t):
-    log = {}
-    for name in FILES:
-        src, backup = ROOT/f"{name}.jsonl", ROOT/f"{name}_pre_labse.jsonl"
-        if not backup.exists():
-            shutil.copyfile(src, backup)
-        scores = {s["id"]: s["score"] for s in read(ROOT/"meaning_scores_v3.jsonl") if s["file"] == name}
-        rows = read(backup)
-        drop = [{**r, "labse_score": scores[r["id"]], "reason": f"labse<{t}"} for r in rows if r["lang"] == LANG and scores[r["id"]] < t]
-        ids = {r["id"] for r in drop}
-        (ROOT/f"{name}_rejected_labse.jsonl").write_text("".join(json.dumps(r, ensure_ascii=False) + "\n" for r in drop), encoding="utf-8")
-        src.write_text("".join(json.dumps(r, ensure_ascii=False) + "\n" for r in rows if r["id"] not in ids), encoding="utf-8")
-        log[name] = {"roman_ur_before": sum(r["lang"] == LANG for r in rows), "removed": len(drop),
-                     "removed_by_label": dict(Counter(r["label"] for r in drop)), "rows_after": len(rows) - len(drop)}
-    return log
-
-
-def main():
-    rows = reviewed()
-    for r in rows: r["cell"] = f"{r['lang']}/{r['label']}"
+def report():
+    rows = reviewed(); f = fit(); t = f["threshold"]
     v3 = [r for r in rows if r["file"] == "translation_review_v3.csv"]
-    ru = [r for r in rows if r["lang"] == LANG]
-    fit = threshold(ru)
-    t = fit["threshold_reject_below"]
-    good_rm = sum(r["verdict"] == "good" and r["score"] < t for r in ru)
-    bad_rm = sum(r["verdict"] == "bad" and r["score"] < t for r in ru)
-    rule = bad_rm >= 5 and bad_rm >= CLEARLY * good_rm
-    applied = rule and "--dry" not in sys.argv
-    log = apply(t) if applied else None
-    # post-filter estimate on the v3 sample: rows passing the v3 checks and (roman_ur) the threshold
-    keep = [r for r in v3 if not r["v3_caught"] and not (r["lang"] == LANG and r["score"] < t)]
+    keep = [r for r in v3 if not r["v3_caught"] and not (t is not None and r["lang"] == LANG and r["score"] < t)
+            and not r["script_caught"]]
     est = lambda xs: {"passing": len(xs), "good": sum(r["verdict"] == "good" for r in xs),
                       "good_rate": round(sum(r["verdict"] == "good" for r in xs) / max(1, len(xs)), 4)}
-    estimate = {"all": est(keep), **{l: est([r for r in keep if r["lang"] == l]) for l in ("roman_ur", "ur", "mixed")},
+    estimate = {"all": est(keep), "roman_ur+mixed": est([r for r in keep if r["lang"] != "ur"]),
+                **{l: est([r for r in keep if r["lang"] == l]) for l in ("roman_ur", "ur", "mixed")},
                 **{lab: est([r for r in keep if r["label"] == lab]) for lab in ("attack", "benign")}}
-    rate = estimate["all"]["good_rate"]
-    gate = "continue" if rate >= .80 else "continue with stated limitation" if rate >= .75 else "stop"
-    report = {"v3_verdicts": verdicts(v3),
-              "roman_ur_fit": {"reviewed_rows": len(ru), "by_file": dict(Counter(r["file"] for r in ru)),
-                               "good_scores": dist([r["score"] for r in ru if r["verdict"] == "good"]),
-                               "bad_scores": dist([r["score"] for r in ru if r["verdict"] == "bad"]),
-                               "bad_meaning_scores": dist([r["score"] for r in ru if r["verdict"] == "bad" and r["meaning"]]),
-                               "max_good_removed_share": MAX_GOOD_REMOVED, **fit,
-                               "apply_rule": f"bad removed >= 5 and >= {CLEARLY} x good removed", "rule_holds": rule, "applied": applied},
-              "applied_log": log,
+    removed = {}
+    for name in FILES:
+        lab = read(ROOT/f"{name}_rejected_labse.jsonl"); scr = read(ROOT/f"{name}_rejected_script.jsonl")
+        removed[name] = {"labse_roman_ur": {"total": len(lab), **Counter(r["label"] for r in lab)},
+                         "script_check": {"total": len(scr), **{l: sum(r["lang"] == l for r in scr) for l in ("roman_ur", "ur", "mixed")},
+                                          "scripts": dict(Counter(s for r in scr for s in r["foreign_scripts"]))},
+                         "rows_after": len(read(ROOT/f"{name}.jsonl"))}
+    rate = estimate["roman_ur+mixed"]["good_rate"]
+    report = {"v3_verdicts": verdicts(v3), "roman_ur_fit": f, "removed_per_file": removed,
               "post_filter_estimate_v3_sample": estimate,
-              "note": "v3 rows are part of the threshold fit, so the roman_ur estimate is optimistic. ur and mixed are not threshold-filtered.",
-              "training_gate": {"estimate": rate, "decision": gate}}
+              "note": "Estimate = good share of v3 sample rows that pass the v3 checks, the roman_ur threshold and the "
+                      "script check. v3 rows are part of the threshold fit, so the roman_ur estimate is optimistic. "
+                      "ur and mixed are not threshold-filtered.",
+              "training_gate": {"scope": "roman_ur + mixed (team decision 2026-11-26: no ur in training)", "estimate": rate,
+                                "decision": "continue" if rate >= .80 else "continue with stated limitation" if rate >= .75 else "stop"}}
     Path("results/labse_filter_v3.md").write_text(
-        "# roman_ur LaBSE filter and v3 review\n\nGenerated by `scripts/labse_filter.py`. Threshold fitted on all reviewed "
-        "roman_ur rows (v2 main, v2 abliterated, v3): largest threshold removing at most floor(5%) of good rows. Applied "
-        "to roman_ur rows only.\n\n```json\n" + json.dumps(report, indent=2) + "\n```\n", encoding="utf-8")
-    print(json.dumps(report), flush=True)
+        "# roman_ur LaBSE filter, script check and v3 review\n\nGenerated by `scripts/labse_filter.py` / "
+        "`scripts/refilter_translations.py`.\n\n```json\n" + json.dumps(report, indent=2) + "\n```\n", encoding="utf-8")
+    print(json.dumps(report["post_filter_estimate_v3_sample"]), json.dumps(report["training_gate"]), flush=True)
+    return report
 
 
 if __name__ == "__main__":
-    main()
+    import refilter_translations
+    refilter_translations.main()

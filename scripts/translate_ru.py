@@ -2,7 +2,7 @@
 import argparse, csv, json, os, random, re, time
 from pathlib import Path
 import requests
-from scripts.translation_checks import check, clean
+from scripts.translation_checks import check, clean, foreign_scripts
 
 ROOT = Path("data/processed")
 HOST = os.getenv("OLLAMA_HOST", "http://localhost:11434")
@@ -27,7 +27,8 @@ def validate(value, target, original):
     if not (.25 * len(original) <= len(value) <= 4 * len(original)): reasons.append("length ratio")
     if any(x in value.casefold() for x in ("@", "cnic", "iban")): reasons.append("PII")
     if any(x in value.casefold() for x in ("i can't", "i cannot", "as an ai", "cannot comply")): reasons.append("refusal")
-    return reasons + [r for r in check(value, original) if r not in reasons]
+    reasons += [r for r in check(value, original) if r not in reasons]
+    return reasons + (["foreign_script"] if foreign_scripts(value, original) else [])
 
 
 def call(original, target, model, examples):

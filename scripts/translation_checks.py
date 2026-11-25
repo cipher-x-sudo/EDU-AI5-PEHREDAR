@@ -1,5 +1,6 @@
 """Post-hoc translation checks (review v2 findings). No network imports, so tests can use them."""
 import re
+import unicodedata
 from collections import Counter
 from difflib import SequenceMatcher
 
@@ -14,6 +15,21 @@ def clean(value: str) -> str:
     value = re.sub(r"<think>.*?</think>", "", value, flags=re.S | re.I)
     value = re.sub(r"</?think>|/no_think|/think\b", "", value, flags=re.I)
     return value.strip()
+
+
+def _scripts(text: str) -> set[str]:
+    out = set()
+    for ch in text:
+        if ch.isalpha():
+            name = unicodedata.name(ch, "UNKNOWN")
+            out.add("LATIN" if "LATIN" in name else "ARABIC" if "ARABIC" in name else name.split(" ")[0])
+    return out
+
+
+def foreign_scripts(value: str, original: str) -> list[str]:
+    """Letter scripts other than Latin/Arabic (Cyrillic, CJK, Devanagari, ...) in the translation that the
+    original does not contain. Digits, punctuation and emoji are not letters, so they never count."""
+    return sorted(_scripts(value) - {"LATIN", "ARABIC"} - _scripts(original))
 
 
 def _repetitive(text: str) -> bool:
