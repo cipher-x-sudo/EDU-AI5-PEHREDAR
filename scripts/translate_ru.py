@@ -52,6 +52,8 @@ def attempt(row, target, model, examples):
     """One validated call; returns (translation or None, failure reasons)."""
     try:
         value = call(row["text"], target, model, examples)
+    except requests.ConnectionError as exc:
+        raise SystemExit(f"Ollama unreachable at {HOST}: {exc}")  # never log an outage as translation failures
     except Exception as exc:
         return None, [f"{model} unavailable" if isinstance(exc, requests.RequestException) else type(exc).__name__]
     bad = validate(value, target, row["text"])
