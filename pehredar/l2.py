@@ -37,11 +37,11 @@ class L2:
     device: str | None = None
     vram_gb: float | None = None
 
-    def load(self, v2_dir: str) -> "L2":
+    def load(self, v2_dir: str, device: str | None = None) -> "L2":
         import torch
         from transformers import AutoModelForSequenceClassification, AutoTokenizer
         from .clf_text import encode
-        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        device = torch.device(device or ("cuda" if torch.cuda.is_available() else "cpu"))
         self.device = str(device)
 
         def deberta():

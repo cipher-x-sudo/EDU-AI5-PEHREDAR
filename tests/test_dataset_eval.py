@@ -193,3 +193,14 @@ def test_wilson_interval():
     assert wilson(0, 10) == [0.0, 0.2775]
     assert wilson(5, 10) == [0.2366, 0.7634]
     assert wilson(0, 0) is None
+
+
+def test_v3_metrics_and_mcnemar():
+    from scripts.run_v3_evaluation import mcnemar, metrics
+    rows = [{"label": "attack", "pred": {"a": True, "b": False}, "score": {"a": 0.9, "b": 0.2}} for _ in range(8)]
+    rows += [{"label": "benign", "pred": {"a": False, "b": False}, "score": {"a": 0.1, "b": 0.3}} for _ in range(8)]
+    m = metrics(rows, "a")
+    assert (m["recall"], m["fpr"], m["auroc"], m["tp"], m["attacks"]) == (1.0, 0.0, 1.0, 8, 8)
+    c = mcnemar(rows, "a", "b")
+    assert c["a_right_b_wrong"] == 8 and c["b_right_a_wrong"] == 0 and c["significant_0.05"]
+    assert not mcnemar(rows, "a", "a")["significant_0.05"]
