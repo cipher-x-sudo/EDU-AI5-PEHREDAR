@@ -12,7 +12,8 @@ MARKERS = {"hai","ka","ki","ke","ko","mein","karo","kar","nahi","kya","aur","se"
 ENGLISH = {"the","is","are","what","how","please","can","you","to","of","and","for","with","this","that","your","from","in","on"}
 
 
-def validate(value, target, original):
+def validate_basic(value, target, original):
+    """The original per-language validator (every qwen output passed it before the filter chain)."""
     if not isinstance(value, str) or not value.strip(): return ["empty"]
     words = re.findall(r"[a-z]+", value.casefold())
     markers = len(set(words) & MARKERS)
@@ -27,6 +28,13 @@ def validate(value, target, original):
     if not (.25 * len(original) <= len(value) <= 4 * len(original)): reasons.append("length ratio")
     if any(x in value.casefold() for x in ("@", "cnic", "iban")): reasons.append("PII")
     if any(x in value.casefold() for x in ("i can't", "i cannot", "as an ai", "cannot comply")): reasons.append("refusal")
+    return reasons
+
+
+def validate(value, target, original):
+    reasons = validate_basic(value, target, original)
+    if reasons == ["empty"]:
+        return reasons
     reasons += [r for r in check(value, original) if r not in reasons]
     return reasons + (["foreign_script"] if foreign_scripts(value, original) else [])
 

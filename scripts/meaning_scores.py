@@ -27,21 +27,27 @@ def read(path):
 
 
 def score():
-    import torch
-    from sentence_transformers import SentenceTransformer
     rows = []
     for name in FILES:
         kept = {r["id"] for r in read(ROOT/f"{name}.jsonl")}
         rows += [(name, r, r["id"] in kept) for r in read(ROOT/f"{name}_pre_v3.jsonl")]
-    model = SentenceTransformer(MODEL, device="cuda" if torch.cuda.is_available() else "cpu")
-    originals = sorted({r["original"] for _, r, _ in rows})
-    enc = dict(zip(originals, model.encode(originals, batch_size=128, normalize_embeddings=True, show_progress_bar=True)))
-    trans = model.encode([clean(r["text"]) for _, r, _ in rows], batch_size=128, normalize_embeddings=True, show_progress_bar=True)
+    sims = cosine([(r["original"], r["text"]) for _, r, _ in rows])
     with OUT.open("w", encoding="utf-8") as f:
-        for (name, r, kept), t in zip(rows, trans):
+        for (name, r, kept), sim in zip(rows, sims):
             f.write(json.dumps({"file": name, "id": r["id"], "orig_id": r["orig_id"], "lang": r["lang"], "label": r["label"],
-                                "model": r["model"], "kept_v3": kept, "score": round(float(enc[r["original"]] @ t), 4)}) + "\n")
-    print(json.dumps({"scored": len(rows), "model": MODEL, "max_seq_length": model.max_seq_length}), flush=True)
+                                "model": r["model"], "kept_v3": kept, "score": sim}) + "\n")
+    print(json.dumps({"scored": len(rows), "model": MODEL}), flush=True)
+
+
+def cosine(pairs):
+    """LaBSE cosine(original, clean(translation)) for (original, translation) pairs, rounded to 4 places."""
+    import torch
+    from sentence_transformers import SentenceTransformer
+    model = SentenceTransformer(MODEL, device="cuda" if torch.cuda.is_available() else "cpu")
+    originals = sorted({o for o, _ in pairs})
+    enc = dict(zip(originals, model.encode(originals, batch_size=128, normalize_embeddings=True, show_progress_bar=True)))
+    trans = model.encode([clean(t) for _, t in pairs], batch_size=128, normalize_embeddings=True, show_progress_bar=True)
+    return [round(float(enc[o] @ t), 4) for (o, _), t in zip(pairs, trans)]
 
 
 def dist(xs):

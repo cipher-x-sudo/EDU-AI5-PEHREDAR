@@ -33,9 +33,16 @@ def test_processed_schema_and_unique_ids():
             "translated_v2_failures.jsonl",    # failure logs, no text
             "translated_v2_pending.jsonl",
             "meaning_scores_v3.jsonl",         # scores only, no text
+            "meaning_scores_gemini.jsonl",
+            "translated_full_dedup.jsonl",     # raw Gemini input, imported by scripts/import_gemini.py
+            "to_translate_gemini.jsonl",       # Gemini work queue
+            "translated_full.jsonl",           # raw Gemini output (before dedup)
+            "failed_full.jsonl",               # Gemini failure log
+            "translated_pilot.jsonl",          # Gemini pilot output
+            "failed_pilot.jsonl",              # Gemini pilot failure log
             "train_v2.jsonl",                  # compositions of the files above
             "dev_v2_threshold.jsonl",
-        } or path.name.endswith(("_failures.jsonl", "_pending.jsonl", "_rejected_v3.jsonl", "_pre_v3.jsonl", "_rejected_labse.jsonl", "_pre_labse.jsonl", "_rejected_script.jsonl")):
+        } or path.name.endswith(("_failures.jsonl", "_pending.jsonl", "_rejected_v3.jsonl", "_pre_v3.jsonl", "_rejected_labse.jsonl", "_pre_labse.jsonl", "_rejected_script.jsonl", "_gemini_pre.jsonl", "_gemini_rejected.jsonl")):
             continue
         for row in records(path):
             assert REQUIRED <= row.keys(), (path, row.get("id"))
@@ -208,10 +215,11 @@ def test_translation_v2_two_stage_resume(tmp_path, monkeypatch):
 
 def test_translated_eval_sets_disjoint_from_training():
     """Eval-only translations share no split_group or orig_id with translated_v2 or train_public_v2."""
-    train_files = [PROCESSED / "train_public_v2.jsonl", PROCESSED / "translated_v2.jsonl"]
-    evals = [PROCESSED / f"{n}.jsonl" for n in ("dev_translated_v2", "external_translated", "overrefusal_translated")]
+    train_files = [PROCESSED / "train_public_v2.jsonl", PROCESSED / "translated_v2.jsonl", PROCESSED / "translated_v2_gemini.jsonl"]
+    evals = [PROCESSED / f"{n}{v}.jsonl" for n in ("dev_translated_v2", "external_translated", "overrefusal_translated") for v in ("", "_gemini")]
     evals = [p for p in evals if p.exists()]
-    if not evals or not all(p.exists() for p in train_files):
+    train_files = [p for p in train_files if p.exists()]
+    if not evals or len(train_files) < 2:
         return
     groups, ids = set(), set()
     for path in train_files:
