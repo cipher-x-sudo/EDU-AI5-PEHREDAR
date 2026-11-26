@@ -1,0 +1,356 @@
+{
+  "source": "data/processed/translated_full_dedup.jsonl",
+  "labse_roman_ur_threshold": 0.5168,
+  "totals": {
+    "attempted_pairs": 26223,
+    "gemini_returned": 26200,
+    "qwen_kept": 16663,
+    "gemini_kept": 23642
+  },
+  "per_set_lang_label": {
+    "train": {
+      "roman_ur/attack": {
+        "attempted_pairs": 2500,
+        "gemini_returned": 2495,
+        "qwen_kept": 926,
+        "qwen_rate": 0.3704,
+        "gemini_kept": 2101,
+        "gemini_rate": 0.8404
+      },
+      "roman_ur/benign": {
+        "attempted_pairs": 2500,
+        "gemini_returned": 2500,
+        "qwen_kept": 1505,
+        "qwen_rate": 0.602,
+        "gemini_kept": 2077,
+        "gemini_rate": 0.8308
+      },
+      "ur/attack": {
+        "attempted_pairs": 2500,
+        "gemini_returned": 2494,
+        "qwen_kept": 1289,
+        "qwen_rate": 0.5156,
+        "gemini_kept": 2261,
+        "gemini_rate": 0.9044
+      },
+      "ur/benign": {
+        "attempted_pairs": 2500,
+        "gemini_returned": 2500,
+        "qwen_kept": 1831,
+        "qwen_rate": 0.7324,
+        "gemini_kept": 2381,
+        "gemini_rate": 0.9524
+      },
+      "mixed/attack": {
+        "attempted_pairs": 2500,
+        "gemini_returned": 2495,
+        "qwen_kept": 1194,
+        "qwen_rate": 0.4776,
+        "gemini_kept": 2286,
+        "gemini_rate": 0.9144
+      },
+      "mixed/benign": {
+        "attempted_pairs": 2500,
+        "gemini_returned": 2500,
+        "qwen_kept": 1955,
+        "qwen_rate": 0.782,
+        "gemini_kept": 2400,
+        "gemini_rate": 0.96
+      }
+    },
+    "dev": {
+      "roman_ur/attack": {
+        "attempted_pairs": 700,
+        "gemini_returned": 699,
+        "qwen_kept": 300,
+        "qwen_rate": 0.4286,
+        "gemini_kept": 559,
+        "gemini_rate": 0.7986
+      },
+      "roman_ur/benign": {
+        "attempted_pairs": 1050,
+        "gemini_returned": 1050,
+        "qwen_kept": 647,
+        "qwen_rate": 0.6162,
+        "gemini_kept": 874,
+        "gemini_rate": 0.8324
+      },
+      "ur/attack": {
+        "attempted_pairs": 700,
+        "gemini_returned": 699,
+        "qwen_kept": 393,
+        "qwen_rate": 0.5614,
+        "gemini_kept": 637,
+        "gemini_rate": 0.91
+      },
+      "ur/benign": {
+        "attempted_pairs": 1050,
+        "gemini_returned": 1050,
+        "qwen_kept": 771,
+        "qwen_rate": 0.7343,
+        "gemini_kept": 997,
+        "gemini_rate": 0.9495
+      },
+      "mixed/attack": {
+        "attempted_pairs": 700,
+        "gemini_returned": 699,
+        "qwen_kept": 379,
+        "qwen_rate": 0.5414,
+        "gemini_kept": 649,
+        "gemini_rate": 0.9271
+      },
+      "mixed/benign": {
+        "attempted_pairs": 1050,
+        "gemini_returned": 1050,
+        "qwen_kept": 834,
+        "qwen_rate": 0.7943,
+        "gemini_kept": 1019,
+        "gemini_rate": 0.9705
+      }
+    },
+    "external": {
+      "roman_ur/attack": {
+        "attempted_pairs": 138,
+        "gemini_returned": 138,
+        "qwen_kept": 40,
+        "qwen_rate": 0.2899,
+        "gemini_kept": 113,
+        "gemini_rate": 0.8188
+      },
+      "roman_ur/benign": {
+        "attempted_pairs": 287,
+        "gemini_returned": 287,
+        "qwen_kept": 115,
+        "qwen_rate": 0.4007,
+        "gemini_kept": 240,
+        "gemini_rate": 0.8362
+      },
+      "ur/attack": {
+        "attempted_pairs": 138,
+        "gemini_returned": 138,
+        "qwen_kept": 62,
+        "qwen_rate": 0.4493,
+        "gemini_kept": 125,
+        "gemini_rate": 0.9058
+      },
+      "ur/benign": {
+        "attempted_pairs": 287,
+        "gemini_returned": 287,
+        "qwen_kept": 165,
+        "qwen_rate": 0.5749,
+        "gemini_kept": 257,
+        "gemini_rate": 0.8955
+      },
+      "mixed/attack": {
+        "attempted_pairs": 138,
+        "gemini_returned": 138,
+        "qwen_kept": 48,
+        "qwen_rate": 0.3478,
+        "gemini_kept": 123,
+        "gemini_rate": 0.8913
+      },
+      "mixed/benign": {
+        "attempted_pairs": 287,
+        "gemini_returned": 287,
+        "qwen_kept": 155,
+        "qwen_rate": 0.5401,
+        "gemini_kept": 259,
+        "gemini_rate": 0.9024
+      }
+    },
+    "overrefusal": {
+      "roman_ur/benign": {
+        "attempted_pairs": 1566,
+        "gemini_returned": 1564,
+        "qwen_kept": 1147,
+        "qwen_rate": 0.7324,
+        "gemini_kept": 1156,
+        "gemini_rate": 0.7382
+      },
+      "ur/benign": {
+        "attempted_pairs": 1566,
+        "gemini_returned": 1565,
+        "qwen_kept": 1473,
+        "qwen_rate": 0.9406,
+        "gemini_kept": 1565,
+        "gemini_rate": 0.9994
+      },
+      "mixed/benign": {
+        "attempted_pairs": 1566,
+        "gemini_returned": 1565,
+        "qwen_kept": 1434,
+        "qwen_rate": 0.9157,
+        "gemini_kept": 1563,
+        "gemini_rate": 0.9981
+      }
+    }
+  },
+  "gemini_removed_per_stage": {
+    "train": {
+      "validator": {
+        "roman_ur": 250,
+        "ur": 219,
+        "mixed": 193,
+        "reasons": {
+          "marker words": 216,
+          "script check": 196,
+          "mixed markers": 152,
+          "PII": 88,
+          "refusal": 20
+        }
+      },
+      "v3_checks": {
+        "roman_ur": 150,
+        "ur": 133,
+        "mixed": 115,
+        "reasons": {
+          "repetition": 158,
+          "truncated": 122,
+          "untranslated": 106,
+          "answered": 13,
+          "wrong_script": 5
+        }
+      },
+      "script_check": {
+        "roman_ur": 0,
+        "ur": 0,
+        "mixed": 1,
+        "reasons": {
+          "CJK": 1
+        }
+      },
+      "labse_roman_ur": {
+        "roman_ur": 417,
+        "ur": 0,
+        "mixed": 0,
+        "reasons": {
+          "labse<0.5168": 417
+        }
+      }
+    },
+    "dev": {
+      "validator": {
+        "roman_ur": 88,
+        "ur": 70,
+        "mixed": 48,
+        "reasons": {
+          "marker words": 79,
+          "script check": 66,
+          "mixed markers": 37,
+          "PII": 28,
+          "refusal": 6
+        }
+      },
+      "v3_checks": {
+        "roman_ur": 47,
+        "ur": 44,
+        "mixed": 33,
+        "reasons": {
+          "repetition": 44,
+          "truncated": 42,
+          "untranslated": 31,
+          "wrong_script": 5,
+          "answered": 2
+        }
+      },
+      "script_check": {
+        "roman_ur": 0,
+        "ur": 1,
+        "mixed": 0,
+        "reasons": {
+          "CYRILLIC": 1
+        }
+      },
+      "labse_roman_ur": {
+        "roman_ur": 181,
+        "ur": 0,
+        "mixed": 0,
+        "reasons": {
+          "labse<0.5168": 181
+        }
+      }
+    },
+    "external": {
+      "validator": {
+        "roman_ur": 24,
+        "ur": 29,
+        "mixed": 21,
+        "reasons": {
+          "script check": 22,
+          "PII": 21,
+          "marker words": 14,
+          "mixed markers": 10,
+          "refusal": 9
+        }
+      },
+      "v3_checks": {
+        "roman_ur": 18,
+        "ur": 14,
+        "mixed": 22,
+        "reasons": {
+          "repetition": 24,
+          "untranslated": 17,
+          "truncated": 9,
+          "wrong_script": 6
+        }
+      },
+      "script_check": {
+        "roman_ur": 0,
+        "ur": 0,
+        "mixed": 0,
+        "reasons": {}
+      },
+      "labse_roman_ur": {
+        "roman_ur": 30,
+        "ur": 0,
+        "mixed": 0,
+        "reasons": {
+          "labse<0.5168": 30
+        }
+      }
+    },
+    "overrefusal": {
+      "validator": {
+        "roman_ur": 24,
+        "ur": 0,
+        "mixed": 2,
+        "reasons": {
+          "marker words": 23,
+          "PII": 2,
+          "mixed markers": 1
+        }
+      },
+      "v3_checks": {
+        "roman_ur": 0,
+        "ur": 0,
+        "mixed": 0,
+        "reasons": {}
+      },
+      "script_check": {
+        "roman_ur": 0,
+        "ur": 0,
+        "mixed": 0,
+        "reasons": {}
+      },
+      "labse_roman_ur": {
+        "roman_ur": 384,
+        "ur": 0,
+        "mixed": 0,
+        "reasons": {
+          "labse<0.5168": 384
+        }
+      }
+    }
+  },
+  "review_sample": {
+    "path": "data/processed/translation_review_gemini.csv",
+    "cells": {
+      "roman_ur/attack": 17,
+      "roman_ur/benign": 17,
+      "ur/attack": 17,
+      "ur/benign": 17,
+      "mixed/attack": 16,
+      "mixed/benign": 16
+    }
+  }
+}

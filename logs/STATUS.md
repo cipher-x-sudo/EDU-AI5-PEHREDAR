@@ -266,3 +266,7 @@ log: logs/canary_v1.log
 started: 2026-11-26T03:32:13+05:00
 plan: 300 attack prompts (100 en / roman_ur / mixed) to the protected model bare and through the gateway
 canary-v1 2026-11-26T03:48:05+05:00: done; bare leaks 81/300, gateway leaks 0/300; results/output_guard_v1.md; VRAM all models loaded 9,286/10,240 MiB (results/vram_all_models_v1.json); ollama stopped
+
+job: gemini-import-v1
+state: done (2026-11-26T19:43:29+05:00)
+result: results/translation_gemini_v1.md; Gemini kept 23,642 / 26,223 attempted pairs (qwen 16,663); review sample data/processed/translation_review_gemini.csv; qwen files untouched
