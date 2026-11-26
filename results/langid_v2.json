@@ -1,0 +1,503 @@
+{
+  "train_rows": 32251,
+  "synthetic_mixed_rows": 3589,
+  "model_path": "/app/models/langid_v2.joblib",
+  "model_bytes": 6783805,
+  "override_markers": 105,
+  "sets": {
+    "dev": {
+      "v1": {
+        "n": 8776,
+        "macro_f1": 0.9397,
+        "en_vs_non_en_accuracy": 0.9981,
+        "non_en_sent_to_en": 4,
+        "en_sent_to_non_en": 13,
+        "confusion": [
+          [
+            3963,
+            0,
+            0,
+            13
+          ],
+          [
+            1,
+            1265,
+            0,
+            311
+          ],
+          [
+            0,
+            0,
+            1598,
+            4
+          ],
+          [
+            3,
+            57,
+            0,
+            1561
+          ]
+        ]
+      },
+      "v1+override": {
+        "n": 8776,
+        "macro_f1": 0.9401,
+        "en_vs_non_en_accuracy": 0.9984,
+        "non_en_sent_to_en": 0,
+        "en_sent_to_non_en": 14,
+        "confusion": [
+          [
+            3962,
+            0,
+            0,
+            14
+          ],
+          [
+            0,
+            1266,
+            0,
+            311
+          ],
+          [
+            0,
+            0,
+            1598,
+            4
+          ],
+          [
+            0,
+            57,
+            0,
+            1564
+          ]
+        ]
+      },
+      "v2": {
+        "n": 8776,
+        "macro_f1": 0.9345,
+        "en_vs_non_en_accuracy": 0.9932,
+        "non_en_sent_to_en": 0,
+        "en_sent_to_non_en": 60,
+        "confusion": [
+          [
+            3916,
+            0,
+            0,
+            60
+          ],
+          [
+            0,
+            1337,
+            0,
+            240
+          ],
+          [
+            0,
+            0,
+            1599,
+            3
+          ],
+          [
+            0,
+            138,
+            0,
+            1483
+          ]
+        ]
+      },
+      "v2+override (detect_lang)": {
+        "n": 8776,
+        "macro_f1": 0.9344,
+        "en_vs_non_en_accuracy": 0.993,
+        "non_en_sent_to_en": 0,
+        "en_sent_to_non_en": 61,
+        "confusion": [
+          [
+            3915,
+            0,
+            0,
+            61
+          ],
+          [
+            0,
+            1337,
+            0,
+            240
+          ],
+          [
+            0,
+            0,
+            1599,
+            3
+          ],
+          [
+            0,
+            138,
+            0,
+            1483
+          ]
+        ]
+      }
+    },
+    "test": {
+      "v1": {
+        "n": 1636,
+        "macro_f1": 0.9425,
+        "en_vs_non_en_accuracy": 0.9939,
+        "non_en_sent_to_en": 6,
+        "en_sent_to_non_en": 4,
+        "confusion": [
+          [
+            502,
+            0,
+            0,
+            4
+          ],
+          [
+            3,
+            310,
+            0,
+            68
+          ],
+          [
+            0,
+            0,
+            371,
+            2
+          ],
+          [
+            3,
+            8,
+            0,
+            365
+          ]
+        ]
+      },
+      "v1+override": {
+        "n": 1636,
+        "macro_f1": 0.9425,
+        "en_vs_non_en_accuracy": 0.9945,
+        "non_en_sent_to_en": 5,
+        "en_sent_to_non_en": 4,
+        "confusion": [
+          [
+            502,
+            0,
+            0,
+            4
+          ],
+          [
+            3,
+            310,
+            0,
+            68
+          ],
+          [
+            0,
+            0,
+            371,
+            2
+          ],
+          [
+            2,
+            9,
+            0,
+            365
+          ]
+        ]
+      },
+      "v2": {
+        "n": 1636,
+        "macro_f1": 0.9408,
+        "en_vs_non_en_accuracy": 0.9914,
+        "non_en_sent_to_en": 3,
+        "en_sent_to_non_en": 11,
+        "confusion": [
+          [
+            495,
+            0,
+            0,
+            11
+          ],
+          [
+            2,
+            322,
+            0,
+            57
+          ],
+          [
+            0,
+            0,
+            371,
+            2
+          ],
+          [
+            1,
+            19,
+            0,
+            356
+          ]
+        ]
+      },
+      "v2+override (detect_lang)": {
+        "n": 1636,
+        "macro_f1": 0.9408,
+        "en_vs_non_en_accuracy": 0.9914,
+        "non_en_sent_to_en": 3,
+        "en_sent_to_non_en": 11,
+        "confusion": [
+          [
+            495,
+            0,
+            0,
+            11
+          ],
+          [
+            2,
+            322,
+            0,
+            57
+          ],
+          [
+            0,
+            0,
+            371,
+            2
+          ],
+          [
+            1,
+            19,
+            0,
+            356
+          ]
+        ]
+      }
+    },
+    "overrefusal": {
+      "v1": {
+        "n": 6146,
+        "macro_f1": 0.9436,
+        "en_vs_non_en_accuracy": 1.0,
+        "non_en_sent_to_en": 0,
+        "en_sent_to_non_en": 0,
+        "confusion": [
+          [
+            1568,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            1202,
+            0,
+            281
+          ],
+          [
+            0,
+            0,
+            1537,
+            0
+          ],
+          [
+            0,
+            59,
+            0,
+            1499
+          ]
+        ]
+      },
+      "v1+override": {
+        "n": 6146,
+        "macro_f1": 0.9436,
+        "en_vs_non_en_accuracy": 1.0,
+        "non_en_sent_to_en": 0,
+        "en_sent_to_non_en": 0,
+        "confusion": [
+          [
+            1568,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            1202,
+            0,
+            281
+          ],
+          [
+            0,
+            0,
+            1537,
+            0
+          ],
+          [
+            0,
+            59,
+            0,
+            1499
+          ]
+        ]
+      },
+      "v2": {
+        "n": 6146,
+        "macro_f1": 0.9387,
+        "en_vs_non_en_accuracy": 0.9976,
+        "non_en_sent_to_en": 0,
+        "en_sent_to_non_en": 15,
+        "confusion": [
+          [
+            1553,
+            0,
+            0,
+            15
+          ],
+          [
+            0,
+            1241,
+            0,
+            242
+          ],
+          [
+            0,
+            0,
+            1537,
+            0
+          ],
+          [
+            0,
+            116,
+            0,
+            1442
+          ]
+        ]
+      },
+      "v2+override (detect_lang)": {
+        "n": 6146,
+        "macro_f1": 0.9387,
+        "en_vs_non_en_accuracy": 0.9976,
+        "non_en_sent_to_en": 0,
+        "en_sent_to_non_en": 15,
+        "confusion": [
+          [
+            1553,
+            0,
+            0,
+            15
+          ],
+          [
+            0,
+            1241,
+            0,
+            242
+          ],
+          [
+            0,
+            0,
+            1537,
+            0
+          ],
+          [
+            0,
+            116,
+            0,
+            1442
+          ]
+        ]
+      }
+    }
+  },
+  "english_sent_to_non_en": {
+    "external_eval (en)": {
+      "v1": {
+        "n": 506,
+        "sent_to_non_en": 4
+      },
+      "v1+override": {
+        "n": 506,
+        "sent_to_non_en": 4
+      },
+      "v2": {
+        "n": 506,
+        "sent_to_non_en": 11
+      },
+      "v2+override (detect_lang)": {
+        "n": 506,
+        "sent_to_non_en": 11
+      }
+    },
+    "overrefusal xstest+or_bench (en)": {
+      "v1": {
+        "n": 1568,
+        "sent_to_non_en": 0
+      },
+      "v1+override": {
+        "n": 1568,
+        "sent_to_non_en": 0
+      },
+      "v2": {
+        "n": 1568,
+        "sent_to_non_en": 15
+      },
+      "v2+override (detect_lang)": {
+        "n": 1568,
+        "sent_to_non_en": 15
+      }
+    },
+    "benign_email_probe": {
+      "v1": {
+        "n": 100,
+        "sent_to_non_en": 0
+      },
+      "v1+override": {
+        "n": 100,
+        "sent_to_non_en": 0
+      },
+      "v2": {
+        "n": 100,
+        "sent_to_non_en": 0
+      },
+      "v2+override (detect_lang)": {
+        "n": 100,
+        "sent_to_non_en": 0
+      }
+    },
+    "bipia": {
+      "v1": {
+        "n": 125,
+        "sent_to_non_en": 0
+      },
+      "v1+override": {
+        "n": 125,
+        "sent_to_non_en": 0
+      },
+      "v2": {
+        "n": 125,
+        "sent_to_non_en": 1
+      },
+      "v2+override (detect_lang)": {
+        "n": 125,
+        "sent_to_non_en": 1
+      }
+    },
+    "injecagent": {
+      "v1": {
+        "n": 1054,
+        "sent_to_non_en": 0
+      },
+      "v1+override": {
+        "n": 1054,
+        "sent_to_non_en": 0
+      },
+      "v2": {
+        "n": 1054,
+        "sent_to_non_en": 0
+      },
+      "v2+override (detect_lang)": {
+        "n": 1054,
+        "sent_to_non_en": 0
+      }
+    }
+  }
+}
