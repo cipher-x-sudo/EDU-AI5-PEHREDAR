@@ -42,6 +42,8 @@ def test_processed_schema_and_unique_ids():
             "failed_pilot.jsonl",              # Gemini pilot failure log
             "train_v2.jsonl",                  # compositions of the files above
             "dev_v2_threshold.jsonl",
+            "train_v3.jsonl",
+            "dev_v3.jsonl",
         } or path.name.endswith(("_failures.jsonl", "_pending.jsonl", "_rejected_v3.jsonl", "_pre_v3.jsonl", "_rejected_labse.jsonl", "_pre_labse.jsonl", "_rejected_script.jsonl", "_gemini_pre.jsonl", "_gemini_rejected.jsonl")):
             continue
         for row in records(path):
