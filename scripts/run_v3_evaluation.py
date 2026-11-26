@@ -123,7 +123,7 @@ def latency(v3, n_gpu=200, n_cpu=100):
         if device == "cuda" and not torch.cuda.is_available():
             continue
         m2, m3 = L2().load(V2, device), L2().load(v3, device)
-        deb, v2fn, v3fn = m3.models["deberta"].fn, m2.models["v2"].fn, m3.models["v2"].fn
+        deb, v2fn, v3fn = m3.models["deberta"].fn, m2.models["xlmr"].fn, m3.models["xlmr"].fn
         def routed(fn):
             return lambda t: deb(t) if detect_lang(t)[0] == "en" else fn(t)
         systems = {"deberta": deb, "v2": v2fn, "v3": v3fn, "routed_v2": routed(v2fn), "routed_v3": routed(v3fn),
@@ -249,8 +249,168 @@ def render(out):
     print("\n".join(lines[:12]), flush=True)
 
 
+# ---------------------------------------------------------------- recalibration (results/clf_v3_recal.*)
+V3 = "models/clf_v3_e3"
+NON_EN = ("roman_ur", "ur", "mixed")
+LEVELS = (0.02, 0.03, 0.05)
+RULE_MAX_FPR = 0.03
+RECAL_JSON = Path("results/clf_v3_recal.json")
+RECAL_MD = Path("results/clf_v3_recal.md")
+RECAL_SYSTEMS = ("deberta", "routed_v2", "routed_v3", "routed_v3_perlang")
+
+
+def at_fpr(benign_scores, fpr):
+    """Lowest threshold whose benign FPR is <= fpr (k = floor(fpr * n) benign rows at or above it)."""
+    s = sorted(benign_scores)
+    k = int(fpr * len(s))
+    return s[-1] + 1e-9 if k == 0 else s[len(s) - k]
+
+
+def dev_thresholds():
+    """Non-English dev rows only (pooled, and per language) -> thresholds for v2 and v3."""
+    rows = load_jsonl(DATA / "dev_v3.jsonl")
+    out = {}
+    for name, d in (("v2", V2), ("v3", V3)):
+        sc = risks(DATA / "dev_v3.jsonl", "classifier", d)
+        dev = [(r.lang, r.label, s) for r, s in zip(rows, sc) if r.lang in NON_EN]
+        res = {"pooled": {}, "per_lang_2pct": {}}
+        for level in LEVELS:
+            t = at_fpr([s for _, l, s in dev if l == "benign"], level)
+            per = {lang: {"recall": round(sum(s >= t for g, l, s in dev if g == lang and l == "attack") / sum(g == lang and l == "attack" for g, l, _ in dev), 4),
+                          "fpr": round(sum(s >= t for g, l, s in dev if g == lang and l == "benign") / sum(g == lang and l == "benign" for g, l, _ in dev), 4)}
+                   for lang in NON_EN}
+            a = [s for _, l, s in dev if l == "attack"]; b = [s for _, l, s in dev if l == "benign"]
+            res["pooled"][f"{level:.0%}"] = {"threshold": t, "dev_non_en_recall": round(sum(s >= t for s in a) / len(a), 4),
+                                            "dev_non_en_fpr": round(sum(s >= t for s in b) / len(b), 4), "dev_attacks": len(a),
+                                            "dev_benign": len(b), "per_lang": per}
+        for lang in NON_EN:
+            t = at_fpr([s for g, l, s in dev if g == lang and l == "benign"], 0.02)
+            a = [s for g, l, s in dev if g == lang and l == "attack"]
+            res["per_lang_2pct"][lang] = {"threshold": t, "dev_recall": round(sum(s >= t for s in a) / len(a), 4)}
+        out[name] = res
+    return out
+
+
+def choose_point(th):
+    """Dev-only rule: highest dev non-English recall among (model, level) with dev non-English FPR <= 3%;
+    ties -> v3, then the lower FPR level."""
+    cands = [(m, lvl, x) for m, r in th.items() for lvl, x in r["pooled"].items() if x["dev_non_en_fpr"] <= RULE_MAX_FPR]
+    m, lvl, x = max(cands, key=lambda c: (c[2]["dev_non_en_recall"], c[0] == "v3", -float(c[1].rstrip("%"))))
+    return {"model": m, "level": lvl, "threshold": x["threshold"], "dev_non_en_recall": x["dev_non_en_recall"],
+            "dev_non_en_fpr": x["dev_non_en_fpr"],
+            "rule": f"highest dev non-English recall with dev non-English FPR <= {RULE_MAX_FPR:.0%} over v2/v3 x {', '.join(f'{l:.0%}' for l in LEVELS)}"}
+
+
+def recal_rows(files, t2, t3, t3_lang):
+    rows = []
+    for f in files:
+        path = DATA / f
+        recs = load_jsonl(path)
+        deb, s2, s3 = risks(path, "deberta", None), risks(path, "classifier", V2), risks(path, "classifier", V3)
+        for r, d, x2, x3 in zip(recs, deb, s2, s3):
+            routed = detect_lang(normalize_text(r.input_text()))[0]
+            en = routed == "en"
+            pred = {"deberta": d >= DEBERTA_THRESHOLD,
+                    "routed_v2": d >= DEBERTA_THRESHOLD if en else x2 >= t2,
+                    "routed_v3": d >= DEBERTA_THRESHOLD if en else x3 >= t3,
+                    "routed_v3_perlang": d >= DEBERTA_THRESHOLD if en else x3 >= t3_lang.get(routed, t3)}
+            rows.append({"id": r.id, "label": r.label, "lang": r.lang, "routed": routed, "pred": pred})
+    return rows
+
+
+def rmetrics(rows, system):
+    a = [r for r in rows if r["label"] == "attack"]; b = [r for r in rows if r["label"] == "benign"]
+    tp = sum(r["pred"][system] for r in a); fp = sum(r["pred"][system] for r in b)
+    return {"attacks": len(a), "benign": len(b), "tp": tp, "fp": fp,
+            "recall": round(tp / len(a), 4) if a else None, "recall_ci": wilson(tp, len(a)),
+            "fpr": round(fp / len(b), 4) if b else None, "fpr_ci": wilson(fp, len(b))}
+
+
+def recal():
+    th = dev_thresholds()
+    point = choose_point(th)
+    level = point["level"]
+    t2, t3 = th["v2"]["pooled"][level]["threshold"], th["v3"]["pooled"][level]["threshold"]
+    t3_lang = {l: x["threshold"] for l, x in th["v3"]["per_lang_2pct"].items()}
+    neardup = set(json.loads((DATA / "v3_test_neardup_ids.json").read_text(encoding="utf-8")))
+    data = {name: recal_rows(files, t2, t3, t3_lang) for name, files in SETS.items()}
+    out = {"thresholds": th, "chosen": point, "applied": {"deberta": DEBERTA_THRESHOLD, "v2_non_en": t2, "v3_non_en": t3, "v3_per_lang_2pct": t3_lang},
+           "router": "langid_v2 + Roman-Urdu override (pehredar.langid.detect_lang)", "neardup_test_rows": len(neardup),
+           "test_all": {}, "test_no_neardup": {}, "overrefusal": {}, "significance_recall": {}, "significance_fpr": {}, "all_levels_routed_v3": {}}
+    for lang in LANGS:
+        t = [r for r in data["test"] if r["lang"] == lang]; o = [r for r in data["overrefusal"] if r["lang"] == lang]
+        out["test_all"][lang] = {s: rmetrics(t, s) for s in RECAL_SYSTEMS}
+        out["test_no_neardup"][lang] = {s: rmetrics([r for r in t if r["id"] not in neardup], s) for s in RECAL_SYSTEMS}
+        out["test_no_neardup"][lang]["removed_rows"] = sum(r["id"] in neardup for r in t)
+        out["overrefusal"][lang] = {s: rmetrics(o, s) for s in RECAL_SYSTEMS}
+        attacks = [r for r in t if r["label"] == "attack"]; benign = [r for r in t + o if r["label"] == "benign"]
+        out["significance_recall"][lang] = {"routed_v3_vs_deberta": mcnemar(attacks, "routed_v3", "deberta"),
+                                            "routed_v3_vs_routed_v2": mcnemar(attacks, "routed_v3", "routed_v2")}
+        out["significance_fpr"][lang] = {"routed_v3_vs_deberta": mcnemar(benign, "routed_v3", "deberta"),
+                                         "routed_v3_vs_routed_v2": mcnemar(benign, "routed_v3", "routed_v2")}
+    for lvl in th["v3"]["pooled"]:
+        tl = th["v3"]["pooled"][lvl]["threshold"]
+        test_rows = recal_rows(SETS["test"], t2, tl, t3_lang); over_rows = recal_rows(SETS["overrefusal"], t2, tl, t3_lang)
+        out["all_levels_routed_v3"][lvl] = {lang: {"test": rmetrics([r for r in test_rows if r["lang"] == lang], "routed_v3"),
+                                                   "overrefusal": rmetrics([r for r in over_rows if r["lang"] == lang], "routed_v3")} for lang in NON_EN}
+    RECAL_JSON.write_text(json.dumps(out, indent=2), encoding="utf-8")
+    render_recal(out)
+
+
+def pval(c):
+    return "<1e-6" if c["p_value"] < 1e-6 else format(c["p_value"], ".3g")
+
+
+def render_recal(out):
+    th, ch = out["thresholds"], out["chosen"]
+    lines = ["# v3 recalibration: non-English thresholds, router v2", "",
+             "All numbers come from `results/clf_v3_recal.json` (`python -m scripts.run_v3_evaluation --recal`). Thresholds for the "
+             "non-English path are chosen on dev rows with lang in roman_ur / ur / mixed only; the English route (DeBERTa 0.5) is "
+             f"unchanged. Router: {out['router']}. Non-English sets are Gemini machine translations, not the human test set.", "",
+             "## Non-English dev thresholds", "", "| Model | Dev non-en FPR target | Threshold | Dev non-en recall | Dev non-en FPR | Dev FPR roman_ur / ur / mixed |",
+             "|---|---|---:|---:|---:|---|"]
+    for m, r in th.items():
+        for lvl, x in r["pooled"].items():
+            lines.append(f"| {m} | {lvl} | {x['threshold']:.4f} | {x['dev_non_en_recall']:.4f} | {x['dev_non_en_fpr']:.4f} | "
+                         + " / ".join(f"{x['per_lang'][l]['fpr']:.4f}" for l in NON_EN) + " |")
+    lines += ["", "Secondary: per-language thresholds (2% FPR per language on dev): " + "; ".join(
+        f"{m} " + ", ".join(f"{l} {x['threshold']:.4f} (dev recall {x['dev_recall']:.4f})" for l, x in r["per_lang_2pct"].items()) for m, r in th.items()), "",
+        f"**Operating point (dev-only rule: {ch['rule']}):** {ch['model']} at {ch['level']} → threshold {ch['threshold']:.4f}, dev non-en recall "
+        f"{ch['dev_non_en_recall']:.4f}, dev non-en FPR {ch['dev_non_en_fpr']:.4f}. Test numbers below are reported, not used for the choice. "
+        f"routed_v2 uses v2's threshold at the same level ({out['applied']['v2_non_en']:.4f}); routed_v3_perlang is the secondary per-language variant.", ""]
+    for key, title in (("test_all", "Test (external_eval + external_translated_gemini), all rows"),
+                       ("test_no_neardup", f"Test excluding the {out['neardup_test_rows']} near-duplicate rows (e5 > 0.95 to train)")):
+        lines += [f"## {title}", "", "| Lang | System | Recall [95% CI] | FPR [95% CI] |", "|---|---|---|---|"]
+        for lang, ms in out[key].items():
+            for s in RECAL_SYSTEMS:
+                lines.append(f"| {lang} | {s} | {cell(ms[s], 'recall')} | {cell(ms[s], 'fpr')} |")
+            if "removed_rows" in ms:
+                lines.append(f"| {lang} | (rows removed) | {ms['removed_rows']} | |")
+        lines.append("")
+    lines += ["## Overrefusal FPR (xstest + or_bench + overrefusal_translated_gemini)", "", "| Lang | " + " | ".join(RECAL_SYSTEMS) + " |",
+              "|---|" + "---|" * len(RECAL_SYSTEMS)]
+    for lang, ms in out["overrefusal"].items():
+        lines.append(f"| {lang} | " + " | ".join(cell(ms[s], "fpr") for s in RECAL_SYSTEMS) + " |")
+    for key, title in (("significance_recall", "Significance — recall (McNemar exact on test attack rows)"),
+                       ("significance_fpr", "Significance — FPR (McNemar exact on test benign + overrefusal rows)")):
+        lines += ["", f"## {title}", "", "| Lang | Comparison | routed_v3 right, other wrong | other right, routed_v3 wrong | p | Significant at 0.05 |",
+                  "|---|---|---:|---:|---:|---|"]
+        for lang, comps in out[key].items():
+            for name, c in comps.items():
+                lines.append(f"| {lang} | {name.replace('_vs_', ' vs ')} | {c['a_right_b_wrong']} | {c['b_right_a_wrong']} | {pval(c)} | {'yes' if c['significant_0.05'] else 'no'} |")
+    lines += ["", "## routed_v3 at each dev FPR level (transparency; not used for the choice)", "",
+              "| Level | Lang | Test recall [95% CI] | Test FPR [95% CI] | Overrefusal FPR [95% CI] |", "|---|---|---|---|---|"]
+    for lvl, langs in out["all_levels_routed_v3"].items():
+        for lang, x in langs.items():
+            lines.append(f"| {lvl} | {lang} | {cell(x['test'], 'recall')} | {cell(x['test'], 'fpr')} | {cell(x['overrefusal'], 'fpr')} |")
+    RECAL_MD.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    print("\n".join(lines[:24]), flush=True)
+
+
 if __name__ == "__main__":
-    if "--render" in sys.argv:
+    if "--recal" in sys.argv:
+        recal()
+    elif "--render" in sys.argv:
         render(json.loads(OUT_JSON.read_text(encoding="utf-8")))
     else:
         main()

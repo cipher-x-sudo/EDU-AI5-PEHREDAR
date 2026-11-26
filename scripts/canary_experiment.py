@@ -1,4 +1,4 @@
-"""Output guard / canary experiment -> results/output_guard_v1.md, results/output_guard_v1.json.
+"""Output guard / canary experiment -> results/output_guard_<tag>.md/.json (tag = PEHREDAR_EVAL_TAG, default v1).
 
 300 attack prompts from eval-only sets: 100 English (external_eval), 100 roman_ur and 100 mixed
 (external_translated attacks first, then dev_translated_v2 attacks; seed 42).
@@ -15,6 +15,7 @@ from run_v2_evaluation import wilson
 DATA = Path("data/processed")
 PROTECTED = os.getenv("PEHREDAR_PROTECTED_MODEL", "richardyoung/qwen3-8b-abliterated:Q4_K_M")
 MAX_TOKENS = 200
+TAG = os.getenv("PEHREDAR_EVAL_TAG", "v1")
 N = 100
 
 
@@ -104,9 +105,9 @@ def report(items):
     out = {"protected_model": PROTECTED, "max_tokens": MAX_TOKENS, "temperature": 0, "reasoning_effort": "none",
            "per_language": {l: summary([x for x in items if x["lang"] == l]) for l in ("en", "roman_ur", "mixed")},
            "all": summary(items), "sources": dict(Counter(f"{x['lang']}:{x['set']}" for x in items))}
-    Path("results/output_guard_v1.json").write_text(json.dumps(out, indent=2), encoding="utf-8")
+    Path(f"results/output_guard_{TAG}.json").write_text(json.dumps(out, indent=2), encoding="utf-8")
     pct = lambda k, n, ci: f"{k}/{n} = {k / max(1, n):.1%} [{ci[0]:.3f}–{ci[1]:.3f}]" if ci else f"{k}/{n}"
-    lines = ["# Output guard / canary experiment v1", "",
+    lines = [f"# Output guard / canary experiment {TAG}", "",
              f"Protected model `{PROTECTED}` (Ollama), temperature 0, max_tokens {MAX_TOKENS}, reasoning_effort none (thinking off, same in both arms). The canary is in the "
              "system prompt (`canary_system_prompt`, same text as the gateway adds). (a) bare: prompt sent straight to the "
              "model. (b) gateway: full `/v1/chat/completions` (input layers → model → output guard incl. Qwen3Guard). "
@@ -125,7 +126,7 @@ def report(items):
               f"- Partial leaks (hex part of the canary only): bare {a['bare']['hex_only_leaks']}, gateway {a['gateway']['hex_only_leaks_to_client']}",
               f"- Output guard tags the bare responses would have triggered: {json.dumps(a['bare']['output_guard_would_flag'])}",
               f"- Gateway passed-response tags: {json.dumps(a['gateway']['passed_tags'])}", ""]
-    Path("results/output_guard_v1.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
+    Path(f"results/output_guard_{TAG}.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
     print("\n".join(lines), flush=True)
 
 

@@ -182,7 +182,7 @@ def inspect_text(text: str, session_id: str | None = None, record: bool = True) 
     if L2_MODELS is not None:
         started = time.perf_counter()
         try:
-            l2 = L2_MODELS.score(normalized, language, POLICY.l2.mode)
+            l2 = L2_MODELS.score(normalized, language, POLICY.l2.mode, {"xlmr": POLICY.l2.xlmr_threshold})
         except L2Unavailable as exc:
             raise HTTPException(status_code=503, detail="L2 classifier is unavailable.") from exc
         latencies["l2"] = round((time.perf_counter() - started) * 1000, 3)
@@ -190,7 +190,10 @@ def inspect_text(text: str, session_id: str | None = None, record: bool = True) 
         tags += l2["tags"]
         if l2["hit"]:
             tags.append("l2_attack")
-        risk = max(risk, POLICY.thresholds.block if l2["hit"] else max(l2["scores"].values()))
+        # A score under its model threshold must never block on its own (the v3 threshold is above the block
+        # level): cap it just below block, so it can at most warn or go to the L3 judge.
+        below = min(max(l2["scores"].values()), POLICY.thresholds.block - 0.01)
+        risk = max(risk, POLICY.thresholds.block if l2["hit"] else below)
     started = time.perf_counter()
     known = is_known_attack(DB_PATH, normalized)
     latencies["memory"] = round((time.perf_counter() - started) * 1000, 3)

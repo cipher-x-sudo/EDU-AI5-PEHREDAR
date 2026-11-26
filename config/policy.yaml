@@ -8,3 +8,5 @@ logging:
   store_hash: true
 l2:
   mode: routed
+  # non-English path: models/clf_v3_e3 (PEHREDAR_L2_XLMR_DIR) at 3% dev non-English FPR (results/clf_v3_recal.md)
+  xlmr_threshold: 0.9613

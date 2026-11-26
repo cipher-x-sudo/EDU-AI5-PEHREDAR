@@ -53,7 +53,8 @@ services:
       PEHREDAR_GUARD_MODEL: hf.co/QuantFactory/Qwen3Guard-Gen-0.6B-GGUF:Q4_K_M
       PEHREDAR_MODELS_DIR: /app/models
       PEHREDAR_L2: "1"
-      PEHREDAR_L2_V2_DIR: /app/models/clf_v2_e2
+      PEHREDAR_L2_XLMR_DIR: /app/models/clf_v3_e3
+      PEHREDAR_LANGID_MODEL: /app/models/langid_v2.joblib
       HF_HUB_OFFLINE: "1"
     volumes:
       - ./config:/app/config:ro

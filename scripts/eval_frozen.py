@@ -12,7 +12,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 FROZEN = Path("data/frozen_test/human_v1.jsonl")
-V2_DIR = os.getenv("PEHREDAR_L2_V2_DIR", "models/clf_v2_e2")
+V2_DIR = os.getenv("PEHREDAR_L2_XLMR_DIR", "models/clf_v3_e3")
 LOG = Path("results/frozen_runs.log")
 OUT = Path("results/frozen_v1.md")
 WARNING = ("WARNING: data/frozen_test is the human test set. It may only be evaluated ONCE per final model. "
@@ -67,8 +67,8 @@ def main():
     preds = []
     for r in rows:
         text = normalize_text(r.input_text())
-        d = l2.models["deberta"].fn(text); v = l2.models["v2"].fn(text)
-        hit_d, hit_v = d >= l2.models["deberta"].threshold, v >= l2.models["v2"].threshold
+        d = l2.models["deberta"].fn(text); v = l2.models["xlmr"].fn(text)
+        hit_d, hit_v = d >= l2.models["deberta"].threshold, v >= l2.models["xlmr"].threshold
         preds.append({"lang": r.lang, "label": r.label, "deberta": hit_d, "v2": hit_v,
                       "ensemble_routed": hit_d if detect(text) == "en" else hit_v})
     models = ("deberta", "v2", "ensemble_routed")

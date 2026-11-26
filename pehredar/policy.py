@@ -3,7 +3,7 @@ from pathlib import Path
 from typing import Literal
 
 import yaml
-from pydantic import BaseModel, Field, model_validator
+from pydantic import BaseModel, Field, field_validator, model_validator
 
 
 class Thresholds(BaseModel):
@@ -21,8 +21,16 @@ class Thresholds(BaseModel):
 
 
 class L2Policy(BaseModel):
-    # routed: en -> DeBERTa, other languages -> v2; deberta / v2: one model; max: both, either over threshold
-    mode: Literal["routed", "deberta", "v2", "max"] = "routed"
+    # routed: en -> DeBERTa, other languages -> the XLM-R classifier; deberta / xlmr: one model; max: both
+    mode: Literal["routed", "deberta", "xlmr", "max"] = "routed"
+    # Threshold for the XLM-R (non-English) path; None = the model's training_report.json threshold.
+    # Must match the model in PEHREDAR_L2_XLMR_DIR (chosen on dev, see results/clf_v3_recal.md).
+    xlmr_threshold: float | None = Field(default=None, gt=0, lt=1)
+
+    @field_validator("mode", mode="before")
+    @classmethod
+    def legacy_v2(cls, value):
+        return "xlmr" if value == "v2" else value  # policies stored before the rename
 
 
 class Policy(BaseModel):

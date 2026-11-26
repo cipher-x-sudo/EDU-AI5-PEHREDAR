@@ -6,7 +6,7 @@ dev   = dev_public_v2 + dev_translated_v2_gemini, minus label-audit-flagged dev 
         (e5 cosine > 0.95 to any train row, any language).
 Leakage audit: (a) the same original (orig_id for translations, id for English rows) and the same split_group
 must never appear in two of train / dev / test; (b) e5 cosine > 0.95 between train and dev / test rows,
-cross-language included. Test rows are never changed: leaks are reported only.
+cross-language included. Test rows are never changed: leaks are reported only (ids in v3_test_neardup_ids.json).
 
   python -m scripts.build_v3_data   # training image, GPU (e5)"""
 import csv, json
@@ -68,6 +68,7 @@ def main():
     test_leak = [(r, s, t) for r, (s, t) in zip(test, near_test) if s > SIM]
     dev_final = [r for r in dev if r["id"] not in dev_leak]
     write("train_v3.jsonl", sorted(train, key=lambda r: r["id"])); write("dev_v3.jsonl", dev_final)
+    (ROOT/"v3_test_neardup_ids.json").write_text(json.dumps(sorted(r["id"] for r, _, _ in test_leak)), encoding="utf-8")
     ratio = lambda rs: {l: round(sum(r["lang"] == l and r["label"] == "benign" for r in rs) /
                                  max(1, sum(r["lang"] == l and r["label"] == "attack" for r in rs)), 3) for l in sorted({r["lang"] for r in rs})}
     out = {"train_rows": len(train), "train_dropped_label_audit": len(train_all) - len(train), "train_by_lang_label": cells(train),

@@ -1,7 +1,7 @@
 """L2: language-routed classifier ensemble.
 
-routed (default): en -> ProtectAI DeBERTa; roman_ur / mixed / ur / other -> Pehredar XLM-R v2.
-deberta / v2: always that model. max: both models, attack if either is over its own threshold.
+routed (default): en -> ProtectAI DeBERTa; roman_ur / mixed / ur / other -> the Pehredar XLM-R classifier ("xlmr",
+PEHREDAR_L2_XLMR_DIR, default models/clf_v3_e3). deberta / xlmr: always that model. max: both models, attack if either is over its own threshold.
 If the routed model failed to load, the other one is used (tag l2_fallback). If none is loaded,
 score() raises L2Unavailable and the gateway fails closed (503).
 Models are loaded once by load() at startup; torch/transformers are imported only there."""
@@ -14,7 +14,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Callable
 
-MODES = ("routed", "deberta", "v2", "max")
+MODES = ("routed", "deberta", "xlmr", "max")
 DEBERTA_NAME = "protectai/deberta-v3-base-prompt-injection-v2"
 DEBERTA_THRESHOLD = 0.5
 
@@ -37,7 +37,7 @@ class L2:
     device: str | None = None
     vram_gb: float | None = None
 
-    def load(self, v2_dir: str, device: str | None = None) -> "L2":
+    def load(self, xlmr_dir: str, device: str | None = None) -> "L2":
         import torch
         from transformers import AutoModelForSequenceClassification, AutoTokenizer
         from .clf_text import encode
@@ -55,8 +55,8 @@ class L2:
                     return torch.softmax(model(**enc).logits, dim=-1)[0, int(label)].item()
             return Scorer(DEBERTA_THRESHOLD, fn)
 
-        def v2():
-            path = Path(v2_dir)
+        def xlmr():
+            path = Path(xlmr_dir)
             report = json.loads((path / "training_report.json").read_text(encoding="utf-8"))
             tok = AutoTokenizer.from_pretrained(path, local_files_only=True)
             model = AutoModelForSequenceClassification.from_pretrained(path, local_files_only=True).to(device).eval()
@@ -69,7 +69,7 @@ class L2:
                     return torch.softmax(model(**enc).logits, dim=-1)[0, 1].item()
             return Scorer(float(report["threshold"]), fn)
 
-        for name, loader in (("deberta", deberta), ("v2", v2)):
+        for name, loader in (("deberta", deberta), ("xlmr", xlmr)):
             started = time.perf_counter()
             try:
                 self.models[name] = loader()
@@ -85,15 +85,15 @@ class L2:
                 "device": self.device, "vram_allocated_gb": self.vram_gb,
                 "thresholds": {k: m.threshold for k, m in self.models.items()}}
 
-    def score(self, text: str, lang: str, mode: str) -> dict:
+    def score(self, text: str, lang: str, mode: str, thresholds: dict | None = None) -> dict:
         """Returns scores, which models ran, hit (any used model over its threshold), risk and tags.
         risk follows the old single-classifier rule: block_risk if hit, else the highest raw score."""
         if mode not in MODES:
             raise ValueError(f"unknown l2 mode {mode}")
         if not self.models:
             raise L2Unavailable("no L2 model loaded")
-        wanted = ["deberta", "v2"] if mode == "max" else [mode] if mode in ("deberta", "v2") else \
-                 ["deberta" if lang == "en" else "v2"]
+        wanted = ["deberta", "xlmr"] if mode == "max" else [mode] if mode in ("deberta", "xlmr") else \
+                 ["deberta" if lang == "en" else "xlmr"]
         used = [m for m in wanted if m in self.models]
         tags = []
         if not used:
@@ -106,13 +106,13 @@ class L2:
             started = time.perf_counter()
             scores[m] = self.models[m].fn(text)
             latency[m] = round((time.perf_counter() - started) * 1000, 3)
-        hit = any(scores[m] >= self.models[m].threshold for m in used)
-        return {"scores": scores, "used": used, "hit": hit, "tags": tags, "latency_ms": latency,
-                "thresholds": {m: self.models[m].threshold for m in used}}
+        limit = {m: (thresholds or {}).get(m) or self.models[m].threshold for m in used}  # policy override, else the model's own
+        hit = any(scores[m] >= limit[m] for m in used)
+        return {"scores": scores, "used": used, "hit": hit, "tags": tags, "latency_ms": latency, "thresholds": limit}
 
 
 def from_env() -> L2 | None:
-    """PEHREDAR_L2=1 enables L2; PEHREDAR_L2_V2_DIR points at the v2 model (default models/clf_v2_e2)."""
+    """PEHREDAR_L2=1 enables L2; PEHREDAR_L2_XLMR_DIR points at the XLM-R classifier (default models/clf_v3_e3)."""
     if os.getenv("PEHREDAR_L2", "") != "1":
         return None
-    return L2().load(os.getenv("PEHREDAR_L2_V2_DIR", "models/clf_v2_e2"))
+    return L2().load(os.getenv("PEHREDAR_L2_XLMR_DIR", "models/clf_v3_e3"))
