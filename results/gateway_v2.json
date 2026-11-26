@@ -1,0 +1,625 @@
+{
+  "l2": {
+    "loaded": [
+      "deberta",
+      "xlmr"
+    ],
+    "errors": {},
+    "load_seconds": {
+      "deberta": 8.63,
+      "xlmr": 8.68
+    },
+    "device": "cuda",
+    "vram_allocated_gb": 1.72,
+    "thresholds": {
+      "deberta": 0.5,
+      "xlmr": 0.9629704356193542
+    }
+  },
+  "vram": {
+    "after_run_all_models_loaded": {
+      "used_mib": 4687,
+      "total_mib": 10240
+    },
+    "l2_torch_allocated_gb": 1.72
+  },
+  "requests": 9061,
+  "judge_calls": 905,
+  "results": {
+    "external_eval": {
+      "gateway": {
+        "attacks": 197,
+        "benign": 309,
+        "tp": 135,
+        "fp": 5,
+        "recall": 0.6853,
+        "recall_ci": [
+          0.6174,
+          0.7461
+        ],
+        "fpr": 0.0162,
+        "fpr_ci": [
+          0.0069,
+          0.0373
+        ]
+      },
+      "l2_only": {
+        "attacks": 197,
+        "benign": 309,
+        "tp": 134,
+        "fp": 5,
+        "recall": 0.6802,
+        "recall_ci": [
+          0.6122,
+          0.7414
+        ],
+        "fpr": 0.0162,
+        "fpr_ci": [
+          0.0069,
+          0.0373
+        ]
+      },
+      "warn": 1,
+      "judge_calls": 3,
+      "judge_outcomes": {
+        "judge_controversial": 1,
+        "judge_unsafe": 1
+      },
+      "http_errors": {},
+      "rule_hits": 2,
+      "blocks_by_layer": {
+        "L2": 137,
+        "L1 rules": 2,
+        "L3 judge": 1
+      },
+      "detected_lang": {
+        "en": 495,
+        "mixed": 11
+      },
+      "fallback_tags": 0
+    },
+    "injecagent (unseen)": {
+      "gateway": {
+        "attacks": 1054,
+        "benign": 0,
+        "tp": 702,
+        "fp": 0,
+        "recall": 0.666,
+        "recall_ci": [
+          0.637,
+          0.6939
+        ],
+        "fpr": null,
+        "fpr_ci": null
+      },
+      "l2_only": {
+        "attacks": 1054,
+        "benign": 0,
+        "tp": 693,
+        "fp": 0,
+        "recall": 0.6575,
+        "recall_ci": [
+          0.6283,
+          0.6855
+        ],
+        "fpr": null,
+        "fpr_ci": null
+      },
+      "warn": 19,
+      "judge_calls": 40,
+      "judge_outcomes": {
+        "judge_unsafe": 9,
+        "judge_controversial": 17
+      },
+      "http_errors": {},
+      "rule_hits": 0,
+      "blocks_by_layer": {
+        "L2": 693,
+        "L3 judge": 9
+      },
+      "detected_lang": {
+        "en": 1054
+      },
+      "fallback_tags": 0
+    },
+    "bipia (unseen)": {
+      "gateway": {
+        "attacks": 125,
+        "benign": 0,
+        "tp": 13,
+        "fp": 0,
+        "recall": 0.104,
+        "recall_ci": [
+          0.0618,
+          0.1698
+        ],
+        "fpr": null,
+        "fpr_ci": null
+      },
+      "l2_only": {
+        "attacks": 125,
+        "benign": 0,
+        "tp": 13,
+        "fp": 0,
+        "recall": 0.104,
+        "recall_ci": [
+          0.0618,
+          0.1698
+        ],
+        "fpr": null,
+        "fpr_ci": null
+      },
+      "warn": 1,
+      "judge_calls": 1,
+      "judge_outcomes": {},
+      "http_errors": {},
+      "rule_hits": 0,
+      "blocks_by_layer": {
+        "L2": 13
+      },
+      "detected_lang": {
+        "en": 124,
+        "mixed": 1
+      },
+      "fallback_tags": 0
+    },
+    "xstest FPR": {
+      "gateway": {
+        "attacks": 0,
+        "benign": 249,
+        "tp": 0,
+        "fp": 0,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.0,
+        "fpr_ci": [
+          0,
+          0.0152
+        ]
+      },
+      "l2_only": {
+        "attacks": 0,
+        "benign": 249,
+        "tp": 0,
+        "fp": 0,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.0,
+        "fpr_ci": [
+          0,
+          0.0152
+        ]
+      },
+      "warn": 0,
+      "judge_calls": 0,
+      "judge_outcomes": {},
+      "http_errors": {},
+      "rule_hits": 0,
+      "blocks_by_layer": {},
+      "detected_lang": {
+        "en": 249
+      },
+      "fallback_tags": 0
+    },
+    "or_bench FPR": {
+      "gateway": {
+        "attacks": 0,
+        "benign": 1319,
+        "tp": 0,
+        "fp": 92,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.0697,
+        "fpr_ci": [
+          0.0572,
+          0.0848
+        ]
+      },
+      "l2_only": {
+        "attacks": 0,
+        "benign": 1319,
+        "tp": 0,
+        "fp": 89,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.0675,
+        "fpr_ci": [
+          0.0552,
+          0.0823
+        ]
+      },
+      "warn": 2,
+      "judge_calls": 6,
+      "judge_outcomes": {
+        "judge_unsafe": 3,
+        "judge_controversial": 1
+      },
+      "http_errors": {},
+      "rule_hits": 0,
+      "blocks_by_layer": {
+        "L2": 89,
+        "L3 judge": 3
+      },
+      "detected_lang": {
+        "en": 1304,
+        "mixed": 15
+      },
+      "fallback_tags": 0
+    },
+    "benign_email_probe FPR": {
+      "gateway": {
+        "attacks": 0,
+        "benign": 100,
+        "tp": 0,
+        "fp": 0,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.0,
+        "fpr_ci": [
+          0,
+          0.037
+        ]
+      },
+      "l2_only": {
+        "attacks": 0,
+        "benign": 100,
+        "tp": 0,
+        "fp": 0,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.0,
+        "fpr_ci": [
+          0,
+          0.037
+        ]
+      },
+      "warn": 0,
+      "judge_calls": 0,
+      "judge_outcomes": {},
+      "http_errors": {},
+      "rule_hits": 0,
+      "blocks_by_layer": {},
+      "detected_lang": {
+        "en": 100
+      },
+      "fallback_tags": 0
+    },
+    "external_translated roman_ur": {
+      "gateway": {
+        "attacks": 119,
+        "benign": 262,
+        "tp": 76,
+        "fp": 8,
+        "recall": 0.6387,
+        "recall_ci": [
+          0.5493,
+          0.7194
+        ],
+        "fpr": 0.0305,
+        "fpr_ci": [
+          0.0156,
+          0.0591
+        ]
+      },
+      "l2_only": {
+        "attacks": 119,
+        "benign": 262,
+        "tp": 73,
+        "fp": 6,
+        "recall": 0.6134,
+        "recall_ci": [
+          0.5237,
+          0.6961
+        ],
+        "fpr": 0.0229,
+        "fpr_ci": [
+          0.0105,
+          0.0491
+        ]
+      },
+      "warn": 46,
+      "judge_calls": 60,
+      "judge_outcomes": {
+        "judge_controversial": 24,
+        "judge_unsafe": 5
+      },
+      "http_errors": {},
+      "rule_hits": 1,
+      "blocks_by_layer": {
+        "L2": 78,
+        "L3 judge": 5,
+        "L1 rules": 1
+      },
+      "detected_lang": {
+        "roman_ur": 322,
+        "mixed": 57,
+        "en": 2
+      },
+      "fallback_tags": 0
+    },
+    "external_translated ur": {
+      "gateway": {
+        "attacks": 122,
+        "benign": 251,
+        "tp": 82,
+        "fp": 16,
+        "recall": 0.6721,
+        "recall_ci": [
+          0.5847,
+          0.7491
+        ],
+        "fpr": 0.0637,
+        "fpr_ci": [
+          0.0396,
+          0.101
+        ]
+      },
+      "l2_only": {
+        "attacks": 122,
+        "benign": 251,
+        "tp": 72,
+        "fp": 14,
+        "recall": 0.5902,
+        "recall_ci": [
+          0.5014,
+          0.6734
+        ],
+        "fpr": 0.0558,
+        "fpr_ci": [
+          0.0335,
+          0.0914
+        ]
+      },
+      "warn": 59,
+      "judge_calls": 77,
+      "judge_outcomes": {
+        "judge_controversial": 27,
+        "judge_unsafe": 12
+      },
+      "http_errors": {},
+      "rule_hits": 1,
+      "blocks_by_layer": {
+        "L2": 85,
+        "L3 judge": 12,
+        "L1 rules": 1
+      },
+      "detected_lang": {
+        "ur": 371,
+        "mixed": 2
+      },
+      "fallback_tags": 0
+    },
+    "external_translated mixed": {
+      "gateway": {
+        "attacks": 120,
+        "benign": 256,
+        "tp": 84,
+        "fp": 8,
+        "recall": 0.7,
+        "recall_ci": [
+          0.6128,
+          0.7747
+        ],
+        "fpr": 0.0312,
+        "fpr_ci": [
+          0.0159,
+          0.0604
+        ]
+      },
+      "l2_only": {
+        "attacks": 120,
+        "benign": 256,
+        "tp": 80,
+        "fp": 6,
+        "recall": 0.6667,
+        "recall_ci": [
+          0.5783,
+          0.7447
+        ],
+        "fpr": 0.0234,
+        "fpr_ci": [
+          0.0108,
+          0.0502
+        ]
+      },
+      "warn": 34,
+      "judge_calls": 47,
+      "judge_outcomes": {
+        "judge_controversial": 12,
+        "judge_unsafe": 6
+      },
+      "http_errors": {},
+      "rule_hits": 0,
+      "blocks_by_layer": {
+        "L2": 86,
+        "L3 judge": 6
+      },
+      "detected_lang": {
+        "mixed": 356,
+        "roman_ur": 19,
+        "en": 1
+      },
+      "fallback_tags": 0
+    },
+    "overrefusal_translated FPR roman_ur": {
+      "gateway": {
+        "attacks": 0,
+        "benign": 1483,
+        "tp": 0,
+        "fp": 149,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.1005,
+        "fpr_ci": [
+          0.0862,
+          0.1168
+        ]
+      },
+      "l2_only": {
+        "attacks": 0,
+        "benign": 1483,
+        "tp": 0,
+        "fp": 106,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.0715,
+        "fpr_ci": [
+          0.0594,
+          0.0857
+        ]
+      },
+      "warn": 130,
+      "judge_calls": 195,
+      "judge_outcomes": {
+        "judge_controversial": 55,
+        "judge_unsafe": 43
+      },
+      "http_errors": {},
+      "rule_hits": 0,
+      "blocks_by_layer": {
+        "L3 judge": 43,
+        "L2": 106
+      },
+      "detected_lang": {
+        "roman_ur": 1241,
+        "mixed": 242
+      },
+      "fallback_tags": 0
+    },
+    "overrefusal_translated FPR ur": {
+      "gateway": {
+        "attacks": 0,
+        "benign": 1537,
+        "tp": 0,
+        "fp": 252,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.164,
+        "fpr_ci": [
+          0.1463,
+          0.1833
+        ]
+      },
+      "l2_only": {
+        "attacks": 0,
+        "benign": 1537,
+        "tp": 0,
+        "fp": 141,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.0917,
+        "fpr_ci": [
+          0.0783,
+          0.1072
+        ]
+      },
+      "warn": 100,
+      "judge_calls": 229,
+      "judge_outcomes": {
+        "judge_unsafe": 111,
+        "judge_controversial": 48
+      },
+      "http_errors": {},
+      "rule_hits": 0,
+      "blocks_by_layer": {
+        "L3 judge": 111,
+        "L2": 141
+      },
+      "detected_lang": {
+        "ur": 1537
+      },
+      "fallback_tags": 0
+    },
+    "overrefusal_translated FPR mixed": {
+      "gateway": {
+        "attacks": 0,
+        "benign": 1558,
+        "tp": 0,
+        "fp": 212,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.1361,
+        "fpr_ci": [
+          0.1199,
+          0.154
+        ]
+      },
+      "l2_only": {
+        "attacks": 0,
+        "benign": 1558,
+        "tp": 0,
+        "fp": 150,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.0963,
+        "fpr_ci": [
+          0.0826,
+          0.1119
+        ]
+      },
+      "warn": 166,
+      "judge_calls": 247,
+      "judge_outcomes": {
+        "judge_controversial": 79,
+        "judge_unsafe": 62
+      },
+      "http_errors": {},
+      "rule_hits": 0,
+      "blocks_by_layer": {
+        "L3 judge": 62,
+        "L2": 150
+      },
+      "detected_lang": {
+        "mixed": 1442,
+        "roman_ur": 116
+      },
+      "fallback_tags": 0
+    }
+  },
+  "latency": {
+    "normalization": {
+      "median_ms": 0.02,
+      "p95_ms": 0.06,
+      "n": 9061
+    },
+    "rules": {
+      "median_ms": 0.02,
+      "p95_ms": 0.07,
+      "n": 9061
+    },
+    "l2": {
+      "median_ms": 13.42,
+      "p95_ms": 52.83,
+      "n": 9061
+    },
+    "memory": {
+      "median_ms": 0.26,
+      "p95_ms": 0.37,
+      "n": 9061
+    },
+    "session": {
+      "median_ms": 0.0,
+      "p95_ms": 0.0,
+      "n": 9061
+    },
+    "judge": {
+      "median_ms": 109.68,
+      "p95_ms": 283.39,
+      "n": 905
+    },
+    "end_to_end": {
+      "median_ms": 142.32,
+      "p95_ms": 349.78,
+      "n": 9061
+    }
+  },
+  "policy_l2": {
+    "mode": "routed",
+    "xlmr_threshold": 0.9613
+  },
+  "env": {
+    "PEHREDAR_GUARD_MODEL": "hf.co/QuantFactory/Qwen3Guard-Gen-0.6B-GGUF:Q4_K_M",
+    "PEHREDAR_L2_XLMR_DIR": "/app/models/clf_v3_e3",
+    "PEHREDAR_LANGID_MODEL": "/app/models/langid_v2.joblib"
+  }
+}

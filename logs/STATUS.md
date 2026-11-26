@@ -288,3 +288,11 @@ log: logs/v3_eval.log
 started: 2026-11-26T20:52:13+05:00
 v3-eval 2026-11-26T20:59:35+05:00: exited
 v3-eval 2026-11-26T21:01:08+05:00: done; best epoch 3 (threshold 0.9630); results/clf_v3.md, results/clf_v3_metrics.json
+
+job: gateway-eval-v2 + canary-v2
+state: running
+logs: logs/gateway_eval_v2.log, logs/canary_v2.log
+started: 2026-11-26T21:26:23+05:00
+gateway-eval-v2 + canary-v2 2026-11-26T21:32:22+05:00: done; ollama stopped
+gateway-eval-v2 + canary-v2 2026-11-26T21:32:54+05:00: rerun (first attempt: stale container name; bare canary arm hit Ollama before it was ready)
+gateway-eval-v2 + canary-v2 2026-11-26T22:12:00+05:00: done; ollama stopped
