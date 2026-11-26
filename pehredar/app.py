@@ -14,7 +14,7 @@ import httpx
 from fastapi import FastAPI, HTTPException, Header
 from pydantic import BaseModel, Field
 from .normalizer import normalize_text
-from .langid import detect as detect_language
+from .langid import detect_lang
 from .rules import score_rules
 from .output_guard import check_output
 from .policy import Policy, load_policy
@@ -177,7 +177,8 @@ def inspect_text(text: str, session_id: str | None = None, record: bool = True) 
     risk = rules_risk
     scores = {"rules": rules_risk}
     latencies = {"normalization": round(normalization_ms, 3), "rules": round(rules_ms, 3)}
-    language = detect_language(normalized)
+    language, language_prob = detect_lang(normalized)
+    scores["langid_prob"] = round(language_prob, 4)
     if L2_MODELS is not None:
         started = time.perf_counter()
         try:

@@ -16,10 +16,10 @@ DATA = Path("data/processed")
 SETS = [("external_eval", "external_eval.jsonl", None, None), ("injecagent (unseen)", "indirect_eval.jsonl", "injecagent", None),
         ("bipia (unseen)", "indirect_eval.jsonl", "bipia", None), ("xstest FPR", "overrefusal_eval.jsonl", "xstest", None),
         ("or_bench FPR", "overrefusal_eval.jsonl", "or_bench", None), ("benign_email_probe FPR", "benign_email_probe.jsonl", None, None),
-        ("external_translated roman_ur", "external_translated.jsonl", None, "roman_ur"),
-        ("external_translated mixed", "external_translated.jsonl", None, "mixed"),
-        ("overrefusal_translated FPR roman_ur", "overrefusal_translated.jsonl", None, "roman_ur"),
-        ("overrefusal_translated FPR mixed", "overrefusal_translated.jsonl", None, "mixed")]
+        ("external_translated roman_ur", "external_translated_gemini.jsonl", None, "roman_ur"),
+        ("external_translated mixed", "external_translated_gemini.jsonl", None, "mixed"),
+        ("overrefusal_translated FPR roman_ur", "overrefusal_translated_gemini.jsonl", None, "roman_ur"),
+        ("overrefusal_translated FPR mixed", "overrefusal_translated_gemini.jsonl", None, "mixed")]
 LAYERS = ("normalization", "rules", "l2", "memory", "session", "judge")
 
 

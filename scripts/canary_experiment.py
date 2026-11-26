@@ -27,8 +27,8 @@ def prompts():
     en = sorted((r for r in read("external_eval.jsonl") if r["label"] == "attack" and r.get("text")), key=lambda r: r["id"])
     out = [{"lang": "en", "id": r["id"], "set": "external_eval", "text": r["text"]} for r in rng.sample(en, N)]
     for lang in ("roman_ur", "mixed"):
-        ext = sorted((r for r in read("external_translated.jsonl") if r["lang"] == lang and r["label"] == "attack"), key=lambda r: r["id"])
-        dev = sorted((r for r in read("dev_translated_v2.jsonl") if r["lang"] == lang and r["label"] == "attack"), key=lambda r: r["id"])
+        ext = sorted((r for r in read("external_translated_gemini.jsonl") if r["lang"] == lang and r["label"] == "attack"), key=lambda r: r["id"])
+        dev = sorted((r for r in read("dev_translated_v2_gemini.jsonl") if r["lang"] == lang and r["label"] == "attack"), key=lambda r: r["id"])
         picked = [(r, "external_translated") for r in ext[:N]] + [(r, "dev_translated_v2") for r in rng.sample(dev, N - min(N, len(ext)))]
         out += [{"lang": lang, "id": r["id"], "set": s, "text": r["text"]} for r, s in picked]
     return out

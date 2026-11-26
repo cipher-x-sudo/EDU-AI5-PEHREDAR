@@ -49,6 +49,34 @@ def fit():
             "rule_holds": rule, "threshold": t if rule else None}
 
 
+GEMINI_REVIEW = ROOT/"translation_review_gemini.csv"
+
+
+def gemini_lang(row_id):
+    return row_id.rsplit("-", 2)[1]  # <orig_id>-<lang>-gemini
+
+
+def fit_balanced(lang, gemini_scores, cap_share=0.02):
+    """Threshold (reject score < t) for one language, fitted on qwen review rows (good + bad) plus Gemini
+    review rows (all good so far): the t maximising balanced accuracy, then capped so that at most
+    cap_share of all Gemini rows of that language score below it."""
+    rows = [r for r in reviewed() if r["lang"] == lang]
+    rows += [{"verdict": r["verdict"].strip().lower(), "score": gemini_scores[r["id"]], "file": GEMINI_REVIEW.name}
+             for r in csv.DictReader(GEMINI_REVIEW.open(encoding="utf-8-sig")) if r["lang"] == lang]
+    bad = [r["score"] for r in rows if r["verdict"] == "bad"]
+    good = [r["score"] for r in rows if r["verdict"] == "good"]
+    ba = lambda t: (sum(s < t for s in bad) / len(bad) + sum(s >= t for s in good) / len(good)) / 2
+    best = max(sorted({r["score"] for r in rows}), key=lambda t: (round(ba(t), 6), -t))
+    pool = sorted(v for k, v in gemini_scores.items() if gemini_lang(k) == lang)
+    cap = pool[int(cap_share * len(pool))]  # rejecting s < cap removes at most cap_share of the pool
+    t = min(best, cap)
+    return {"lang": lang, "fit_rows": {"qwen_good": sum(r["verdict"] == "good" and r["file"] != GEMINI_REVIEW.name for r in rows),
+                                       "qwen_bad": len(bad), "gemini_good": sum(r["file"] == GEMINI_REVIEW.name and r["verdict"] == "good" for r in rows)},
+            "balanced_accuracy_threshold": best, "balanced_accuracy": round(ba(best), 4),
+            "cap_2pct_of_gemini_rows": cap, "gemini_rows_scored": len(pool), "cap_applied": best > cap, "threshold": t,
+            "balanced_accuracy_at_threshold": round(ba(t), 4)}
+
+
 def verdicts(rows):
     def share(key):
         out = {}

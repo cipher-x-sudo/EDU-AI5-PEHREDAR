@@ -9,6 +9,7 @@ dependencies = [
   "pydantic>=2.9",
   "httpx>=0.27",
   "PyYAML>=6.0",
+  "scikit-learn==1.9.1",  # language-ID router; pinned to the version that trained models/langid_v1.joblib
 ]
 
 [project.optional-dependencies]
