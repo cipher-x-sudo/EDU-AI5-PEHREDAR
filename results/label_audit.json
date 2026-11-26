@@ -1,0 +1,65 @@
+{
+  "benign_rows": 43876,
+  "flagged": 593,
+  "per_source_split": {
+    "aegis2|train": {
+      "flagged": 4,
+      "benign_rows": 841
+    },
+    "deepset_pi|test": {
+      "flagged": 9,
+      "benign_rows": 192
+    },
+    "dolly|dev": {
+      "flagged": 1,
+      "benign_rows": 1088
+    },
+    "enron|train": {
+      "flagged": 1,
+      "benign_rows": 265
+    },
+    "jailbreak_llms|dev": {
+      "flagged": 36,
+      "benign_rows": 445
+    },
+    "jailbreak_llms|train": {
+      "flagged": 515,
+      "benign_rows": 3645
+    },
+    "oasst1|train": {
+      "flagged": 13,
+      "benign_rows": 5836
+    },
+    "spml|dev": {
+      "flagged": 1,
+      "benign_rows": 650
+    },
+    "spml|train": {
+      "flagged": 6,
+      "benign_rows": 4009
+    },
+    "toxicchat|dev": {
+      "flagged": 3,
+      "benign_rows": 181
+    },
+    "toxicchat|train": {
+      "flagged": 4,
+      "benign_rows": 1000
+    }
+  },
+  "per_split_kind": {
+    "dev|both": 2,
+    "dev|e5": 27,
+    "dev|regex": 12,
+    "test|e5": 9,
+    "train|both": 61,
+    "train|e5": 331,
+    "train|regex": 151
+  },
+  "test_flagged": {
+    "test": 9,
+    "overrefusal": 0,
+    "email_probe": 0
+  },
+  "policy": "drop flagged from train and dev; test sets unchanged (metrics with and without flagged rows)"
+}

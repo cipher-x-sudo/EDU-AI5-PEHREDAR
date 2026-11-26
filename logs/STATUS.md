@@ -270,3 +270,7 @@ canary-v1 2026-11-26T03:48:05+05:00: done; bare leaks 81/300, gateway leaks 0/30
 job: gemini-import-v1
 state: done (2026-11-26T19:43:29+05:00)
 result: results/translation_gemini_v1.md; Gemini kept 23,642 / 26,223 attempted pairs (qwen 16,663); review sample data/processed/translation_review_gemini.csv; qwen files untouched
+
+job: v3-data-prep
+state: done (2026-11-26T20:09:02+05:00)
+result: results/translation_gemini_review.md, translation_gemini_v2.md, label_audit.md, langid_v1.md

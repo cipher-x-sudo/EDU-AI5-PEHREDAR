@@ -1,0 +1,347 @@
+{
+  "train_rows": 28662,
+  "model_path": "/app/models/langid_v1.joblib",
+  "model_bytes": 6746616,
+  "low_confidence": 0.6,
+  "sets": {
+    "dev": {
+      "langid_v1": {
+        "n": 8776,
+        "macro_f1": 0.945,
+        "per_class_f1": {
+          "en": 0.9981,
+          "roman_ur": 0.8876,
+          "ur": 1.0,
+          "mixed": 0.8944
+        },
+        "en_vs_non_en_accuracy": 0.9983,
+        "confusion (rows=true, cols=pred; en, roman_ur, ur, mixed)": [
+          [
+            3975,
+            1,
+            0,
+            0
+          ],
+          [
+            5,
+            1366,
+            0,
+            206
+          ],
+          [
+            0,
+            0,
+            1602,
+            0
+          ],
+          [
+            9,
+            134,
+            0,
+            1478
+          ]
+        ]
+      },
+      "langid_v1_routed": {
+        "n": 8776,
+        "macro_f1": 0.9397,
+        "per_class_f1": {
+          "en": 0.9979,
+          "roman_ur": 0.8727,
+          "ur": 0.9988,
+          "mixed": 0.8895
+        },
+        "en_vs_non_en_accuracy": 0.9981,
+        "confusion (rows=true, cols=pred; en, roman_ur, ur, mixed)": [
+          [
+            3963,
+            0,
+            0,
+            13
+          ],
+          [
+            1,
+            1265,
+            0,
+            311
+          ],
+          [
+            0,
+            0,
+            1598,
+            4
+          ],
+          [
+            3,
+            57,
+            0,
+            1561
+          ]
+        ]
+      },
+      "old_8_word": {
+        "n": 8776,
+        "macro_f1": 0.4304,
+        "per_class_f1": {
+          "en": 0.7242,
+          "roman_ur": 0.1053,
+          "ur": 0.8921,
+          "mixed": 0.0
+        },
+        "en_vs_non_en_accuracy": 0.655,
+        "confusion (rows=true, cols=pred; en, roman_ur, ur, mixed)": [
+          [
+            3976,
+            0,
+            0,
+            0
+          ],
+          [
+            1485,
+            92,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            1290,
+            312
+          ],
+          [
+            1543,
+            78,
+            0,
+            0
+          ]
+        ]
+      }
+    },
+    "test": {
+      "langid_v1": {
+        "n": 1636,
+        "macro_f1": 0.9434,
+        "per_class_f1": {
+          "en": 0.9844,
+          "roman_ur": 0.897,
+          "ur": 1.0,
+          "mixed": 0.8921
+        },
+        "en_vs_non_en_accuracy": 0.9902,
+        "confusion (rows=true, cols=pred; en, roman_ur, ur, mixed)": [
+          [
+            506,
+            0,
+            0,
+            0
+          ],
+          [
+            5,
+            331,
+            0,
+            45
+          ],
+          [
+            0,
+            0,
+            373,
+            0
+          ],
+          [
+            11,
+            26,
+            0,
+            339
+          ]
+        ]
+      },
+      "langid_v1_routed": {
+        "n": 1636,
+        "macro_f1": 0.9425,
+        "per_class_f1": {
+          "en": 0.9901,
+          "roman_ur": 0.887,
+          "ur": 0.9973,
+          "mixed": 0.8957
+        },
+        "en_vs_non_en_accuracy": 0.9939,
+        "confusion (rows=true, cols=pred; en, roman_ur, ur, mixed)": [
+          [
+            502,
+            0,
+            0,
+            4
+          ],
+          [
+            3,
+            310,
+            0,
+            68
+          ],
+          [
+            0,
+            0,
+            371,
+            2
+          ],
+          [
+            3,
+            8,
+            0,
+            365
+          ]
+        ]
+      },
+      "old_8_word": {
+        "n": 1636,
+        "macro_f1": 0.3432,
+        "per_class_f1": {
+          "en": 0.5734,
+          "roman_ur": 0.0104,
+          "ur": 0.789,
+          "mixed": 0.0
+        },
+        "en_vs_non_en_accuracy": 0.5397,
+        "confusion (rows=true, cols=pred; en, roman_ur, ur, mixed)": [
+          [
+            506,
+            0,
+            0,
+            0
+          ],
+          [
+            379,
+            2,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            243,
+            130
+          ],
+          [
+            374,
+            2,
+            0,
+            0
+          ]
+        ]
+      }
+    },
+    "overrefusal": {
+      "langid_v1": {
+        "n": 6146,
+        "macro_f1": 0.9484,
+        "per_class_f1": {
+          "en": 0.9997,
+          "roman_ur": 0.8922,
+          "ur": 1.0,
+          "mixed": 0.9018
+        },
+        "en_vs_non_en_accuracy": 0.9998,
+        "confusion (rows=true, cols=pred; en, roman_ur, ur, mixed)": [
+          [
+            1568,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            1291,
+            0,
+            192
+          ],
+          [
+            0,
+            0,
+            1537,
+            0
+          ],
+          [
+            1,
+            120,
+            0,
+            1437
+          ]
+        ]
+      },
+      "langid_v1_routed": {
+        "n": 6146,
+        "macro_f1": 0.9436,
+        "per_class_f1": {
+          "en": 1.0,
+          "roman_ur": 0.8761,
+          "ur": 1.0,
+          "mixed": 0.8981
+        },
+        "en_vs_non_en_accuracy": 1.0,
+        "confusion (rows=true, cols=pred; en, roman_ur, ur, mixed)": [
+          [
+            1568,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            1202,
+            0,
+            281
+          ],
+          [
+            0,
+            0,
+            1537,
+            0
+          ],
+          [
+            0,
+            59,
+            0,
+            1499
+          ]
+        ]
+      },
+      "old_8_word": {
+        "n": 6146,
+        "macro_f1": 0.3936,
+        "per_class_f1": {
+          "en": 0.5158,
+          "roman_ur": 0.0608,
+          "ur": 0.998,
+          "mixed": 0.0
+        },
+        "en_vs_non_en_accuracy": 0.521,
+        "confusion (rows=true, cols=pred; en, roman_ur, ur, mixed)": [
+          [
+            1568,
+            0,
+            0,
+            0
+          ],
+          [
+            1435,
+            48,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            1531,
+            6
+          ],
+          [
+            1509,
+            49,
+            0,
+            0
+          ]
+        ]
+      }
+    }
+  }
+}

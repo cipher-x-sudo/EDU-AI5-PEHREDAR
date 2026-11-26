@@ -1,0 +1,557 @@
+{
+  "source": "data/processed/translated_full_dedup.jsonl",
+  "review": {
+    "rows": 100,
+    "verdicts": {
+      "good": 100
+    },
+    "reviewers": {
+      "claude-suggested": 100
+    },
+    "good_rate_per_lang_label": {
+      "mixed/attack": {
+        "good": 16,
+        "n": 16,
+        "rate": 1.0
+      },
+      "mixed/benign": {
+        "good": 16,
+        "n": 16,
+        "rate": 1.0
+      },
+      "roman_ur/attack": {
+        "good": 17,
+        "n": 17,
+        "rate": 1.0
+      },
+      "roman_ur/benign": {
+        "good": 17,
+        "n": 17,
+        "rate": 1.0
+      },
+      "ur/attack": {
+        "good": 17,
+        "n": 17,
+        "rate": 1.0
+      },
+      "ur/benign": {
+        "good": 17,
+        "n": 17,
+        "rate": 1.0
+      }
+    },
+    "notes_flagging_labels": [
+      {
+        "id": "jailbreak_llms-2497-ur-gemini",
+        "note": "good translation; LABEL_SUSPECT: DAN jailbreak marked benign in source - check label"
+      }
+    ]
+  },
+  "labse_fits": {
+    "roman_ur": {
+      "lang": "roman_ur",
+      "fit_rows": {
+        "qwen_good": 50,
+        "qwen_bad": 30,
+        "gemini_good": 34
+      },
+      "balanced_accuracy_threshold": 0.646,
+      "balanced_accuracy": 0.7393,
+      "cap_2pct_of_gemini_rows": 0.2863,
+      "gemini_rows_scored": 8733,
+      "cap_applied": true,
+      "threshold": 0.2863,
+      "balanced_accuracy_at_threshold": 0.55
+    },
+    "ur": {
+      "lang": "ur",
+      "fit_rows": {
+        "qwen_good": 40,
+        "qwen_bad": 37,
+        "gemini_good": 34
+      },
+      "balanced_accuracy_threshold": 0.8186,
+      "balanced_accuracy": 0.7703,
+      "cap_2pct_of_gemini_rows": 0.7694,
+      "gemini_rows_scored": 8733,
+      "cap_applied": true,
+      "threshold": 0.7694,
+      "balanced_accuracy_at_threshold": 0.7365
+    },
+    "mixed": {
+      "lang": "mixed",
+      "fit_rows": {
+        "qwen_good": 59,
+        "qwen_bad": 14,
+        "gemini_good": 32
+      },
+      "balanced_accuracy_threshold": 0.7456,
+      "balanced_accuracy": 0.7363,
+      "cap_2pct_of_gemini_rows": 0.5229,
+      "gemini_rows_scored": 8734,
+      "cap_applied": true,
+      "threshold": 0.5229,
+      "balanced_accuracy_at_threshold": 0.5604
+    }
+  },
+  "labse_old": {
+    "roman_ur": 0.5168
+  },
+  "labse_drops_old_vs_new": {
+    "train": {
+      "roman_ur": {
+        "old": 417,
+        "new": 62,
+        "reached_labse": 4595
+      },
+      "ur": {
+        "old": 0,
+        "new": 100,
+        "reached_labse": 4642
+      },
+      "mixed": {
+        "old": 0,
+        "new": 99,
+        "reached_labse": 4686
+      }
+    },
+    "dev": {
+      "roman_ur": {
+        "old": 181,
+        "new": 37,
+        "reached_labse": 1614
+      },
+      "ur": {
+        "old": 0,
+        "new": 32,
+        "reached_labse": 1634
+      },
+      "mixed": {
+        "old": 0,
+        "new": 47,
+        "reached_labse": 1668
+      }
+    },
+    "external": {
+      "roman_ur": {
+        "old": 30,
+        "new": 2,
+        "reached_labse": 383
+      },
+      "ur": {
+        "old": 0,
+        "new": 9,
+        "reached_labse": 382
+      },
+      "mixed": {
+        "old": 0,
+        "new": 6,
+        "reached_labse": 382
+      }
+    },
+    "overrefusal": {
+      "roman_ur": {
+        "old": 384,
+        "new": 57,
+        "reached_labse": 1540
+      },
+      "ur": {
+        "old": 0,
+        "new": 28,
+        "reached_labse": 1565
+      },
+      "mixed": {
+        "old": 0,
+        "new": 5,
+        "reached_labse": 1563
+      }
+    }
+  },
+  "totals": {
+    "attempted_pairs": 26223,
+    "gemini_returned": 26200,
+    "qwen_kept": 16663,
+    "gemini_kept": 24170
+  },
+  "per_set_lang_label": {
+    "train": {
+      "roman_ur/attack": {
+        "attempted_pairs": 2500,
+        "gemini_returned": 2495,
+        "qwen_kept": 926,
+        "qwen_rate": 0.3704,
+        "gemini_kept": 2226,
+        "gemini_rate": 0.8904
+      },
+      "roman_ur/benign": {
+        "attempted_pairs": 2500,
+        "gemini_returned": 2500,
+        "qwen_kept": 1505,
+        "qwen_rate": 0.602,
+        "gemini_kept": 2307,
+        "gemini_rate": 0.9228
+      },
+      "ur/attack": {
+        "attempted_pairs": 2500,
+        "gemini_returned": 2494,
+        "qwen_kept": 1289,
+        "qwen_rate": 0.5156,
+        "gemini_kept": 2224,
+        "gemini_rate": 0.8896
+      },
+      "ur/benign": {
+        "attempted_pairs": 2500,
+        "gemini_returned": 2500,
+        "qwen_kept": 1831,
+        "qwen_rate": 0.7324,
+        "gemini_kept": 2318,
+        "gemini_rate": 0.9272
+      },
+      "mixed/attack": {
+        "attempted_pairs": 2500,
+        "gemini_returned": 2495,
+        "qwen_kept": 1194,
+        "qwen_rate": 0.4776,
+        "gemini_kept": 2251,
+        "gemini_rate": 0.9004
+      },
+      "mixed/benign": {
+        "attempted_pairs": 2500,
+        "gemini_returned": 2500,
+        "qwen_kept": 1955,
+        "qwen_rate": 0.782,
+        "gemini_kept": 2336,
+        "gemini_rate": 0.9344
+      }
+    },
+    "dev": {
+      "roman_ur/attack": {
+        "attempted_pairs": 700,
+        "gemini_returned": 699,
+        "qwen_kept": 300,
+        "qwen_rate": 0.4286,
+        "gemini_kept": 613,
+        "gemini_rate": 0.8757
+      },
+      "roman_ur/benign": {
+        "attempted_pairs": 1050,
+        "gemini_returned": 1050,
+        "qwen_kept": 647,
+        "qwen_rate": 0.6162,
+        "gemini_kept": 964,
+        "gemini_rate": 0.9181
+      },
+      "ur/attack": {
+        "attempted_pairs": 700,
+        "gemini_returned": 699,
+        "qwen_kept": 393,
+        "qwen_rate": 0.5614,
+        "gemini_kept": 627,
+        "gemini_rate": 0.8957
+      },
+      "ur/benign": {
+        "attempted_pairs": 1050,
+        "gemini_returned": 1050,
+        "qwen_kept": 771,
+        "qwen_rate": 0.7343,
+        "gemini_kept": 975,
+        "gemini_rate": 0.9286
+      },
+      "mixed/attack": {
+        "attempted_pairs": 700,
+        "gemini_returned": 699,
+        "qwen_kept": 379,
+        "qwen_rate": 0.5414,
+        "gemini_kept": 632,
+        "gemini_rate": 0.9029
+      },
+      "mixed/benign": {
+        "attempted_pairs": 1050,
+        "gemini_returned": 1050,
+        "qwen_kept": 834,
+        "qwen_rate": 0.7943,
+        "gemini_kept": 989,
+        "gemini_rate": 0.9419
+      }
+    },
+    "external": {
+      "roman_ur/attack": {
+        "attempted_pairs": 138,
+        "gemini_returned": 138,
+        "qwen_kept": 40,
+        "qwen_rate": 0.2899,
+        "gemini_kept": 119,
+        "gemini_rate": 0.8623
+      },
+      "roman_ur/benign": {
+        "attempted_pairs": 287,
+        "gemini_returned": 287,
+        "qwen_kept": 115,
+        "qwen_rate": 0.4007,
+        "gemini_kept": 262,
+        "gemini_rate": 0.9129
+      },
+      "ur/attack": {
+        "attempted_pairs": 138,
+        "gemini_returned": 138,
+        "qwen_kept": 62,
+        "qwen_rate": 0.4493,
+        "gemini_kept": 122,
+        "gemini_rate": 0.8841
+      },
+      "ur/benign": {
+        "attempted_pairs": 287,
+        "gemini_returned": 287,
+        "qwen_kept": 165,
+        "qwen_rate": 0.5749,
+        "gemini_kept": 251,
+        "gemini_rate": 0.8746
+      },
+      "mixed/attack": {
+        "attempted_pairs": 138,
+        "gemini_returned": 138,
+        "qwen_kept": 48,
+        "qwen_rate": 0.3478,
+        "gemini_kept": 120,
+        "gemini_rate": 0.8696
+      },
+      "mixed/benign": {
+        "attempted_pairs": 287,
+        "gemini_returned": 287,
+        "qwen_kept": 155,
+        "qwen_rate": 0.5401,
+        "gemini_kept": 256,
+        "gemini_rate": 0.892
+      }
+    },
+    "overrefusal": {
+      "roman_ur/benign": {
+        "attempted_pairs": 1566,
+        "gemini_returned": 1564,
+        "qwen_kept": 1147,
+        "qwen_rate": 0.7324,
+        "gemini_kept": 1483,
+        "gemini_rate": 0.947
+      },
+      "ur/benign": {
+        "attempted_pairs": 1566,
+        "gemini_returned": 1565,
+        "qwen_kept": 1473,
+        "qwen_rate": 0.9406,
+        "gemini_kept": 1537,
+        "gemini_rate": 0.9815
+      },
+      "mixed/benign": {
+        "attempted_pairs": 1566,
+        "gemini_returned": 1565,
+        "qwen_kept": 1434,
+        "qwen_rate": 0.9157,
+        "gemini_kept": 1558,
+        "gemini_rate": 0.9949
+      }
+    }
+  },
+  "gemini_removed_per_stage": {
+    "train": {
+      "validator": {
+        "roman_ur": 250,
+        "ur": 219,
+        "mixed": 193,
+        "reasons": {
+          "marker words": 216,
+          "script check": 196,
+          "mixed markers": 152,
+          "PII": 88,
+          "refusal": 20
+        }
+      },
+      "v3_checks": {
+        "roman_ur": 150,
+        "ur": 133,
+        "mixed": 115,
+        "reasons": {
+          "repetition": 158,
+          "truncated": 122,
+          "untranslated": 106,
+          "answered": 13,
+          "wrong_script": 5
+        }
+      },
+      "script_check": {
+        "roman_ur": 0,
+        "ur": 0,
+        "mixed": 1,
+        "reasons": {
+          "CJK": 1
+        }
+      },
+      "labse": {
+        "roman_ur": 62,
+        "ur": 100,
+        "mixed": 99,
+        "reasons": {
+          "labse<0.7694": 100,
+          "labse<0.5229": 99,
+          "labse<0.2863": 62
+        }
+      }
+    },
+    "dev": {
+      "validator": {
+        "roman_ur": 88,
+        "ur": 70,
+        "mixed": 48,
+        "reasons": {
+          "marker words": 79,
+          "script check": 66,
+          "mixed markers": 37,
+          "PII": 28,
+          "refusal": 6
+        }
+      },
+      "v3_checks": {
+        "roman_ur": 47,
+        "ur": 44,
+        "mixed": 33,
+        "reasons": {
+          "repetition": 44,
+          "truncated": 42,
+          "untranslated": 31,
+          "wrong_script": 5,
+          "answered": 2
+        }
+      },
+      "script_check": {
+        "roman_ur": 0,
+        "ur": 1,
+        "mixed": 0,
+        "reasons": {
+          "CYRILLIC": 1
+        }
+      },
+      "labse": {
+        "roman_ur": 37,
+        "ur": 32,
+        "mixed": 47,
+        "reasons": {
+          "labse<0.5229": 47,
+          "labse<0.2863": 37,
+          "labse<0.7694": 32
+        }
+      }
+    },
+    "external": {
+      "validator": {
+        "roman_ur": 24,
+        "ur": 29,
+        "mixed": 21,
+        "reasons": {
+          "script check": 22,
+          "PII": 21,
+          "marker words": 14,
+          "mixed markers": 10,
+          "refusal": 9
+        }
+      },
+      "v3_checks": {
+        "roman_ur": 18,
+        "ur": 14,
+        "mixed": 22,
+        "reasons": {
+          "repetition": 24,
+          "untranslated": 17,
+          "truncated": 9,
+          "wrong_script": 6
+        }
+      },
+      "script_check": {
+        "roman_ur": 0,
+        "ur": 0,
+        "mixed": 0,
+        "reasons": {}
+      },
+      "labse": {
+        "roman_ur": 2,
+        "ur": 9,
+        "mixed": 6,
+        "reasons": {
+          "labse<0.7694": 9,
+          "labse<0.5229": 6,
+          "labse<0.2863": 2
+        }
+      }
+    },
+    "overrefusal": {
+      "validator": {
+        "roman_ur": 24,
+        "ur": 0,
+        "mixed": 2,
+        "reasons": {
+          "marker words": 23,
+          "PII": 2,
+          "mixed markers": 1
+        }
+      },
+      "v3_checks": {
+        "roman_ur": 0,
+        "ur": 0,
+        "mixed": 0,
+        "reasons": {}
+      },
+      "script_check": {
+        "roman_ur": 0,
+        "ur": 0,
+        "mixed": 0,
+        "reasons": {}
+      },
+      "labse": {
+        "roman_ur": 57,
+        "ur": 28,
+        "mixed": 5,
+        "reasons": {
+          "labse<0.2863": 57,
+          "labse<0.7694": 28,
+          "labse<0.5229": 5
+        }
+      }
+    }
+  },
+  "missing_pairs": {
+    "train": [
+      "wildjailbreak-2476-mixed",
+      "wildjailbreak-2476-roman_ur",
+      "wildjailbreak-2476-ur",
+      "wildjailbreak-3909-mixed",
+      "wildjailbreak-3909-roman_ur",
+      "wildjailbreak-3909-ur",
+      "wildjailbreak-4092-mixed",
+      "wildjailbreak-4092-roman_ur",
+      "wildjailbreak-4092-ur",
+      "wildjailbreak-7903-ur",
+      "wildjailbreak-824-mixed",
+      "wildjailbreak-824-roman_ur",
+      "wildjailbreak-824-ur",
+      "wildjailbreak-973-mixed",
+      "wildjailbreak-973-roman_ur",
+      "wildjailbreak-973-ur"
+    ],
+    "dev": [
+      "wildjailbreak-2504-mixed",
+      "wildjailbreak-2504-roman_ur",
+      "wildjailbreak-2504-ur"
+    ],
+    "external": [],
+    "overrefusal": [
+      "or_bench-158-roman_ur",
+      "or_bench-167-mixed",
+      "or_bench-167-roman_ur",
+      "or_bench-167-ur"
+    ]
+  },
+  "review_sample": {
+    "path": "data/processed/translation_review_gemini.csv",
+    "cells": {
+      "kept_existing_file": true
+    }
+  }
+}
