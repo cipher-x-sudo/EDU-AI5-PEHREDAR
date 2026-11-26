@@ -185,9 +185,12 @@ def conclusion(out):
     parts = []
     for lang in ("roman_ur", "ur", "mixed"):
         o = out["main"][f"overrefusal|{lang}"]; t = out["main"][f"test|{lang}"]; sig = out["significance"][lang]["routed_v3_vs_deberta"]
+        p = "p<1e-6" if sig["p_value"] < 1e-6 else f"p={sig['p_value']:.3g}"
         parts.append(f"on {lang}, routed_v3 over-blocks {o['routed_v3']['fpr']:.1%} of benign overrefusal prompts vs DeBERTa "
-                     f"{o['deberta']['fpr']:.1%}, with test recall {t['routed_v3']['recall']:.1%} vs {t['deberta']['recall']:.1%} "
-                     f"({'significant' if sig['significant_0.05'] else 'not significant'} overall difference, McNemar p={sig['p_value']:.3g})")
+                     f"{o['deberta']['fpr']:.1%} (routed_v2 {o['routed_v2']['fpr']:.1%}), with test recall {t['routed_v3']['recall']:.1%} "
+                     f"vs DeBERTa {t['deberta']['recall']:.1%} at test FPR {t['routed_v3']['fpr']:.1%} vs {t['deberta']['fpr']:.1%}; "
+                     f"per-row correctness differs {'significantly' if sig['significant_0.05'] else 'not significantly'} "
+                     f"(McNemar {p}; routed_v3 right where DeBERTa wrong {sig['a_right_b_wrong']}, the reverse {sig['b_right_a_wrong']})")
     en = out["main"]["test|en"]; eo = out["main"]["overrefusal|en"]
     return ("In plain terms: " + "; ".join(parts) + f". On English, routed_v3 sends text to DeBERTa, so it keeps DeBERTa's behaviour "
             f"(test recall {en['routed_v3']['recall']:.1%}, overrefusal FPR {eo['routed_v3']['fpr']:.1%}); v3 alone on English has "
@@ -223,7 +226,7 @@ def render(out):
               "| Lang | Comparison | A right, B wrong | B right, A wrong | p | Significant at 0.05 |", "|---|---|---:|---:|---:|---|"]
     for lang, comps in out["significance"].items():
         for name, c in comps.items():
-            lines.append(f"| {lang} | {name.replace('_vs_', ' vs ')} | {c['a_right_b_wrong']} | {c['b_right_a_wrong']} | {c['p_value']:.3g} | {'yes' if c['significant_0.05'] else 'no'} |")
+            lines.append(f"| {lang} | {name.replace('_vs_', ' vs ')} | {c['a_right_b_wrong']} | {c['b_right_a_wrong']} | {'<1e-6' if c['p_value'] < 1e-6 else format(c['p_value'], '.3g')} | {'yes' if c['significant_0.05'] else 'no'} |")
     lines += ["", "## Router impact: routed_v3 with langid_v1 vs oracle language", "",
               "| Set | Lang | langid_v1 routed as | routed_v3 recall | routed_v3_oracle recall | routed_v3 FPR | routed_v3_oracle FPR |", "|---|---|---|---|---|---|---|"]
     for key, r in out["router"].items():
