@@ -274,3 +274,17 @@ result: results/translation_gemini_v1.md; Gemini kept 23,642 / 26,223 attempted 
 job: v3-data-prep
 state: done (2026-11-26T20:09:02+05:00)
 result: results/translation_gemini_review.md, translation_gemini_v2.md, label_audit.md, langid_v1.md
+
+job: v3-train
+state: running (detached container pehredar-v3-train)
+log: logs/v3_train.log
+started: 2026-11-26T20:15:56+05:00
+plan: XLM-R base, encoder v2, train_v3.jsonl (53,348 rows), 3 epochs, checkpoint per epoch models/clf_v3_e{1,2,3}; data commit 4ba5be1
+v3-train 2026-11-26T20:52:13+05:00: exited (code 0)
+
+job: v3-eval
+state: running
+log: logs/v3_eval.log
+started: 2026-11-26T20:52:13+05:00
+v3-eval 2026-11-26T20:59:35+05:00: exited
+v3-eval 2026-11-26T21:01:08+05:00: done; best epoch 3 (threshold 0.9630); results/clf_v3.md, results/clf_v3_metrics.json

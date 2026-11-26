@@ -1,0 +1,1958 @@
+{
+  "best_epoch_dir": "models/clf_v3_e3",
+  "epochs": {
+    "models/clf_v3_e1": {
+      "epoch": 1,
+      "threshold": 0.9616084694862366,
+      "dev_recall_at_2pct_fpr": 0.8372,
+      "dev_attacks": 2647,
+      "dev_per_lang_fpr": {
+        "en": {
+          "fp": 26,
+          "benign": 2330,
+          "fpr": 0.0112,
+          "ci": [
+            0.0076,
+            0.0163
+          ]
+        },
+        "roman_ur": {
+          "fp": 33,
+          "benign": 936,
+          "fpr": 0.0353,
+          "ci": [
+            0.0252,
+            0.0491
+          ]
+        },
+        "ur": {
+          "fp": 17,
+          "benign": 943,
+          "fpr": 0.018,
+          "ci": [
+            0.0113,
+            0.0287
+          ]
+        },
+        "mixed": {
+          "fp": 28,
+          "benign": 968,
+          "fpr": 0.0289,
+          "ci": [
+            0.0201,
+            0.0415
+          ]
+        }
+      },
+      "training_seconds_cumulative": 724,
+      "peak_vram_gb": 5.24
+    },
+    "models/clf_v3_e2": {
+      "epoch": 2,
+      "threshold": 0.9355581998825073,
+      "dev_recall_at_2pct_fpr": 0.8617,
+      "dev_attacks": 2647,
+      "dev_per_lang_fpr": {
+        "en": {
+          "fp": 14,
+          "benign": 2330,
+          "fpr": 0.006,
+          "ci": [
+            0.0036,
+            0.0101
+          ]
+        },
+        "roman_ur": {
+          "fp": 27,
+          "benign": 936,
+          "fpr": 0.0288,
+          "ci": [
+            0.0199,
+            0.0416
+          ]
+        },
+        "ur": {
+          "fp": 41,
+          "benign": 943,
+          "fpr": 0.0435,
+          "ci": [
+            0.0322,
+            0.0585
+          ]
+        },
+        "mixed": {
+          "fp": 22,
+          "benign": 968,
+          "fpr": 0.0227,
+          "ci": [
+            0.0151,
+            0.0342
+          ]
+        }
+      },
+      "training_seconds_cumulative": 1441,
+      "peak_vram_gb": 5.24
+    },
+    "models/clf_v3_e3": {
+      "epoch": 3,
+      "threshold": 0.9629704356193542,
+      "dev_recall_at_2pct_fpr": 0.8727,
+      "dev_attacks": 2647,
+      "dev_per_lang_fpr": {
+        "en": {
+          "fp": 20,
+          "benign": 2330,
+          "fpr": 0.0086,
+          "ci": [
+            0.0056,
+            0.0132
+          ]
+        },
+        "roman_ur": {
+          "fp": 29,
+          "benign": 936,
+          "fpr": 0.031,
+          "ci": [
+            0.0217,
+            0.0441
+          ]
+        },
+        "ur": {
+          "fp": 34,
+          "benign": 943,
+          "fpr": 0.0361,
+          "ci": [
+            0.0259,
+            0.05
+          ]
+        },
+        "mixed": {
+          "fp": 21,
+          "benign": 968,
+          "fpr": 0.0217,
+          "ci": [
+            0.0142,
+            0.0329
+          ]
+        }
+      },
+      "training_seconds_cumulative": 2155,
+      "peak_vram_gb": 5.24
+    }
+  },
+  "thresholds": {
+    "deberta": 0.5,
+    "v2": 0.738341212272644,
+    "v3": 0.9629704356193542
+  },
+  "main": {
+    "test|en": {
+      "deberta": {
+        "attacks": 197,
+        "benign": 309,
+        "tp": 136,
+        "fp": 5,
+        "recall": 0.6904,
+        "recall_ci": [
+          0.6227,
+          0.7508
+        ],
+        "fpr": 0.0162,
+        "fpr_ci": [
+          0.0069,
+          0.0373
+        ],
+        "f1": 0.8047,
+        "auroc": 0.9316
+      },
+      "v2": {
+        "attacks": 197,
+        "benign": 309,
+        "tp": 160,
+        "fp": 14,
+        "recall": 0.8122,
+        "recall_ci": [
+          0.7519,
+          0.8606
+        ],
+        "fpr": 0.0453,
+        "fpr_ci": [
+          0.0272,
+          0.0746
+        ],
+        "f1": 0.8625,
+        "auroc": 0.9489
+      },
+      "v3": {
+        "attacks": 197,
+        "benign": 309,
+        "tp": 141,
+        "fp": 4,
+        "recall": 0.7157,
+        "recall_ci": [
+          0.6491,
+          0.7741
+        ],
+        "fpr": 0.0129,
+        "fpr_ci": [
+          0.005,
+          0.0328
+        ],
+        "f1": 0.8246,
+        "auroc": 0.9431
+      },
+      "routed_v2": {
+        "attacks": 197,
+        "benign": 309,
+        "tp": 135,
+        "fp": 5,
+        "recall": 0.6853,
+        "recall_ci": [
+          0.6174,
+          0.7461
+        ],
+        "fpr": 0.0162,
+        "fpr_ci": [
+          0.0069,
+          0.0373
+        ],
+        "f1": 0.8012,
+        "auroc": 0.9304
+      },
+      "routed_v3": {
+        "attacks": 197,
+        "benign": 309,
+        "tp": 135,
+        "fp": 5,
+        "recall": 0.6853,
+        "recall_ci": [
+          0.6174,
+          0.7461
+        ],
+        "fpr": 0.0162,
+        "fpr_ci": [
+          0.0069,
+          0.0373
+        ],
+        "f1": 0.8012,
+        "auroc": 0.9306
+      },
+      "routed_v3_oracle": {
+        "attacks": 197,
+        "benign": 309,
+        "tp": 136,
+        "fp": 5,
+        "recall": 0.6904,
+        "recall_ci": [
+          0.6227,
+          0.7508
+        ],
+        "fpr": 0.0162,
+        "fpr_ci": [
+          0.0069,
+          0.0373
+        ],
+        "f1": 0.8047,
+        "auroc": 0.9316
+      },
+      "max_deberta_v3": {
+        "attacks": 197,
+        "benign": 309,
+        "tp": 157,
+        "fp": 8,
+        "recall": 0.797,
+        "recall_ci": [
+          0.7354,
+          0.8472
+        ],
+        "fpr": 0.0259,
+        "fpr_ci": [
+          0.0132,
+          0.0502
+        ],
+        "f1": 0.8674,
+        "auroc": 0.9483
+      }
+    },
+    "test|roman_ur": {
+      "deberta": {
+        "attacks": 119,
+        "benign": 262,
+        "tp": 72,
+        "fp": 21,
+        "recall": 0.605,
+        "recall_ci": [
+          0.5152,
+          0.6883
+        ],
+        "fpr": 0.0802,
+        "fpr_ci": [
+          0.053,
+          0.1194
+        ],
+        "f1": 0.6792,
+        "auroc": 0.8239
+      },
+      "v2": {
+        "attacks": 119,
+        "benign": 262,
+        "tp": 82,
+        "fp": 15,
+        "recall": 0.6891,
+        "recall_ci": [
+          0.6011,
+          0.7652
+        ],
+        "fpr": 0.0573,
+        "fpr_ci": [
+          0.035,
+          0.0923
+        ],
+        "f1": 0.7593,
+        "auroc": 0.9013
+      },
+      "v3": {
+        "attacks": 119,
+        "benign": 262,
+        "tp": 73,
+        "fp": 6,
+        "recall": 0.6134,
+        "recall_ci": [
+          0.5237,
+          0.6961
+        ],
+        "fpr": 0.0229,
+        "fpr_ci": [
+          0.0105,
+          0.0491
+        ],
+        "f1": 0.7374,
+        "auroc": 0.9064
+      },
+      "routed_v2": {
+        "attacks": 119,
+        "benign": 262,
+        "tp": 82,
+        "fp": 15,
+        "recall": 0.6891,
+        "recall_ci": [
+          0.6011,
+          0.7652
+        ],
+        "fpr": 0.0573,
+        "fpr_ci": [
+          0.035,
+          0.0923
+        ],
+        "f1": 0.7593,
+        "auroc": 0.9017
+      },
+      "routed_v3": {
+        "attacks": 119,
+        "benign": 262,
+        "tp": 73,
+        "fp": 6,
+        "recall": 0.6134,
+        "recall_ci": [
+          0.5237,
+          0.6961
+        ],
+        "fpr": 0.0229,
+        "fpr_ci": [
+          0.0105,
+          0.0491
+        ],
+        "f1": 0.7374,
+        "auroc": 0.9069
+      },
+      "routed_v3_oracle": {
+        "attacks": 119,
+        "benign": 262,
+        "tp": 73,
+        "fp": 6,
+        "recall": 0.6134,
+        "recall_ci": [
+          0.5237,
+          0.6961
+        ],
+        "fpr": 0.0229,
+        "fpr_ci": [
+          0.0105,
+          0.0491
+        ],
+        "f1": 0.7374,
+        "auroc": 0.9064
+      },
+      "max_deberta_v3": {
+        "attacks": 119,
+        "benign": 262,
+        "tp": 93,
+        "fp": 26,
+        "recall": 0.7815,
+        "recall_ci": [
+          0.6991,
+          0.8463
+        ],
+        "fpr": 0.0992,
+        "fpr_ci": [
+          0.0686,
+          0.1414
+        ],
+        "f1": 0.7815,
+        "auroc": 0.8982
+      }
+    },
+    "test|ur": {
+      "deberta": {
+        "attacks": 122,
+        "benign": 251,
+        "tp": 109,
+        "fp": 195,
+        "recall": 0.8934,
+        "recall_ci": [
+          0.8262,
+          0.9367
+        ],
+        "fpr": 0.7769,
+        "fpr_ci": [
+          0.7214,
+          0.824
+        ],
+        "f1": 0.5117,
+        "auroc": 0.6588
+      },
+      "v2": {
+        "attacks": 122,
+        "benign": 251,
+        "tp": 89,
+        "fp": 28,
+        "recall": 0.7295,
+        "recall_ci": [
+          0.6446,
+          0.8004
+        ],
+        "fpr": 0.1116,
+        "fpr_ci": [
+          0.0783,
+          0.1565
+        ],
+        "f1": 0.7448,
+        "auroc": 0.8854
+      },
+      "v3": {
+        "attacks": 122,
+        "benign": 251,
+        "tp": 72,
+        "fp": 14,
+        "recall": 0.5902,
+        "recall_ci": [
+          0.5014,
+          0.6734
+        ],
+        "fpr": 0.0558,
+        "fpr_ci": [
+          0.0335,
+          0.0914
+        ],
+        "f1": 0.6923,
+        "auroc": 0.8766
+      },
+      "routed_v2": {
+        "attacks": 122,
+        "benign": 251,
+        "tp": 89,
+        "fp": 28,
+        "recall": 0.7295,
+        "recall_ci": [
+          0.6446,
+          0.8004
+        ],
+        "fpr": 0.1116,
+        "fpr_ci": [
+          0.0783,
+          0.1565
+        ],
+        "f1": 0.7448,
+        "auroc": 0.8854
+      },
+      "routed_v3": {
+        "attacks": 122,
+        "benign": 251,
+        "tp": 72,
+        "fp": 14,
+        "recall": 0.5902,
+        "recall_ci": [
+          0.5014,
+          0.6734
+        ],
+        "fpr": 0.0558,
+        "fpr_ci": [
+          0.0335,
+          0.0914
+        ],
+        "f1": 0.6923,
+        "auroc": 0.8766
+      },
+      "routed_v3_oracle": {
+        "attacks": 122,
+        "benign": 251,
+        "tp": 72,
+        "fp": 14,
+        "recall": 0.5902,
+        "recall_ci": [
+          0.5014,
+          0.6734
+        ],
+        "fpr": 0.0558,
+        "fpr_ci": [
+          0.0335,
+          0.0914
+        ],
+        "f1": 0.6923,
+        "auroc": 0.8766
+      },
+      "max_deberta_v3": {
+        "attacks": 122,
+        "benign": 251,
+        "tp": 114,
+        "fp": 198,
+        "recall": 0.9344,
+        "recall_ci": [
+          0.8759,
+          0.9664
+        ],
+        "fpr": 0.7888,
+        "fpr_ci": [
+          0.7342,
+          0.8348
+        ],
+        "f1": 0.5253,
+        "auroc": 0.6681
+      }
+    },
+    "test|mixed": {
+      "deberta": {
+        "attacks": 120,
+        "benign": 256,
+        "tp": 71,
+        "fp": 18,
+        "recall": 0.5917,
+        "recall_ci": [
+          0.5022,
+          0.6754
+        ],
+        "fpr": 0.0703,
+        "fpr_ci": [
+          0.0449,
+          0.1084
+        ],
+        "f1": 0.6794,
+        "auroc": 0.8428
+      },
+      "v2": {
+        "attacks": 120,
+        "benign": 256,
+        "tp": 84,
+        "fp": 20,
+        "recall": 0.7,
+        "recall_ci": [
+          0.6128,
+          0.7747
+        ],
+        "fpr": 0.0781,
+        "fpr_ci": [
+          0.0511,
+          0.1176
+        ],
+        "f1": 0.75,
+        "auroc": 0.9034
+      },
+      "v3": {
+        "attacks": 120,
+        "benign": 256,
+        "tp": 79,
+        "fp": 6,
+        "recall": 0.6583,
+        "recall_ci": [
+          0.5697,
+          0.7371
+        ],
+        "fpr": 0.0234,
+        "fpr_ci": [
+          0.0108,
+          0.0502
+        ],
+        "f1": 0.7707,
+        "auroc": 0.9158
+      },
+      "routed_v2": {
+        "attacks": 120,
+        "benign": 256,
+        "tp": 84,
+        "fp": 20,
+        "recall": 0.7,
+        "recall_ci": [
+          0.6128,
+          0.7747
+        ],
+        "fpr": 0.0781,
+        "fpr_ci": [
+          0.0511,
+          0.1176
+        ],
+        "f1": 0.75,
+        "auroc": 0.9037
+      },
+      "routed_v3": {
+        "attacks": 120,
+        "benign": 256,
+        "tp": 79,
+        "fp": 6,
+        "recall": 0.6583,
+        "recall_ci": [
+          0.5697,
+          0.7371
+        ],
+        "fpr": 0.0234,
+        "fpr_ci": [
+          0.0108,
+          0.0502
+        ],
+        "f1": 0.7707,
+        "auroc": 0.9161
+      },
+      "routed_v3_oracle": {
+        "attacks": 120,
+        "benign": 256,
+        "tp": 79,
+        "fp": 6,
+        "recall": 0.6583,
+        "recall_ci": [
+          0.5697,
+          0.7371
+        ],
+        "fpr": 0.0234,
+        "fpr_ci": [
+          0.0108,
+          0.0502
+        ],
+        "f1": 0.7707,
+        "auroc": 0.9158
+      },
+      "max_deberta_v3": {
+        "attacks": 120,
+        "benign": 256,
+        "tp": 90,
+        "fp": 24,
+        "recall": 0.75,
+        "recall_ci": [
+          0.6656,
+          0.8189
+        ],
+        "fpr": 0.0938,
+        "fpr_ci": [
+          0.0638,
+          0.1357
+        ],
+        "f1": 0.7692,
+        "auroc": 0.9046
+      }
+    },
+    "overrefusal|en": {
+      "deberta": {
+        "attacks": 0,
+        "benign": 1568,
+        "tp": 0,
+        "fp": 86,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.0548,
+        "fpr_ci": [
+          0.0446,
+          0.0672
+        ],
+        "f1": null,
+        "auroc": null
+      },
+      "v2": {
+        "attacks": 0,
+        "benign": 1568,
+        "tp": 0,
+        "fp": 268,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.1709,
+        "fpr_ci": [
+          0.1531,
+          0.1903
+        ],
+        "f1": null,
+        "auroc": null
+      },
+      "v3": {
+        "attacks": 0,
+        "benign": 1568,
+        "tp": 0,
+        "fp": 143,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.0912,
+        "fpr_ci": [
+          0.0779,
+          0.1065
+        ],
+        "f1": null,
+        "auroc": null
+      },
+      "routed_v2": {
+        "attacks": 0,
+        "benign": 1568,
+        "tp": 0,
+        "fp": 86,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.0548,
+        "fpr_ci": [
+          0.0446,
+          0.0672
+        ],
+        "f1": null,
+        "auroc": null
+      },
+      "routed_v3": {
+        "attacks": 0,
+        "benign": 1568,
+        "tp": 0,
+        "fp": 86,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.0548,
+        "fpr_ci": [
+          0.0446,
+          0.0672
+        ],
+        "f1": null,
+        "auroc": null
+      },
+      "routed_v3_oracle": {
+        "attacks": 0,
+        "benign": 1568,
+        "tp": 0,
+        "fp": 86,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.0548,
+        "fpr_ci": [
+          0.0446,
+          0.0672
+        ],
+        "f1": null,
+        "auroc": null
+      },
+      "max_deberta_v3": {
+        "attacks": 0,
+        "benign": 1568,
+        "tp": 0,
+        "fp": 200,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.1276,
+        "fpr_ci": [
+          0.1119,
+          0.145
+        ],
+        "f1": null,
+        "auroc": null
+      }
+    },
+    "overrefusal|roman_ur": {
+      "deberta": {
+        "attacks": 0,
+        "benign": 1483,
+        "tp": 0,
+        "fp": 697,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.47,
+        "fpr_ci": [
+          0.4447,
+          0.4954
+        ],
+        "f1": null,
+        "auroc": null
+      },
+      "v2": {
+        "attacks": 0,
+        "benign": 1483,
+        "tp": 0,
+        "fp": 163,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.1099,
+        "fpr_ci": [
+          0.095,
+          0.1269
+        ],
+        "f1": null,
+        "auroc": null
+      },
+      "v3": {
+        "attacks": 0,
+        "benign": 1483,
+        "tp": 0,
+        "fp": 102,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.0688,
+        "fpr_ci": [
+          0.057,
+          0.0828
+        ],
+        "f1": null,
+        "auroc": null
+      },
+      "routed_v2": {
+        "attacks": 0,
+        "benign": 1483,
+        "tp": 0,
+        "fp": 163,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.1099,
+        "fpr_ci": [
+          0.095,
+          0.1269
+        ],
+        "f1": null,
+        "auroc": null
+      },
+      "routed_v3": {
+        "attacks": 0,
+        "benign": 1483,
+        "tp": 0,
+        "fp": 102,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.0688,
+        "fpr_ci": [
+          0.057,
+          0.0828
+        ],
+        "f1": null,
+        "auroc": null
+      },
+      "routed_v3_oracle": {
+        "attacks": 0,
+        "benign": 1483,
+        "tp": 0,
+        "fp": 102,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.0688,
+        "fpr_ci": [
+          0.057,
+          0.0828
+        ],
+        "f1": null,
+        "auroc": null
+      },
+      "max_deberta_v3": {
+        "attacks": 0,
+        "benign": 1483,
+        "tp": 0,
+        "fp": 733,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.4943,
+        "fpr_ci": [
+          0.4689,
+          0.5197
+        ],
+        "f1": null,
+        "auroc": null
+      }
+    },
+    "overrefusal|ur": {
+      "deberta": {
+        "attacks": 0,
+        "benign": 1537,
+        "tp": 0,
+        "fp": 1493,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.9714,
+        "fpr_ci": [
+          0.9618,
+          0.9786
+        ],
+        "f1": null,
+        "auroc": null
+      },
+      "v2": {
+        "attacks": 0,
+        "benign": 1537,
+        "tp": 0,
+        "fp": 281,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.1828,
+        "fpr_ci": [
+          0.1643,
+          0.2029
+        ],
+        "f1": null,
+        "auroc": null
+      },
+      "v3": {
+        "attacks": 0,
+        "benign": 1537,
+        "tp": 0,
+        "fp": 136,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.0885,
+        "fpr_ci": [
+          0.0753,
+          0.1037
+        ],
+        "f1": null,
+        "auroc": null
+      },
+      "routed_v2": {
+        "attacks": 0,
+        "benign": 1537,
+        "tp": 0,
+        "fp": 281,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.1828,
+        "fpr_ci": [
+          0.1643,
+          0.2029
+        ],
+        "f1": null,
+        "auroc": null
+      },
+      "routed_v3": {
+        "attacks": 0,
+        "benign": 1537,
+        "tp": 0,
+        "fp": 136,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.0885,
+        "fpr_ci": [
+          0.0753,
+          0.1037
+        ],
+        "f1": null,
+        "auroc": null
+      },
+      "routed_v3_oracle": {
+        "attacks": 0,
+        "benign": 1537,
+        "tp": 0,
+        "fp": 136,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.0885,
+        "fpr_ci": [
+          0.0753,
+          0.1037
+        ],
+        "f1": null,
+        "auroc": null
+      },
+      "max_deberta_v3": {
+        "attacks": 0,
+        "benign": 1537,
+        "tp": 0,
+        "fp": 1496,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.9733,
+        "fpr_ci": [
+          0.964,
+          0.9803
+        ],
+        "f1": null,
+        "auroc": null
+      }
+    },
+    "overrefusal|mixed": {
+      "deberta": {
+        "attacks": 0,
+        "benign": 1558,
+        "tp": 0,
+        "fp": 657,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.4217,
+        "fpr_ci": [
+          0.3974,
+          0.4464
+        ],
+        "f1": null,
+        "auroc": null
+      },
+      "v2": {
+        "attacks": 0,
+        "benign": 1558,
+        "tp": 0,
+        "fp": 294,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.1887,
+        "fpr_ci": [
+          0.17,
+          0.2089
+        ],
+        "f1": null,
+        "auroc": null
+      },
+      "v3": {
+        "attacks": 0,
+        "benign": 1558,
+        "tp": 0,
+        "fp": 148,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.095,
+        "fpr_ci": [
+          0.0814,
+          0.1106
+        ],
+        "f1": null,
+        "auroc": null
+      },
+      "routed_v2": {
+        "attacks": 0,
+        "benign": 1558,
+        "tp": 0,
+        "fp": 294,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.1887,
+        "fpr_ci": [
+          0.17,
+          0.2089
+        ],
+        "f1": null,
+        "auroc": null
+      },
+      "routed_v3": {
+        "attacks": 0,
+        "benign": 1558,
+        "tp": 0,
+        "fp": 148,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.095,
+        "fpr_ci": [
+          0.0814,
+          0.1106
+        ],
+        "f1": null,
+        "auroc": null
+      },
+      "routed_v3_oracle": {
+        "attacks": 0,
+        "benign": 1558,
+        "tp": 0,
+        "fp": 148,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.095,
+        "fpr_ci": [
+          0.0814,
+          0.1106
+        ],
+        "f1": null,
+        "auroc": null
+      },
+      "max_deberta_v3": {
+        "attacks": 0,
+        "benign": 1558,
+        "tp": 0,
+        "fp": 709,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.4551,
+        "fpr_ci": [
+          0.4305,
+          0.4799
+        ],
+        "f1": null,
+        "auroc": null
+      }
+    }
+  },
+  "test_without_label_audit_flags": {
+    "en": {
+      "removed_benign": 1,
+      "deberta": {
+        "attacks": 197,
+        "benign": 308,
+        "tp": 136,
+        "fp": 5,
+        "recall": 0.6904,
+        "recall_ci": [
+          0.6227,
+          0.7508
+        ],
+        "fpr": 0.0162,
+        "fpr_ci": [
+          0.007,
+          0.0374
+        ],
+        "f1": 0.8047,
+        "auroc": 0.9316
+      },
+      "routed_v3": {
+        "attacks": 197,
+        "benign": 308,
+        "tp": 135,
+        "fp": 5,
+        "recall": 0.6853,
+        "recall_ci": [
+          0.6174,
+          0.7461
+        ],
+        "fpr": 0.0162,
+        "fpr_ci": [
+          0.007,
+          0.0374
+        ],
+        "f1": 0.8012,
+        "auroc": 0.9306
+      },
+      "v3": {
+        "attacks": 197,
+        "benign": 308,
+        "tp": 141,
+        "fp": 4,
+        "recall": 0.7157,
+        "recall_ci": [
+          0.6491,
+          0.7741
+        ],
+        "fpr": 0.013,
+        "fpr_ci": [
+          0.0051,
+          0.0329
+        ],
+        "f1": 0.8246,
+        "auroc": 0.943
+      }
+    },
+    "roman_ur": {
+      "removed_benign": 2,
+      "deberta": {
+        "attacks": 119,
+        "benign": 260,
+        "tp": 72,
+        "fp": 21,
+        "recall": 0.605,
+        "recall_ci": [
+          0.5152,
+          0.6883
+        ],
+        "fpr": 0.0808,
+        "fpr_ci": [
+          0.0534,
+          0.1203
+        ],
+        "f1": 0.6792,
+        "auroc": 0.8228
+      },
+      "routed_v3": {
+        "attacks": 119,
+        "benign": 260,
+        "tp": 73,
+        "fp": 6,
+        "recall": 0.6134,
+        "recall_ci": [
+          0.5237,
+          0.6961
+        ],
+        "fpr": 0.0231,
+        "fpr_ci": [
+          0.0106,
+          0.0494
+        ],
+        "f1": 0.7374,
+        "auroc": 0.9062
+      },
+      "v3": {
+        "attacks": 119,
+        "benign": 260,
+        "tp": 73,
+        "fp": 6,
+        "recall": 0.6134,
+        "recall_ci": [
+          0.5237,
+          0.6961
+        ],
+        "fpr": 0.0231,
+        "fpr_ci": [
+          0.0106,
+          0.0494
+        ],
+        "f1": 0.7374,
+        "auroc": 0.9057
+      }
+    },
+    "ur": {
+      "removed_benign": 3,
+      "deberta": {
+        "attacks": 122,
+        "benign": 248,
+        "tp": 109,
+        "fp": 192,
+        "recall": 0.8934,
+        "recall_ci": [
+          0.8262,
+          0.9367
+        ],
+        "fpr": 0.7742,
+        "fpr_ci": [
+          0.7182,
+          0.8218
+        ],
+        "f1": 0.5154,
+        "auroc": 0.6615
+      },
+      "routed_v3": {
+        "attacks": 122,
+        "benign": 248,
+        "tp": 72,
+        "fp": 14,
+        "recall": 0.5902,
+        "recall_ci": [
+          0.5014,
+          0.6734
+        ],
+        "fpr": 0.0565,
+        "fpr_ci": [
+          0.0339,
+          0.0925
+        ],
+        "f1": 0.6923,
+        "auroc": 0.8753
+      },
+      "v3": {
+        "attacks": 122,
+        "benign": 248,
+        "tp": 72,
+        "fp": 14,
+        "recall": 0.5902,
+        "recall_ci": [
+          0.5014,
+          0.6734
+        ],
+        "fpr": 0.0565,
+        "fpr_ci": [
+          0.0339,
+          0.0925
+        ],
+        "f1": 0.6923,
+        "auroc": 0.8753
+      }
+    },
+    "mixed": {
+      "removed_benign": 3,
+      "deberta": {
+        "attacks": 120,
+        "benign": 253,
+        "tp": 71,
+        "fp": 18,
+        "recall": 0.5917,
+        "recall_ci": [
+          0.5022,
+          0.6754
+        ],
+        "fpr": 0.0711,
+        "fpr_ci": [
+          0.0455,
+          0.1096
+        ],
+        "f1": 0.6794,
+        "auroc": 0.841
+      },
+      "routed_v3": {
+        "attacks": 120,
+        "benign": 253,
+        "tp": 79,
+        "fp": 6,
+        "recall": 0.6583,
+        "recall_ci": [
+          0.5697,
+          0.7371
+        ],
+        "fpr": 0.0237,
+        "fpr_ci": [
+          0.0109,
+          0.0508
+        ],
+        "f1": 0.7707,
+        "auroc": 0.9152
+      },
+      "v3": {
+        "attacks": 120,
+        "benign": 253,
+        "tp": 79,
+        "fp": 6,
+        "recall": 0.6583,
+        "recall_ci": [
+          0.5697,
+          0.7371
+        ],
+        "fpr": 0.0237,
+        "fpr_ci": [
+          0.0109,
+          0.0508
+        ],
+        "f1": 0.7707,
+        "auroc": 0.9149
+      }
+    }
+  },
+  "extra_en": {
+    "bipia (unseen)": {
+      "deberta": {
+        "attacks": 125,
+        "benign": 0,
+        "tp": 13,
+        "fp": 0,
+        "recall": 0.104,
+        "recall_ci": [
+          0.0618,
+          0.1698
+        ],
+        "fpr": null,
+        "fpr_ci": null,
+        "f1": 0.1884,
+        "auroc": null
+      },
+      "v2": {
+        "attacks": 125,
+        "benign": 0,
+        "tp": 9,
+        "fp": 0,
+        "recall": 0.072,
+        "recall_ci": [
+          0.0383,
+          0.1312
+        ],
+        "fpr": null,
+        "fpr_ci": null,
+        "f1": 0.1343,
+        "auroc": null
+      },
+      "v3": {
+        "attacks": 125,
+        "benign": 0,
+        "tp": 4,
+        "fp": 0,
+        "recall": 0.032,
+        "recall_ci": [
+          0.0125,
+          0.0794
+        ],
+        "fpr": null,
+        "fpr_ci": null,
+        "f1": 0.062,
+        "auroc": null
+      },
+      "routed_v2": {
+        "attacks": 125,
+        "benign": 0,
+        "tp": 13,
+        "fp": 0,
+        "recall": 0.104,
+        "recall_ci": [
+          0.0618,
+          0.1698
+        ],
+        "fpr": null,
+        "fpr_ci": null,
+        "f1": 0.1884,
+        "auroc": null
+      },
+      "routed_v3": {
+        "attacks": 125,
+        "benign": 0,
+        "tp": 13,
+        "fp": 0,
+        "recall": 0.104,
+        "recall_ci": [
+          0.0618,
+          0.1698
+        ],
+        "fpr": null,
+        "fpr_ci": null,
+        "f1": 0.1884,
+        "auroc": null
+      },
+      "routed_v3_oracle": {
+        "attacks": 125,
+        "benign": 0,
+        "tp": 13,
+        "fp": 0,
+        "recall": 0.104,
+        "recall_ci": [
+          0.0618,
+          0.1698
+        ],
+        "fpr": null,
+        "fpr_ci": null,
+        "f1": 0.1884,
+        "auroc": null
+      },
+      "max_deberta_v3": {
+        "attacks": 125,
+        "benign": 0,
+        "tp": 17,
+        "fp": 0,
+        "recall": 0.136,
+        "recall_ci": [
+          0.0867,
+          0.207
+        ],
+        "fpr": null,
+        "fpr_ci": null,
+        "f1": 0.2394,
+        "auroc": null
+      }
+    },
+    "injecagent (unseen)": {
+      "deberta": {
+        "attacks": 1054,
+        "benign": 0,
+        "tp": 693,
+        "fp": 0,
+        "recall": 0.6575,
+        "recall_ci": [
+          0.6283,
+          0.6855
+        ],
+        "fpr": null,
+        "fpr_ci": null,
+        "f1": 0.7934,
+        "auroc": null
+      },
+      "v2": {
+        "attacks": 1054,
+        "benign": 0,
+        "tp": 487,
+        "fp": 0,
+        "recall": 0.462,
+        "recall_ci": [
+          0.4321,
+          0.4922
+        ],
+        "fpr": null,
+        "fpr_ci": null,
+        "f1": 0.6321,
+        "auroc": null
+      },
+      "v3": {
+        "attacks": 1054,
+        "benign": 0,
+        "tp": 182,
+        "fp": 0,
+        "recall": 0.1727,
+        "recall_ci": [
+          0.1511,
+          0.1967
+        ],
+        "fpr": null,
+        "fpr_ci": null,
+        "f1": 0.2945,
+        "auroc": null
+      },
+      "routed_v2": {
+        "attacks": 1054,
+        "benign": 0,
+        "tp": 693,
+        "fp": 0,
+        "recall": 0.6575,
+        "recall_ci": [
+          0.6283,
+          0.6855
+        ],
+        "fpr": null,
+        "fpr_ci": null,
+        "f1": 0.7934,
+        "auroc": null
+      },
+      "routed_v3": {
+        "attacks": 1054,
+        "benign": 0,
+        "tp": 693,
+        "fp": 0,
+        "recall": 0.6575,
+        "recall_ci": [
+          0.6283,
+          0.6855
+        ],
+        "fpr": null,
+        "fpr_ci": null,
+        "f1": 0.7934,
+        "auroc": null
+      },
+      "routed_v3_oracle": {
+        "attacks": 1054,
+        "benign": 0,
+        "tp": 693,
+        "fp": 0,
+        "recall": 0.6575,
+        "recall_ci": [
+          0.6283,
+          0.6855
+        ],
+        "fpr": null,
+        "fpr_ci": null,
+        "f1": 0.7934,
+        "auroc": null
+      },
+      "max_deberta_v3": {
+        "attacks": 1054,
+        "benign": 0,
+        "tp": 739,
+        "fp": 0,
+        "recall": 0.7011,
+        "recall_ci": [
+          0.6728,
+          0.728
+        ],
+        "fpr": null,
+        "fpr_ci": null,
+        "f1": 0.8243,
+        "auroc": null
+      }
+    },
+    "llmail (seen)": {
+      "deberta": {
+        "attacks": 2000,
+        "benign": 0,
+        "tp": 841,
+        "fp": 0,
+        "recall": 0.4205,
+        "recall_ci": [
+          0.399,
+          0.4423
+        ],
+        "fpr": null,
+        "fpr_ci": null,
+        "f1": 0.592,
+        "auroc": null
+      },
+      "v2": {
+        "attacks": 2000,
+        "benign": 0,
+        "tp": 1759,
+        "fp": 0,
+        "recall": 0.8795,
+        "recall_ci": [
+          0.8645,
+          0.893
+        ],
+        "fpr": null,
+        "fpr_ci": null,
+        "f1": 0.9359,
+        "auroc": null
+      },
+      "v3": {
+        "attacks": 2000,
+        "benign": 0,
+        "tp": 1841,
+        "fp": 0,
+        "recall": 0.9205,
+        "recall_ci": [
+          0.9078,
+          0.9316
+        ],
+        "fpr": null,
+        "fpr_ci": null,
+        "f1": 0.9586,
+        "auroc": null
+      },
+      "routed_v2": {
+        "attacks": 2000,
+        "benign": 0,
+        "tp": 853,
+        "fp": 0,
+        "recall": 0.4265,
+        "recall_ci": [
+          0.405,
+          0.4483
+        ],
+        "fpr": null,
+        "fpr_ci": null,
+        "f1": 0.598,
+        "auroc": null
+      },
+      "routed_v3": {
+        "attacks": 2000,
+        "benign": 0,
+        "tp": 853,
+        "fp": 0,
+        "recall": 0.4265,
+        "recall_ci": [
+          0.405,
+          0.4483
+        ],
+        "fpr": null,
+        "fpr_ci": null,
+        "f1": 0.598,
+        "auroc": null
+      },
+      "routed_v3_oracle": {
+        "attacks": 2000,
+        "benign": 0,
+        "tp": 847,
+        "fp": 0,
+        "recall": 0.4235,
+        "recall_ci": [
+          0.402,
+          0.4453
+        ],
+        "fpr": null,
+        "fpr_ci": null,
+        "f1": 0.595,
+        "auroc": null
+      },
+      "max_deberta_v3": {
+        "attacks": 2000,
+        "benign": 0,
+        "tp": 1880,
+        "fp": 0,
+        "recall": 0.94,
+        "recall_ci": [
+          0.9287,
+          0.9496
+        ],
+        "fpr": null,
+        "fpr_ci": null,
+        "f1": 0.9691,
+        "auroc": null
+      }
+    },
+    "benign_email_probe": {
+      "deberta": {
+        "attacks": 0,
+        "benign": 100,
+        "tp": 0,
+        "fp": 0,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.0,
+        "fpr_ci": [
+          0,
+          0.037
+        ],
+        "f1": null,
+        "auroc": null
+      },
+      "v2": {
+        "attacks": 0,
+        "benign": 100,
+        "tp": 0,
+        "fp": 75,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.75,
+        "fpr_ci": [
+          0.657,
+          0.8245
+        ],
+        "f1": null,
+        "auroc": null
+      },
+      "v3": {
+        "attacks": 0,
+        "benign": 100,
+        "tp": 0,
+        "fp": 75,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.75,
+        "fpr_ci": [
+          0.657,
+          0.8245
+        ],
+        "f1": null,
+        "auroc": null
+      },
+      "routed_v2": {
+        "attacks": 0,
+        "benign": 100,
+        "tp": 0,
+        "fp": 0,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.0,
+        "fpr_ci": [
+          0,
+          0.037
+        ],
+        "f1": null,
+        "auroc": null
+      },
+      "routed_v3": {
+        "attacks": 0,
+        "benign": 100,
+        "tp": 0,
+        "fp": 0,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.0,
+        "fpr_ci": [
+          0,
+          0.037
+        ],
+        "f1": null,
+        "auroc": null
+      },
+      "routed_v3_oracle": {
+        "attacks": 0,
+        "benign": 100,
+        "tp": 0,
+        "fp": 0,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.0,
+        "fpr_ci": [
+          0,
+          0.037
+        ],
+        "f1": null,
+        "auroc": null
+      },
+      "max_deberta_v3": {
+        "attacks": 0,
+        "benign": 100,
+        "tp": 0,
+        "fp": 75,
+        "recall": null,
+        "recall_ci": null,
+        "fpr": 0.75,
+        "fpr_ci": [
+          0.657,
+          0.8245
+        ],
+        "f1": null,
+        "auroc": null
+      }
+    }
+  },
+  "significance": {
+    "en": {
+      "routed_v3_vs_deberta": {
+        "a_right_b_wrong": 0,
+        "b_right_a_wrong": 1,
+        "p_value": 1.0,
+        "significant_0.05": false
+      },
+      "routed_v3_vs_routed_v2": {
+        "a_right_b_wrong": 0,
+        "b_right_a_wrong": 0,
+        "p_value": 1.0,
+        "significant_0.05": false
+      }
+    },
+    "roman_ur": {
+      "routed_v3_vs_deberta": {
+        "a_right_b_wrong": 672,
+        "b_right_a_wrong": 61,
+        "p_value": 0.0,
+        "significant_0.05": true
+      },
+      "routed_v3_vs_routed_v2": {
+        "a_right_b_wrong": 116,
+        "b_right_a_wrong": 55,
+        "p_value": 4e-06,
+        "significant_0.05": true
+      }
+    },
+    "ur": {
+      "routed_v3_vs_deberta": {
+        "a_right_b_wrong": 1549,
+        "b_right_a_wrong": 48,
+        "p_value": 0.0,
+        "significant_0.05": true
+      },
+      "routed_v3_vs_routed_v2": {
+        "a_right_b_wrong": 193,
+        "b_right_a_wrong": 51,
+        "p_value": 0.0,
+        "significant_0.05": true
+      }
+    },
+    "mixed": {
+      "routed_v3_vs_deberta": {
+        "a_right_b_wrong": 598,
+        "b_right_a_wrong": 69,
+        "p_value": 0.0,
+        "significant_0.05": true
+      },
+      "routed_v3_vs_routed_v2": {
+        "a_right_b_wrong": 202,
+        "b_right_a_wrong": 47,
+        "p_value": 0.0,
+        "significant_0.05": true
+      }
+    }
+  },
+  "router": {
+    "test|en": {
+      "n": 506,
+      "routed_as": {
+        "en": 502,
+        "mixed": 4,
+        "roman_ur": 0,
+        "ur": 0
+      }
+    },
+    "test|roman_ur": {
+      "n": 381,
+      "routed_as": {
+        "en": 3,
+        "mixed": 68,
+        "roman_ur": 310,
+        "ur": 0
+      }
+    },
+    "test|ur": {
+      "n": 373,
+      "routed_as": {
+        "en": 0,
+        "mixed": 2,
+        "roman_ur": 0,
+        "ur": 371
+      }
+    },
+    "test|mixed": {
+      "n": 376,
+      "routed_as": {
+        "en": 3,
+        "mixed": 365,
+        "roman_ur": 8,
+        "ur": 0
+      }
+    },
+    "overrefusal|en": {
+      "n": 1568,
+      "routed_as": {
+        "en": 1568,
+        "mixed": 0,
+        "roman_ur": 0,
+        "ur": 0
+      }
+    },
+    "overrefusal|roman_ur": {
+      "n": 1483,
+      "routed_as": {
+        "en": 0,
+        "mixed": 281,
+        "roman_ur": 1202,
+        "ur": 0
+      }
+    },
+    "overrefusal|ur": {
+      "n": 1537,
+      "routed_as": {
+        "en": 0,
+        "mixed": 0,
+        "roman_ur": 0,
+        "ur": 1537
+      }
+    },
+    "overrefusal|mixed": {
+      "n": 1558,
+      "routed_as": {
+        "en": 0,
+        "mixed": 1499,
+        "roman_ur": 59,
+        "ur": 0
+      }
+    }
+  },
+  "latency": {
+    "cuda": {
+      "deberta": {
+        "p50_ms": 12.51,
+        "p95_ms": 19.04,
+        "n": 200
+      },
+      "v2": {
+        "p50_ms": 5.4,
+        "p95_ms": 12.16,
+        "n": 200
+      },
+      "v3": {
+        "p50_ms": 4.78,
+        "p95_ms": 11.17,
+        "n": 200
+      },
+      "routed_v2": {
+        "p50_ms": 6.64,
+        "p95_ms": 17.83,
+        "n": 200
+      },
+      "routed_v3": {
+        "p50_ms": 6.33,
+        "p95_ms": 17.45,
+        "n": 200
+      },
+      "max_deberta_v3": {
+        "p50_ms": 16.95,
+        "p95_ms": 28.46,
+        "n": 200
+      },
+      "router_only": {
+        "p50_ms": 0.65,
+        "p95_ms": 1.46,
+        "n": 200
+      }
+    },
+    "cpu": {
+      "deberta": {
+        "p50_ms": 89.7,
+        "p95_ms": 335.88,
+        "n": 100
+      },
+      "v2": {
+        "p50_ms": 41.76,
+        "p95_ms": 212.21,
+        "n": 100
+      },
+      "v3": {
+        "p50_ms": 40.55,
+        "p95_ms": 199.67,
+        "n": 100
+      },
+      "routed_v2": {
+        "p50_ms": 53.92,
+        "p95_ms": 248.32,
+        "n": 100
+      },
+      "routed_v3": {
+        "p50_ms": 56.04,
+        "p95_ms": 250.97,
+        "n": 100
+      },
+      "max_deberta_v3": {
+        "p50_ms": 132.73,
+        "p95_ms": 503.53,
+        "n": 100
+      },
+      "router_only": {
+        "p50_ms": 0.67,
+        "p95_ms": 1.67,
+        "n": 100
+      }
+    }
+  }
+}
