@@ -296,3 +296,29 @@ started: 2026-11-26T21:26:23+05:00
 gateway-eval-v2 + canary-v2 2026-11-26T21:32:22+05:00: done; ollama stopped
 gateway-eval-v2 + canary-v2 2026-11-26T21:32:54+05:00: rerun (first attempt: stale container name; bare canary arm hit Ollama before it was ready)
 gateway-eval-v2 + canary-v2 2026-11-26T22:12:00+05:00: done; ollama stopped
+
+job: judge-replay + judge-sweep
+state: running
+logs: logs/gateway_eval_v2_replay.log, logs/judge_sweep.log
+started: 2026-11-27T00:14:30+05:00
+replay_exit=1
+sweep_exit=1
+judge-replay + judge-sweep 2026-11-27T00:40:16+05:00: done; ollama stopped
+
+job: judge-replay + judge-sweep
+state: running
+logs: logs/gateway_eval_v2_replay.log, logs/judge_sweep.log
+started: 2026-11-27T00:40:52+05:00
+replay_exit=137
+sweep_exit=137
+judge-replay + judge-sweep 2026-11-27T00:41:16+05:00: done; ollama stopped
+judge-replay + judge-sweep 2026-11-27T00:41:29+05:00: attempts 1-2 aborted (stale installed package in image; PYTHONPATH path conversion); relaunching
+
+job: judge-replay + judge-sweep
+state: running
+logs: logs/gateway_eval_v2_replay.log, logs/judge_sweep.log
+started: 2026-11-27T00:41:29+05:00
+replay_exit=0
+sweep_exit=0
+judge-replay + judge-sweep 2026-11-27T04:35:04+05:00: done; ollama stopped
+judge-policy 2026-11-27T04:35:42+05:00: no dev cell meets FPR<=3% (min 3.06% with judge off: L2 85 + rules 2 FP); STOP per prompt, config unchanged, gateway_v3/canary not run

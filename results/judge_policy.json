@@ -1,0 +1,1624 @@
+{
+  "rows": 4390,
+  "attacks": 1543,
+  "benign": 2847,
+  "rule": "highest end-to-end dev non-en recall with end-to-end dev non-en FPR <= 0.03; tie -> fewer judge calls",
+  "policy_l2": {
+    "mode": "routed",
+    "xlmr_threshold": 0.9613
+  },
+  "grid": [
+    {
+      "floor": "0 (current)",
+      "floor_value": 0.0,
+      "policy": "A",
+      "block_categories": null,
+      "all": {
+        "attacks": 1543,
+        "benign": 2847,
+        "tp": 1380,
+        "fp": 101,
+        "recall": 0.8944,
+        "recall_ci": [
+          0.878,
+          0.9087
+        ],
+        "fpr": 0.0355,
+        "fpr_ci": [
+          0.0293,
+          0.0429
+        ]
+      },
+      "judge_calls": 378,
+      "judge_blocks": 56,
+      "per_lang": {
+        "roman_ur": {
+          "attacks": 514,
+          "benign": 936,
+          "tp": 441,
+          "fp": 33,
+          "recall": 0.858,
+          "recall_ci": [
+            0.8251,
+            0.8855
+          ],
+          "fpr": 0.0353,
+          "fpr_ci": [
+            0.0252,
+            0.0491
+          ]
+        },
+        "ur": {
+          "attacks": 511,
+          "benign": 943,
+          "tp": 457,
+          "fp": 44,
+          "recall": 0.8943,
+          "recall_ci": [
+            0.8647,
+            0.9181
+          ],
+          "fpr": 0.0467,
+          "fpr_ci": [
+            0.0349,
+            0.0621
+          ]
+        },
+        "mixed": {
+          "attacks": 518,
+          "benign": 968,
+          "tp": 482,
+          "fp": 24,
+          "recall": 0.9305,
+          "recall_ci": [
+            0.9053,
+            0.9494
+          ],
+          "fpr": 0.0248,
+          "fpr_ci": [
+            0.0167,
+            0.0366
+          ]
+        }
+      }
+    },
+    {
+      "floor": "0 (current)",
+      "floor_value": 0.0,
+      "policy": "B",
+      "block_categories": [
+        "Jailbreak",
+        "PII",
+        "Non-violent Illegal Acts",
+        "Violent"
+      ],
+      "all": {
+        "attacks": 1543,
+        "benign": 2847,
+        "tp": 1358,
+        "fp": 90,
+        "recall": 0.8801,
+        "recall_ci": [
+          0.8629,
+          0.8954
+        ],
+        "fpr": 0.0316,
+        "fpr_ci": [
+          0.0258,
+          0.0387
+        ]
+      },
+      "judge_calls": 378,
+      "judge_blocks": 23,
+      "per_lang": {
+        "roman_ur": {
+          "attacks": 514,
+          "benign": 936,
+          "tp": 438,
+          "fp": 32,
+          "recall": 0.8521,
+          "recall_ci": [
+            0.8188,
+            0.8802
+          ],
+          "fpr": 0.0342,
+          "fpr_ci": [
+            0.0243,
+            0.0479
+          ]
+        },
+        "ur": {
+          "attacks": 511,
+          "benign": 943,
+          "tp": 447,
+          "fp": 36,
+          "recall": 0.8748,
+          "recall_ci": [
+            0.8432,
+            0.9007
+          ],
+          "fpr": 0.0382,
+          "fpr_ci": [
+            0.0277,
+            0.0524
+          ]
+        },
+        "mixed": {
+          "attacks": 518,
+          "benign": 968,
+          "tp": 473,
+          "fp": 22,
+          "recall": 0.9131,
+          "recall_ci": [
+            0.8857,
+            0.9344
+          ],
+          "fpr": 0.0227,
+          "fpr_ci": [
+            0.0151,
+            0.0342
+          ]
+        }
+      }
+    },
+    {
+      "floor": "0 (current)",
+      "floor_value": 0.0,
+      "policy": "C",
+      "block_categories": [
+        "Jailbreak"
+      ],
+      "all": {
+        "attacks": 1543,
+        "benign": 2847,
+        "tp": 1342,
+        "fp": 89,
+        "recall": 0.8697,
+        "recall_ci": [
+          0.852,
+          0.8856
+        ],
+        "fpr": 0.0313,
+        "fpr_ci": [
+          0.0255,
+          0.0383
+        ]
+      },
+      "judge_calls": 378,
+      "judge_blocks": 6,
+      "per_lang": {
+        "roman_ur": {
+          "attacks": 514,
+          "benign": 936,
+          "tp": 437,
+          "fp": 31,
+          "recall": 0.8502,
+          "recall_ci": [
+            0.8167,
+            0.8784
+          ],
+          "fpr": 0.0331,
+          "fpr_ci": [
+            0.0234,
+            0.0466
+          ]
+        },
+        "ur": {
+          "attacks": 511,
+          "benign": 943,
+          "tp": 441,
+          "fp": 36,
+          "recall": 0.863,
+          "recall_ci": [
+            0.8305,
+            0.8901
+          ],
+          "fpr": 0.0382,
+          "fpr_ci": [
+            0.0277,
+            0.0524
+          ]
+        },
+        "mixed": {
+          "attacks": 518,
+          "benign": 968,
+          "tp": 464,
+          "fp": 22,
+          "recall": 0.8958,
+          "recall_ci": [
+            0.8665,
+            0.9192
+          ],
+          "fpr": 0.0227,
+          "fpr_ci": [
+            0.0151,
+            0.0342
+          ]
+        }
+      }
+    },
+    {
+      "floor": "0.75",
+      "floor_value": 0.75,
+      "policy": "A",
+      "block_categories": null,
+      "all": {
+        "attacks": 1543,
+        "benign": 2847,
+        "tp": 1365,
+        "fp": 93,
+        "recall": 0.8846,
+        "recall_ci": [
+          0.8677,
+          0.8996
+        ],
+        "fpr": 0.0327,
+        "fpr_ci": [
+          0.0267,
+          0.0399
+        ]
+      },
+      "judge_calls": 188,
+      "judge_blocks": 33,
+      "per_lang": {
+        "roman_ur": {
+          "attacks": 514,
+          "benign": 936,
+          "tp": 439,
+          "fp": 31,
+          "recall": 0.8541,
+          "recall_ci": [
+            0.8209,
+            0.882
+          ],
+          "fpr": 0.0331,
+          "fpr_ci": [
+            0.0234,
+            0.0466
+          ]
+        },
+        "ur": {
+          "attacks": 511,
+          "benign": 943,
+          "tp": 451,
+          "fp": 40,
+          "recall": 0.8826,
+          "recall_ci": [
+            0.8518,
+            0.9077
+          ],
+          "fpr": 0.0424,
+          "fpr_ci": [
+            0.0313,
+            0.0572
+          ]
+        },
+        "mixed": {
+          "attacks": 518,
+          "benign": 968,
+          "tp": 475,
+          "fp": 22,
+          "recall": 0.917,
+          "recall_ci": [
+            0.89,
+            0.9378
+          ],
+          "fpr": 0.0227,
+          "fpr_ci": [
+            0.0151,
+            0.0342
+          ]
+        }
+      }
+    },
+    {
+      "floor": "0.75",
+      "floor_value": 0.75,
+      "policy": "B",
+      "block_categories": [
+        "Jailbreak",
+        "PII",
+        "Non-violent Illegal Acts",
+        "Violent"
+      ],
+      "all": {
+        "attacks": 1543,
+        "benign": 2847,
+        "tp": 1351,
+        "fp": 89,
+        "recall": 0.8756,
+        "recall_ci": [
+          0.8582,
+          0.8911
+        ],
+        "fpr": 0.0313,
+        "fpr_ci": [
+          0.0255,
+          0.0383
+        ]
+      },
+      "judge_calls": 188,
+      "judge_blocks": 15,
+      "per_lang": {
+        "roman_ur": {
+          "attacks": 514,
+          "benign": 936,
+          "tp": 438,
+          "fp": 31,
+          "recall": 0.8521,
+          "recall_ci": [
+            0.8188,
+            0.8802
+          ],
+          "fpr": 0.0331,
+          "fpr_ci": [
+            0.0234,
+            0.0466
+          ]
+        },
+        "ur": {
+          "attacks": 511,
+          "benign": 943,
+          "tp": 444,
+          "fp": 36,
+          "recall": 0.8689,
+          "recall_ci": [
+            0.8368,
+            0.8954
+          ],
+          "fpr": 0.0382,
+          "fpr_ci": [
+            0.0277,
+            0.0524
+          ]
+        },
+        "mixed": {
+          "attacks": 518,
+          "benign": 968,
+          "tp": 469,
+          "fp": 22,
+          "recall": 0.9054,
+          "recall_ci": [
+            0.8771,
+            0.9277
+          ],
+          "fpr": 0.0227,
+          "fpr_ci": [
+            0.0151,
+            0.0342
+          ]
+        }
+      }
+    },
+    {
+      "floor": "0.75",
+      "floor_value": 0.75,
+      "policy": "C",
+      "block_categories": [
+        "Jailbreak"
+      ],
+      "all": {
+        "attacks": 1543,
+        "benign": 2847,
+        "tp": 1342,
+        "fp": 89,
+        "recall": 0.8697,
+        "recall_ci": [
+          0.852,
+          0.8856
+        ],
+        "fpr": 0.0313,
+        "fpr_ci": [
+          0.0255,
+          0.0383
+        ]
+      },
+      "judge_calls": 188,
+      "judge_blocks": 6,
+      "per_lang": {
+        "roman_ur": {
+          "attacks": 514,
+          "benign": 936,
+          "tp": 437,
+          "fp": 31,
+          "recall": 0.8502,
+          "recall_ci": [
+            0.8167,
+            0.8784
+          ],
+          "fpr": 0.0331,
+          "fpr_ci": [
+            0.0234,
+            0.0466
+          ]
+        },
+        "ur": {
+          "attacks": 511,
+          "benign": 943,
+          "tp": 441,
+          "fp": 36,
+          "recall": 0.863,
+          "recall_ci": [
+            0.8305,
+            0.8901
+          ],
+          "fpr": 0.0382,
+          "fpr_ci": [
+            0.0277,
+            0.0524
+          ]
+        },
+        "mixed": {
+          "attacks": 518,
+          "benign": 968,
+          "tp": 464,
+          "fp": 22,
+          "recall": 0.8958,
+          "recall_ci": [
+            0.8665,
+            0.9192
+          ],
+          "fpr": 0.0227,
+          "fpr_ci": [
+            0.0151,
+            0.0342
+          ]
+        }
+      }
+    },
+    {
+      "floor": "0.85",
+      "floor_value": 0.85,
+      "policy": "A",
+      "block_categories": null,
+      "all": {
+        "attacks": 1543,
+        "benign": 2847,
+        "tp": 1361,
+        "fp": 93,
+        "recall": 0.882,
+        "recall_ci": [
+          0.865,
+          0.8972
+        ],
+        "fpr": 0.0327,
+        "fpr_ci": [
+          0.0267,
+          0.0399
+        ]
+      },
+      "judge_calls": 138,
+      "judge_blocks": 29,
+      "per_lang": {
+        "roman_ur": {
+          "attacks": 514,
+          "benign": 936,
+          "tp": 439,
+          "fp": 31,
+          "recall": 0.8541,
+          "recall_ci": [
+            0.8209,
+            0.882
+          ],
+          "fpr": 0.0331,
+          "fpr_ci": [
+            0.0234,
+            0.0466
+          ]
+        },
+        "ur": {
+          "attacks": 511,
+          "benign": 943,
+          "tp": 448,
+          "fp": 40,
+          "recall": 0.8767,
+          "recall_ci": [
+            0.8454,
+            0.9024
+          ],
+          "fpr": 0.0424,
+          "fpr_ci": [
+            0.0313,
+            0.0572
+          ]
+        },
+        "mixed": {
+          "attacks": 518,
+          "benign": 968,
+          "tp": 474,
+          "fp": 22,
+          "recall": 0.9151,
+          "recall_ci": [
+            0.8879,
+            0.9361
+          ],
+          "fpr": 0.0227,
+          "fpr_ci": [
+            0.0151,
+            0.0342
+          ]
+        }
+      }
+    },
+    {
+      "floor": "0.85",
+      "floor_value": 0.85,
+      "policy": "B",
+      "block_categories": [
+        "Jailbreak",
+        "PII",
+        "Non-violent Illegal Acts",
+        "Violent"
+      ],
+      "all": {
+        "attacks": 1543,
+        "benign": 2847,
+        "tp": 1348,
+        "fp": 89,
+        "recall": 0.8736,
+        "recall_ci": [
+          0.8561,
+          0.8893
+        ],
+        "fpr": 0.0313,
+        "fpr_ci": [
+          0.0255,
+          0.0383
+        ]
+      },
+      "judge_calls": 138,
+      "judge_blocks": 12,
+      "per_lang": {
+        "roman_ur": {
+          "attacks": 514,
+          "benign": 936,
+          "tp": 438,
+          "fp": 31,
+          "recall": 0.8521,
+          "recall_ci": [
+            0.8188,
+            0.8802
+          ],
+          "fpr": 0.0331,
+          "fpr_ci": [
+            0.0234,
+            0.0466
+          ]
+        },
+        "ur": {
+          "attacks": 511,
+          "benign": 943,
+          "tp": 442,
+          "fp": 36,
+          "recall": 0.865,
+          "recall_ci": [
+            0.8326,
+            0.8919
+          ],
+          "fpr": 0.0382,
+          "fpr_ci": [
+            0.0277,
+            0.0524
+          ]
+        },
+        "mixed": {
+          "attacks": 518,
+          "benign": 968,
+          "tp": 468,
+          "fp": 22,
+          "recall": 0.9035,
+          "recall_ci": [
+            0.875,
+            0.926
+          ],
+          "fpr": 0.0227,
+          "fpr_ci": [
+            0.0151,
+            0.0342
+          ]
+        }
+      }
+    },
+    {
+      "floor": "0.85",
+      "floor_value": 0.85,
+      "policy": "C",
+      "block_categories": [
+        "Jailbreak"
+      ],
+      "all": {
+        "attacks": 1543,
+        "benign": 2847,
+        "tp": 1341,
+        "fp": 89,
+        "recall": 0.8691,
+        "recall_ci": [
+          0.8513,
+          0.885
+        ],
+        "fpr": 0.0313,
+        "fpr_ci": [
+          0.0255,
+          0.0383
+        ]
+      },
+      "judge_calls": 138,
+      "judge_blocks": 5,
+      "per_lang": {
+        "roman_ur": {
+          "attacks": 514,
+          "benign": 936,
+          "tp": 437,
+          "fp": 31,
+          "recall": 0.8502,
+          "recall_ci": [
+            0.8167,
+            0.8784
+          ],
+          "fpr": 0.0331,
+          "fpr_ci": [
+            0.0234,
+            0.0466
+          ]
+        },
+        "ur": {
+          "attacks": 511,
+          "benign": 943,
+          "tp": 440,
+          "fp": 36,
+          "recall": 0.8611,
+          "recall_ci": [
+            0.8284,
+            0.8884
+          ],
+          "fpr": 0.0382,
+          "fpr_ci": [
+            0.0277,
+            0.0524
+          ]
+        },
+        "mixed": {
+          "attacks": 518,
+          "benign": 968,
+          "tp": 464,
+          "fp": 22,
+          "recall": 0.8958,
+          "recall_ci": [
+            0.8665,
+            0.9192
+          ],
+          "fpr": 0.0227,
+          "fpr_ci": [
+            0.0151,
+            0.0342
+          ]
+        }
+      }
+    },
+    {
+      "floor": "0.90",
+      "floor_value": 0.9,
+      "policy": "A",
+      "block_categories": null,
+      "all": {
+        "attacks": 1543,
+        "benign": 2847,
+        "tp": 1355,
+        "fp": 92,
+        "recall": 0.8782,
+        "recall_ci": [
+          0.8609,
+          0.8935
+        ],
+        "fpr": 0.0323,
+        "fpr_ci": [
+          0.0264,
+          0.0395
+        ]
+      },
+      "judge_calls": 101,
+      "judge_blocks": 22,
+      "per_lang": {
+        "roman_ur": {
+          "attacks": 514,
+          "benign": 936,
+          "tp": 439,
+          "fp": 31,
+          "recall": 0.8541,
+          "recall_ci": [
+            0.8209,
+            0.882
+          ],
+          "fpr": 0.0331,
+          "fpr_ci": [
+            0.0234,
+            0.0466
+          ]
+        },
+        "ur": {
+          "attacks": 511,
+          "benign": 943,
+          "tp": 446,
+          "fp": 39,
+          "recall": 0.8728,
+          "recall_ci": [
+            0.8411,
+            0.8989
+          ],
+          "fpr": 0.0414,
+          "fpr_ci": [
+            0.0304,
+            0.056
+          ]
+        },
+        "mixed": {
+          "attacks": 518,
+          "benign": 968,
+          "tp": 470,
+          "fp": 22,
+          "recall": 0.9073,
+          "recall_ci": [
+            0.8793,
+            0.9294
+          ],
+          "fpr": 0.0227,
+          "fpr_ci": [
+            0.0151,
+            0.0342
+          ]
+        }
+      }
+    },
+    {
+      "floor": "0.90",
+      "floor_value": 0.9,
+      "policy": "B",
+      "block_categories": [
+        "Jailbreak",
+        "PII",
+        "Non-violent Illegal Acts",
+        "Violent"
+      ],
+      "all": {
+        "attacks": 1543,
+        "benign": 2847,
+        "tp": 1345,
+        "fp": 89,
+        "recall": 0.8717,
+        "recall_ci": [
+          0.8541,
+          0.8874
+        ],
+        "fpr": 0.0313,
+        "fpr_ci": [
+          0.0255,
+          0.0383
+        ]
+      },
+      "judge_calls": 101,
+      "judge_blocks": 9,
+      "per_lang": {
+        "roman_ur": {
+          "attacks": 514,
+          "benign": 936,
+          "tp": 438,
+          "fp": 31,
+          "recall": 0.8521,
+          "recall_ci": [
+            0.8188,
+            0.8802
+          ],
+          "fpr": 0.0331,
+          "fpr_ci": [
+            0.0234,
+            0.0466
+          ]
+        },
+        "ur": {
+          "attacks": 511,
+          "benign": 943,
+          "tp": 441,
+          "fp": 36,
+          "recall": 0.863,
+          "recall_ci": [
+            0.8305,
+            0.8901
+          ],
+          "fpr": 0.0382,
+          "fpr_ci": [
+            0.0277,
+            0.0524
+          ]
+        },
+        "mixed": {
+          "attacks": 518,
+          "benign": 968,
+          "tp": 466,
+          "fp": 22,
+          "recall": 0.8996,
+          "recall_ci": [
+            0.8707,
+            0.9226
+          ],
+          "fpr": 0.0227,
+          "fpr_ci": [
+            0.0151,
+            0.0342
+          ]
+        }
+      }
+    },
+    {
+      "floor": "0.90",
+      "floor_value": 0.9,
+      "policy": "C",
+      "block_categories": [
+        "Jailbreak"
+      ],
+      "all": {
+        "attacks": 1543,
+        "benign": 2847,
+        "tp": 1341,
+        "fp": 89,
+        "recall": 0.8691,
+        "recall_ci": [
+          0.8513,
+          0.885
+        ],
+        "fpr": 0.0313,
+        "fpr_ci": [
+          0.0255,
+          0.0383
+        ]
+      },
+      "judge_calls": 101,
+      "judge_blocks": 5,
+      "per_lang": {
+        "roman_ur": {
+          "attacks": 514,
+          "benign": 936,
+          "tp": 437,
+          "fp": 31,
+          "recall": 0.8502,
+          "recall_ci": [
+            0.8167,
+            0.8784
+          ],
+          "fpr": 0.0331,
+          "fpr_ci": [
+            0.0234,
+            0.0466
+          ]
+        },
+        "ur": {
+          "attacks": 511,
+          "benign": 943,
+          "tp": 440,
+          "fp": 36,
+          "recall": 0.8611,
+          "recall_ci": [
+            0.8284,
+            0.8884
+          ],
+          "fpr": 0.0382,
+          "fpr_ci": [
+            0.0277,
+            0.0524
+          ]
+        },
+        "mixed": {
+          "attacks": 518,
+          "benign": 968,
+          "tp": 464,
+          "fp": 22,
+          "recall": 0.8958,
+          "recall_ci": [
+            0.8665,
+            0.9192
+          ],
+          "fpr": 0.0227,
+          "fpr_ci": [
+            0.0151,
+            0.0342
+          ]
+        }
+      }
+    },
+    {
+      "floor": "0.93",
+      "floor_value": 0.93,
+      "policy": "A",
+      "block_categories": null,
+      "all": {
+        "attacks": 1543,
+        "benign": 2847,
+        "tp": 1349,
+        "fp": 89,
+        "recall": 0.8743,
+        "recall_ci": [
+          0.8568,
+          0.8899
+        ],
+        "fpr": 0.0313,
+        "fpr_ci": [
+          0.0255,
+          0.0383
+        ]
+      },
+      "judge_calls": 66,
+      "judge_blocks": 13,
+      "per_lang": {
+        "roman_ur": {
+          "attacks": 514,
+          "benign": 936,
+          "tp": 438,
+          "fp": 31,
+          "recall": 0.8521,
+          "recall_ci": [
+            0.8188,
+            0.8802
+          ],
+          "fpr": 0.0331,
+          "fpr_ci": [
+            0.0234,
+            0.0466
+          ]
+        },
+        "ur": {
+          "attacks": 511,
+          "benign": 943,
+          "tp": 444,
+          "fp": 37,
+          "recall": 0.8689,
+          "recall_ci": [
+            0.8368,
+            0.8954
+          ],
+          "fpr": 0.0392,
+          "fpr_ci": [
+            0.0286,
+            0.0536
+          ]
+        },
+        "mixed": {
+          "attacks": 518,
+          "benign": 968,
+          "tp": 467,
+          "fp": 21,
+          "recall": 0.9015,
+          "recall_ci": [
+            0.8729,
+            0.9243
+          ],
+          "fpr": 0.0217,
+          "fpr_ci": [
+            0.0142,
+            0.0329
+          ]
+        }
+      }
+    },
+    {
+      "floor": "0.93",
+      "floor_value": 0.93,
+      "policy": "B",
+      "block_categories": [
+        "Jailbreak",
+        "PII",
+        "Non-violent Illegal Acts",
+        "Violent"
+      ],
+      "all": {
+        "attacks": 1543,
+        "benign": 2847,
+        "tp": 1343,
+        "fp": 88,
+        "recall": 0.8704,
+        "recall_ci": [
+          0.8527,
+          0.8862
+        ],
+        "fpr": 0.0309,
+        "fpr_ci": [
+          0.0252,
+          0.0379
+        ]
+      },
+      "judge_calls": 66,
+      "judge_blocks": 6,
+      "per_lang": {
+        "roman_ur": {
+          "attacks": 514,
+          "benign": 936,
+          "tp": 437,
+          "fp": 31,
+          "recall": 0.8502,
+          "recall_ci": [
+            0.8167,
+            0.8784
+          ],
+          "fpr": 0.0331,
+          "fpr_ci": [
+            0.0234,
+            0.0466
+          ]
+        },
+        "ur": {
+          "attacks": 511,
+          "benign": 943,
+          "tp": 441,
+          "fp": 36,
+          "recall": 0.863,
+          "recall_ci": [
+            0.8305,
+            0.8901
+          ],
+          "fpr": 0.0382,
+          "fpr_ci": [
+            0.0277,
+            0.0524
+          ]
+        },
+        "mixed": {
+          "attacks": 518,
+          "benign": 968,
+          "tp": 465,
+          "fp": 21,
+          "recall": 0.8977,
+          "recall_ci": [
+            0.8686,
+            0.9209
+          ],
+          "fpr": 0.0217,
+          "fpr_ci": [
+            0.0142,
+            0.0329
+          ]
+        }
+      }
+    },
+    {
+      "floor": "0.93",
+      "floor_value": 0.93,
+      "policy": "C",
+      "block_categories": [
+        "Jailbreak"
+      ],
+      "all": {
+        "attacks": 1543,
+        "benign": 2847,
+        "tp": 1341,
+        "fp": 88,
+        "recall": 0.8691,
+        "recall_ci": [
+          0.8513,
+          0.885
+        ],
+        "fpr": 0.0309,
+        "fpr_ci": [
+          0.0252,
+          0.0379
+        ]
+      },
+      "judge_calls": 66,
+      "judge_blocks": 4,
+      "per_lang": {
+        "roman_ur": {
+          "attacks": 514,
+          "benign": 936,
+          "tp": 437,
+          "fp": 31,
+          "recall": 0.8502,
+          "recall_ci": [
+            0.8167,
+            0.8784
+          ],
+          "fpr": 0.0331,
+          "fpr_ci": [
+            0.0234,
+            0.0466
+          ]
+        },
+        "ur": {
+          "attacks": 511,
+          "benign": 943,
+          "tp": 440,
+          "fp": 36,
+          "recall": 0.8611,
+          "recall_ci": [
+            0.8284,
+            0.8884
+          ],
+          "fpr": 0.0382,
+          "fpr_ci": [
+            0.0277,
+            0.0524
+          ]
+        },
+        "mixed": {
+          "attacks": 518,
+          "benign": 968,
+          "tp": 464,
+          "fp": 21,
+          "recall": 0.8958,
+          "recall_ci": [
+            0.8665,
+            0.9192
+          ],
+          "fpr": 0.0217,
+          "fpr_ci": [
+            0.0142,
+            0.0329
+          ]
+        }
+      }
+    },
+    {
+      "floor": "0.95",
+      "floor_value": 0.95,
+      "policy": "A",
+      "block_categories": null,
+      "all": {
+        "attacks": 1543,
+        "benign": 2847,
+        "tp": 1343,
+        "fp": 87,
+        "recall": 0.8704,
+        "recall_ci": [
+          0.8527,
+          0.8862
+        ],
+        "fpr": 0.0306,
+        "fpr_ci": [
+          0.0248,
+          0.0375
+        ]
+      },
+      "judge_calls": 24,
+      "judge_blocks": 5,
+      "per_lang": {
+        "roman_ur": {
+          "attacks": 514,
+          "benign": 936,
+          "tp": 437,
+          "fp": 30,
+          "recall": 0.8502,
+          "recall_ci": [
+            0.8167,
+            0.8784
+          ],
+          "fpr": 0.0321,
+          "fpr_ci": [
+            0.0225,
+            0.0454
+          ]
+        },
+        "ur": {
+          "attacks": 511,
+          "benign": 943,
+          "tp": 441,
+          "fp": 36,
+          "recall": 0.863,
+          "recall_ci": [
+            0.8305,
+            0.8901
+          ],
+          "fpr": 0.0382,
+          "fpr_ci": [
+            0.0277,
+            0.0524
+          ]
+        },
+        "mixed": {
+          "attacks": 518,
+          "benign": 968,
+          "tp": 465,
+          "fp": 21,
+          "recall": 0.8977,
+          "recall_ci": [
+            0.8686,
+            0.9209
+          ],
+          "fpr": 0.0217,
+          "fpr_ci": [
+            0.0142,
+            0.0329
+          ]
+        }
+      }
+    },
+    {
+      "floor": "0.95",
+      "floor_value": 0.95,
+      "policy": "B",
+      "block_categories": [
+        "Jailbreak",
+        "PII",
+        "Non-violent Illegal Acts",
+        "Violent"
+      ],
+      "all": {
+        "attacks": 1543,
+        "benign": 2847,
+        "tp": 1341,
+        "fp": 87,
+        "recall": 0.8691,
+        "recall_ci": [
+          0.8513,
+          0.885
+        ],
+        "fpr": 0.0306,
+        "fpr_ci": [
+          0.0248,
+          0.0375
+        ]
+      },
+      "judge_calls": 24,
+      "judge_blocks": 3,
+      "per_lang": {
+        "roman_ur": {
+          "attacks": 514,
+          "benign": 936,
+          "tp": 437,
+          "fp": 30,
+          "recall": 0.8502,
+          "recall_ci": [
+            0.8167,
+            0.8784
+          ],
+          "fpr": 0.0321,
+          "fpr_ci": [
+            0.0225,
+            0.0454
+          ]
+        },
+        "ur": {
+          "attacks": 511,
+          "benign": 943,
+          "tp": 440,
+          "fp": 36,
+          "recall": 0.8611,
+          "recall_ci": [
+            0.8284,
+            0.8884
+          ],
+          "fpr": 0.0382,
+          "fpr_ci": [
+            0.0277,
+            0.0524
+          ]
+        },
+        "mixed": {
+          "attacks": 518,
+          "benign": 968,
+          "tp": 464,
+          "fp": 21,
+          "recall": 0.8958,
+          "recall_ci": [
+            0.8665,
+            0.9192
+          ],
+          "fpr": 0.0217,
+          "fpr_ci": [
+            0.0142,
+            0.0329
+          ]
+        }
+      }
+    },
+    {
+      "floor": "0.95",
+      "floor_value": 0.95,
+      "policy": "C",
+      "block_categories": [
+        "Jailbreak"
+      ],
+      "all": {
+        "attacks": 1543,
+        "benign": 2847,
+        "tp": 1341,
+        "fp": 87,
+        "recall": 0.8691,
+        "recall_ci": [
+          0.8513,
+          0.885
+        ],
+        "fpr": 0.0306,
+        "fpr_ci": [
+          0.0248,
+          0.0375
+        ]
+      },
+      "judge_calls": 24,
+      "judge_blocks": 3,
+      "per_lang": {
+        "roman_ur": {
+          "attacks": 514,
+          "benign": 936,
+          "tp": 437,
+          "fp": 30,
+          "recall": 0.8502,
+          "recall_ci": [
+            0.8167,
+            0.8784
+          ],
+          "fpr": 0.0321,
+          "fpr_ci": [
+            0.0225,
+            0.0454
+          ]
+        },
+        "ur": {
+          "attacks": 511,
+          "benign": 943,
+          "tp": 440,
+          "fp": 36,
+          "recall": 0.8611,
+          "recall_ci": [
+            0.8284,
+            0.8884
+          ],
+          "fpr": 0.0382,
+          "fpr_ci": [
+            0.0277,
+            0.0524
+          ]
+        },
+        "mixed": {
+          "attacks": 518,
+          "benign": 968,
+          "tp": 464,
+          "fp": 21,
+          "recall": 0.8958,
+          "recall_ci": [
+            0.8665,
+            0.9192
+          ],
+          "fpr": 0.0217,
+          "fpr_ci": [
+            0.0142,
+            0.0329
+          ]
+        }
+      }
+    },
+    {
+      "floor": "none",
+      "floor_value": 1.0,
+      "policy": "A",
+      "block_categories": null,
+      "all": {
+        "attacks": 1543,
+        "benign": 2847,
+        "tp": 1338,
+        "fp": 87,
+        "recall": 0.8671,
+        "recall_ci": [
+          0.8493,
+          0.8832
+        ],
+        "fpr": 0.0306,
+        "fpr_ci": [
+          0.0248,
+          0.0375
+        ]
+      },
+      "judge_calls": 0,
+      "judge_blocks": 0,
+      "per_lang": {
+        "roman_ur": {
+          "attacks": 514,
+          "benign": 936,
+          "tp": 436,
+          "fp": 30,
+          "recall": 0.8482,
+          "recall_ci": [
+            0.8147,
+            0.8767
+          ],
+          "fpr": 0.0321,
+          "fpr_ci": [
+            0.0225,
+            0.0454
+          ]
+        },
+        "ur": {
+          "attacks": 511,
+          "benign": 943,
+          "tp": 439,
+          "fp": 36,
+          "recall": 0.8591,
+          "recall_ci": [
+            0.8262,
+            0.8866
+          ],
+          "fpr": 0.0382,
+          "fpr_ci": [
+            0.0277,
+            0.0524
+          ]
+        },
+        "mixed": {
+          "attacks": 518,
+          "benign": 968,
+          "tp": 463,
+          "fp": 21,
+          "recall": 0.8938,
+          "recall_ci": [
+            0.8643,
+            0.9175
+          ],
+          "fpr": 0.0217,
+          "fpr_ci": [
+            0.0142,
+            0.0329
+          ]
+        }
+      }
+    },
+    {
+      "floor": "none",
+      "floor_value": 1.0,
+      "policy": "B",
+      "block_categories": [
+        "Jailbreak",
+        "PII",
+        "Non-violent Illegal Acts",
+        "Violent"
+      ],
+      "all": {
+        "attacks": 1543,
+        "benign": 2847,
+        "tp": 1338,
+        "fp": 87,
+        "recall": 0.8671,
+        "recall_ci": [
+          0.8493,
+          0.8832
+        ],
+        "fpr": 0.0306,
+        "fpr_ci": [
+          0.0248,
+          0.0375
+        ]
+      },
+      "judge_calls": 0,
+      "judge_blocks": 0,
+      "per_lang": {
+        "roman_ur": {
+          "attacks": 514,
+          "benign": 936,
+          "tp": 436,
+          "fp": 30,
+          "recall": 0.8482,
+          "recall_ci": [
+            0.8147,
+            0.8767
+          ],
+          "fpr": 0.0321,
+          "fpr_ci": [
+            0.0225,
+            0.0454
+          ]
+        },
+        "ur": {
+          "attacks": 511,
+          "benign": 943,
+          "tp": 439,
+          "fp": 36,
+          "recall": 0.8591,
+          "recall_ci": [
+            0.8262,
+            0.8866
+          ],
+          "fpr": 0.0382,
+          "fpr_ci": [
+            0.0277,
+            0.0524
+          ]
+        },
+        "mixed": {
+          "attacks": 518,
+          "benign": 968,
+          "tp": 463,
+          "fp": 21,
+          "recall": 0.8938,
+          "recall_ci": [
+            0.8643,
+            0.9175
+          ],
+          "fpr": 0.0217,
+          "fpr_ci": [
+            0.0142,
+            0.0329
+          ]
+        }
+      }
+    },
+    {
+      "floor": "none",
+      "floor_value": 1.0,
+      "policy": "C",
+      "block_categories": [
+        "Jailbreak"
+      ],
+      "all": {
+        "attacks": 1543,
+        "benign": 2847,
+        "tp": 1338,
+        "fp": 87,
+        "recall": 0.8671,
+        "recall_ci": [
+          0.8493,
+          0.8832
+        ],
+        "fpr": 0.0306,
+        "fpr_ci": [
+          0.0248,
+          0.0375
+        ]
+      },
+      "judge_calls": 0,
+      "judge_blocks": 0,
+      "per_lang": {
+        "roman_ur": {
+          "attacks": 514,
+          "benign": 936,
+          "tp": 436,
+          "fp": 30,
+          "recall": 0.8482,
+          "recall_ci": [
+            0.8147,
+            0.8767
+          ],
+          "fpr": 0.0321,
+          "fpr_ci": [
+            0.0225,
+            0.0454
+          ]
+        },
+        "ur": {
+          "attacks": 511,
+          "benign": 943,
+          "tp": 439,
+          "fp": 36,
+          "recall": 0.8591,
+          "recall_ci": [
+            0.8262,
+            0.8866
+          ],
+          "fpr": 0.0382,
+          "fpr_ci": [
+            0.0277,
+            0.0524
+          ]
+        },
+        "mixed": {
+          "attacks": 518,
+          "benign": 968,
+          "tp": 463,
+          "fp": 21,
+          "recall": 0.8938,
+          "recall_ci": [
+            0.8643,
+            0.9175
+          ],
+          "fpr": 0.0217,
+          "fpr_ci": [
+            0.0142,
+            0.0329
+          ]
+        }
+      }
+    }
+  ],
+  "chosen": null,
+  "judge_cache": {
+    "texts_judged": 377,
+    "verdicts": {
+      "safe": 254,
+      "controversial": 67,
+      "unsafe": 56
+    }
+  }
+}
