@@ -33,10 +33,20 @@ class L2Policy(BaseModel):
         return "xlmr" if value == "v2" else value  # policies stored before the rename
 
 
+class JudgePolicy(BaseModel):
+    # An XLM-R score under its threshold goes to the L3 judge only if it is >= xlmr_floor
+    # (0 = always, as before; 1 = never). Below the floor it is capped under judge_low (allow).
+    xlmr_floor: float = Field(0.0, ge=0, le=1)
+    # Judge "unsafe" blocks only if a category is in this list (None = any category); otherwise warn.
+    # "controversial" always warns.
+    block_categories: list[str] | None = None
+
+
 class Policy(BaseModel):
     tenant: str = "default"
     thresholds: Thresholds = Field(default_factory=Thresholds)
     l2: L2Policy = Field(default_factory=L2Policy)
+    judge: JudgePolicy = Field(default_factory=JudgePolicy)
 
 
 def load_policy() -> Policy:

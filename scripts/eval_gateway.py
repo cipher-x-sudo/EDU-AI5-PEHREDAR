@@ -65,16 +65,19 @@ def main():
                 e2e = (time.perf_counter() - started) * 1000
                 if resp.status_code == 200:
                     d = resp.json()
-                    rows_out.append({"set": label, "label": r.label, "lang": r.lang, "detected": d["language"], "status": 200,
+                    rows_out.append({"set": label, "id": r.id, "label": r.label, "lang": r.lang, "detected": d["language"], "status": 200,
+                                     "risk": d["risk"], "scores": d["component_scores"],
                                      "action": d["action"], "tags": d["tags"], "l2_hit": "l2_attack" in d["tags"],
                                      "judge": "judge" in d["layer_latency_ms"], "lat": d["layer_latency_ms"], "e2e": e2e})
                 else:
-                    rows_out.append({"set": label, "label": r.label, "lang": r.lang, "detected": None, "status": resp.status_code,
+                    rows_out.append({"set": label, "id": r.id, "label": r.label, "lang": r.lang, "detected": None, "status": resp.status_code,
                                      "action": "block", "tags": [f"http_{resp.status_code}"], "l2_hit": False, "judge": False,
                                      "lat": {}, "e2e": e2e})
             print(label, sum(x["set"] == label for x in rows_out), flush=True)
         vram = {"after_run_all_models_loaded": gpu_memory(), "l2_torch_allocated_gb": l2_status and l2_status["vram_allocated_gb"]}
-    report(rows_out, l2_status, vram, gateway.POLICY.l2.model_dump())
+    # per-row decisions (no text; join on id) for judge inspection, kept out of git under logs/
+    Path(f"logs/gateway_rows_{TAG}.jsonl").write_text("".join(json.dumps(r) + "\n" for r in rows_out), encoding="utf-8")
+    report(rows_out, l2_status, vram, {"l2": gateway.POLICY.l2.model_dump(), "judge": gateway.POLICY.judge.model_dump()})
 
 
 def report(rows, l2_status, vram, policy_l2=None):
@@ -97,7 +100,7 @@ def report(rows, l2_status, vram, policy_l2=None):
     latency["end_to_end"] = {"median_ms": pct([r["e2e"] for r in ok], .5), "p95_ms": pct([r["e2e"] for r in ok], .95), "n": len(ok)}
     out = {"l2": l2_status, "vram": vram, "requests": len(rows), "judge_calls": sum(r["judge"] for r in rows),
            "results": results, "latency": latency,
-           "policy_l2": policy_l2, "env": {k: os.getenv(k) for k in ("PEHREDAR_GUARD_MODEL", "PEHREDAR_L2_XLMR_DIR", "PEHREDAR_LANGID_MODEL")}}
+           "policy": policy_l2, "env": {k: os.getenv(k) for k in ("PEHREDAR_GUARD_MODEL", "PEHREDAR_L2_XLMR_DIR", "PEHREDAR_LANGID_MODEL")}}
     Path(f"results/gateway_{TAG}.json").write_text(json.dumps(out, indent=2), encoding="utf-8")
     lines = [f"# Gateway {TAG}: end-to-end evaluation", "",
              "Every row was sent to `POST /v1/check/input` (L0 normalizer → L1 rules + memory → L2 routed ensemble → session "
@@ -106,7 +109,7 @@ def report(rows, l2_status, vram, policy_l2=None):
              "**L2 only** counts the routed L2 model over its threshold on the same request. `warn` is not counted as a block. "
              "Language for routing comes from the shared detector (`pehredar/langid.py`), not from the dataset label. "
              "Translated sets are Gemini machine translations (not the human test set).", "",
-             f"- Config: {json.dumps(out['env'])}; policy l2 = {json.dumps(out['policy_l2'])}",
+             f"- Config: {json.dumps(out['env'])}; policy = {json.dumps(out['policy'])}",
              f"- L2: {json.dumps(l2_status)}", f"- GPU memory: {json.dumps(vram)}",
              f"- Requests: {len(rows)}; L3 judge calls: {out['judge_calls']} ({out['judge_calls'] / max(1, len(rows)):.1%})", "",
              "| Eval set | Full gateway recall [95% CI] | Full gateway FPR [95% CI] | L2-only recall [95% CI] | L2-only FPR [95% CI] | warn | L3 calls | L3 outcome | blocks by layer | detected language |",

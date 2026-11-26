@@ -17,7 +17,7 @@ from .normalizer import normalize_text
 from .langid import detect_lang
 from .rules import score_rules
 from .output_guard import check_output
-from .policy import Policy, load_policy
+from .policy import JudgePolicy, Policy, load_policy
 from .state import update_escalation
 from .judge import classify_safety
 from .memory import is_known_attack, learn_canary_miss
@@ -191,8 +191,11 @@ def inspect_text(text: str, session_id: str | None = None, record: bool = True) 
         if l2["hit"]:
             tags.append("l2_attack")
         # A score under its model threshold must never block on its own (the v3 threshold is above the block
-        # level): cap it just below block, so it can at most warn or go to the L3 judge.
-        below = min(max(l2["scores"].values()), POLICY.thresholds.block - 0.01)
+        # level): cap it just below block, so it can at most warn or go to the L3 judge. XLM-R scores under
+        # the judge floor are capped under judge_low instead (no judge call).
+        t = POLICY.thresholds
+        below = max(min(s, t.block - 0.01 if m != "xlmr" or s >= POLICY.judge.xlmr_floor else t.judge_low - 0.01)
+                    for m, s in l2["scores"].items())
         risk = max(risk, POLICY.thresholds.block if l2["hit"] else below)
     started = time.perf_counter()
     known = is_known_attack(DB_PATH, normalized)
@@ -228,16 +231,20 @@ async def apply_judge(decision: Decision, messages: list[Message]) -> Decision:
     recent = "\n".join(f"{m.role}: {m.content}" for m in messages[-6:])
     started = time.perf_counter()
     try:
-        safety = await classify_safety(recent, GUARD_MODEL, UPSTREAM_URL)
+        safety, categories = await classify_safety(recent, GUARD_MODEL, UPSTREAM_URL)
     except (httpx.HTTPError, ValueError, KeyError, IndexError, TypeError) as exc:
         raise HTTPException(status_code=503, detail="Guard model is unavailable.") from exc
+    tags = decision.tags + [f"judge_category:{c}" for c in categories]
+    wanted = POLICY.judge.block_categories
+    if safety == "unsafe" and wanted is not None and not set(categories) & set(wanted):
+        safety, tags = "controversial", tags + ["judge_unsafe_warn"]  # unsafe, but not a blocking category
     decision.layer_latency_ms["judge"] = round((time.perf_counter() - started) * 1000, 3)
     decision.component_scores["judge"] = {"safe": 0.0, "controversial": POLICY.thresholds.warn, "unsafe": 1.0}[safety]
     if safety == "unsafe":
-        return decision.model_copy(update={"action": "block", "risk": 1.0, "tags": decision.tags + ["judge_unsafe"]})
+        return decision.model_copy(update={"action": "block", "risk": 1.0, "tags": tags + ["judge_unsafe"]})
     if safety == "controversial":
         return decision.model_copy(update={"action": "warn", "risk": max(decision.risk, POLICY.thresholds.warn),
-                                           "tags": decision.tags + ["judge_controversial"]})
+                                           "tags": tags + (["judge_controversial"] if "judge_unsafe_warn" not in tags else [])})
     return decision
 
 
@@ -261,7 +268,7 @@ async def output_check(request: OutputRequest) -> dict:
     action, text, tags = check_output(request.text, CANARY)
     if action != "block" and GUARD_MODEL:
         try:
-            safety = await classify_safety(text, GUARD_MODEL, UPSTREAM_URL)
+            safety, _ = await classify_safety(text, GUARD_MODEL, UPSTREAM_URL)
         except (httpx.HTTPError, ValueError, KeyError, IndexError, TypeError) as exc:
             raise HTTPException(status_code=503, detail="Guard model is unavailable.") from exc
         if safety == "unsafe":
