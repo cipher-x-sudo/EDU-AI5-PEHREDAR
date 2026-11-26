@@ -1,0 +1,168 @@
+{
+  "train_rows": 53348,
+  "train_dropped_label_audit": 543,
+  "train_by_lang_label": {
+    "en/attack": 16088,
+    "en/benign": 23642,
+    "mixed/attack": 2254,
+    "mixed/benign": 2318,
+    "roman_ur/attack": 2226,
+    "roman_ur/benign": 2290,
+    "ur/attack": 2224,
+    "ur/benign": 2306
+  },
+  "train_benign_per_attack": {
+    "en": 1.47,
+    "mixed": 1.028,
+    "roman_ur": 1.029,
+    "ur": 1.037
+  },
+  "dev_rows": 7824,
+  "dev_dropped_label_audit": 41,
+  "dev_dropped_e5_leak": 911,
+  "dev_by_lang_label": {
+    "en/attack": 1104,
+    "en/benign": 2330,
+    "mixed/attack": 518,
+    "mixed/benign": 968,
+    "roman_ur/attack": 514,
+    "roman_ur/benign": 936,
+    "ur/attack": 511,
+    "ur/benign": 943
+  },
+  "leakage": {
+    "same_original_or_group_across_splits": {
+      "train-dev": {
+        "orig_ids": 0,
+        "split_groups": 0
+      },
+      "train-test": {
+        "orig_ids": 0,
+        "split_groups": 4
+      },
+      "dev-test": {
+        "orig_ids": 0,
+        "split_groups": 0
+      }
+    },
+    "e5_threshold": 0.95,
+    "dev_rows_over_threshold_to_train": 911,
+    "test_rows_over_threshold_to_train": 314,
+    "test_leaks_by_set_lang": {
+      "deepset_pi/en/benign": 2,
+      "deepset_pi/en/attack": 4,
+      "jb_class/en/attack": 61,
+      "jb_class/en/benign": 1,
+      "jb_class/roman_ur/attack": 14,
+      "deepset_pi/ur/attack": 1,
+      "jb_class/ur/attack": 14,
+      "jb_class/mixed/attack": 15,
+      "xstest/en/benign": 1,
+      "xstest/roman_ur/benign": 2,
+      "bipia/en/attack": 3,
+      "llmail/en/attack": 196
+    },
+    "test_leak_examples": [
+      {
+        "test_id": "deepset_pi-551",
+        "train_id": "dolly-2497",
+        "cos": 0.9584
+      },
+      {
+        "test_id": "deepset_pi-553",
+        "train_id": "deepset_pi-57",
+        "cos": 0.9734
+      },
+      {
+        "test_id": "deepset_pi-590",
+        "train_id": "deepset_pi-237",
+        "cos": 0.9705
+      },
+      {
+        "test_id": "deepset_pi-596",
+        "train_id": "deepset_pi-185",
+        "cos": 0.9587
+      },
+      {
+        "test_id": "deepset_pi-598",
+        "train_id": "deepset_pi-357",
+        "cos": 0.9852
+      },
+      {
+        "test_id": "deepset_pi-626",
+        "train_id": "deepset_pi-364",
+        "cos": 0.9546
+      },
+      {
+        "test_id": "jb_class-1604",
+        "train_id": "jb_class-1249",
+        "cos": 1.0
+      },
+      {
+        "test_id": "jb_class-1606",
+        "train_id": "jb_class-1041",
+        "cos": 0.9972
+      },
+      {
+        "test_id": "jb_class-1607",
+        "train_id": "jailbreak_llms-1319",
+        "cos": 0.9875
+      },
+      {
+        "test_id": "jb_class-1611",
+        "train_id": "jailbreak_llms-228",
+        "cos": 0.9961
+      },
+      {
+        "test_id": "jb_class-1613",
+        "train_id": "jb_class-108",
+        "cos": 0.9562
+      },
+      {
+        "test_id": "jb_class-1619",
+        "train_id": "jb_class-9",
+        "cos": 0.9928
+      },
+      {
+        "test_id": "jb_class-1621",
+        "train_id": "jailbreak_llms-144",
+        "cos": 0.9997
+      },
+      {
+        "test_id": "jb_class-1622",
+        "train_id": "hackaprompt-3380",
+        "cos": 1.0
+      },
+      {
+        "test_id": "jb_class-1628",
+        "train_id": "jb_class-540",
+        "cos": 0.9868
+      },
+      {
+        "test_id": "jb_class-1633",
+        "train_id": "jailbreak_llms-239",
+        "cos": 1.0
+      },
+      {
+        "test_id": "jb_class-1639",
+        "train_id": "jailbreak_llms-742",
+        "cos": 0.9917
+      },
+      {
+        "test_id": "jb_class-1649",
+        "train_id": "jb_class-668",
+        "cos": 0.985
+      },
+      {
+        "test_id": "jb_class-1652",
+        "train_id": "jb_class-1340",
+        "cos": 0.9548
+      },
+      {
+        "test_id": "jb_class-1664",
+        "train_id": "jailbreak_llms-239",
+        "cos": 1.0
+      }
+    ]
+  }
+}
