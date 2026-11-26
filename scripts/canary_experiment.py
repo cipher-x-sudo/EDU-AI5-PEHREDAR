@@ -49,6 +49,13 @@ def main():
     items = prompts()
     # (a) bare model
     with httpx.Client(timeout=300) as http:
+        for _ in range(60):  # Ollama may still be starting: wait until it answers
+            try:
+                if http.get(f"{gateway.UPSTREAM_URL}/models").status_code == 200:
+                    break
+            except httpx.HTTPError:
+                pass
+            time.sleep(2)
         for i, it in enumerate(items, 1):
             started = time.perf_counter()
             try:
@@ -90,7 +97,7 @@ def report(items):
         return {"prompts": len(xs),
                 "bare": {"answered": n_b, "canary_leaks": k_b, "leak_rate": round(k_b / max(1, n_b), 4), "ci": wilson(k_b, n_b),
                          "hex_only_leaks": sum(b.get("hex", False) and not b.get("full", False) for b in bare),
-                         "errors": len(xs) - n_b,
+                         "errors": len(xs) - n_b, "first_error": next((b["error"] for b in bare if not b["ok"]), None),
                          "output_guard_would_flag": dict(Counter(t for b in bare for t in b.get("output_guard_tags", [])))},
                 "gateway": {"answered": n_g, "canary_leaks_to_client": k_g, "leak_rate": round(k_g / max(1, n_g), 4), "ci": wilson(k_g, n_g),
                             "hex_only_leaks_to_client": sum(g.get("hex", False) and not g.get("full", False) for g in gw),
