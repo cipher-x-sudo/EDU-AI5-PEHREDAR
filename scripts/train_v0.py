@@ -28,6 +28,7 @@ def main():
     ap.add_argument("--train-file", default="train_public.jsonl")
     ap.add_argument("--dev-file", default="dev_public.jsonl")
     ap.add_argument("--langs", default="en", help="comma-separated languages to keep")
+    ap.add_argument("--save-each-epoch", action="store_true", help="save <output-dir>_e<N> after every epoch")
     args = ap.parse_args()
     random.seed(SEED); torch.manual_seed(SEED)
     langs = set(args.langs.split(","))
@@ -58,7 +59,31 @@ def main():
     steps = 0
     scaler = torch.amp.GradScaler("cuda", enabled=use_fp16)
     opt.zero_grad()
-    for _ in range(args.epochs):
+    def finish(output_dir, epochs_done):
+        """Score dev (F1 threshold kept as the card's default), save model + card to output_dir."""
+        model.eval()
+        scored = []
+        with torch.no_grad():
+            for r in dev:
+                x = encode(tokenizer, text(r), args.encoder_version)
+                b = {k: torch.tensor([v]).to(device) for k, v in x.items()}
+                scored.append({"label": r["label"], "risk": torch.softmax(model(**b).logits, dim=-1)[0, 1].item()})
+        def f1(th):
+            tp = sum(r["label"] == "attack" and r["risk"] >= th for r in scored); fp = sum(r["label"] == "benign" and r["risk"] >= th for r in scored)
+            fn = sum(r["label"] == "attack" and r["risk"] < th for r in scored)
+            return 2 * tp / (2 * tp + fp + fn) if tp + fp + fn else 0
+        threshold = max(sorted({0.5, *(r["risk"] for r in scored)}), key=lambda x: (f1(x), x))
+        dest = Path(output_dir); dest.mkdir(parents=True, exist_ok=True); model.save_pretrained(dest); tokenizer.save_pretrained(dest)
+        report = {"data_commit": os.getenv("PEHREDAR_DATA_COMMIT", "83d0563"), "base_model": BASE, "base_revision": getattr(model.config, "_commit_hash", None),
+                  "dataset_sha256": hashlib.sha256((ROOT / args.train_file).read_bytes()).hexdigest(), "epochs": epochs_done, "max_length": 512,
+                  "truncation": "head+tail", "encoder_version": args.encoder_version, "seed": SEED, "threshold": threshold, "train_count": len(train),
+                  "dev_count": len(dev), "device": str(device), "training_seconds": time.perf_counter() - start, "train_file": args.train_file,
+                  "dev_file": args.dev_file, "langs": sorted(langs),
+                  "peak_vram_gb": round(torch.cuda.max_memory_allocated() / 2**30, 2) if device.type == "cuda" else None}
+        (dest / "model_card.md").write_text("# Pehredar classifier\n\n" + json.dumps(report, indent=2) + "\n", encoding="utf-8")
+        print(json.dumps(report, indent=2), flush=True)
+
+    for epoch in range(1, args.epochs + 1):
         model.train()
         for batch in loader:
             batch={k:v.to(device) for k,v in batch.items()}
@@ -74,25 +99,13 @@ def main():
                 print(f"step={steps} loss={loss.item()*args.grad_accum:.4f} vram_gb={vram:.2f}", flush=True)
             if args.smoke and steps >= 20:
                 break
+        if args.save_each_epoch:
+            finish(f"{args.output_dir}_e{epoch}", epoch)
         if args.smoke and steps >= 20:
             break
-    model.eval()
-    def score(rows):
-        out=[]
-        with torch.no_grad():
-            for r in rows:
-                st=time.perf_counter(); x=encode(tokenizer,text(r),args.encoder_version)
-                b={k:torch.tensor([v]).to(device) for k,v in x.items()}
-                risk=torch.softmax(model(**b).logits,dim=-1)[0,1].item()
-                out.append({**r,"risk":risk,"latency_ms":(time.perf_counter()-st)*1000})
-        return out
-    scored=score(dev); candidates=sorted({0.5,*(r["risk"] for r in scored)})
-    def f1(th):
-        tp=sum(r["label"]=="attack" and r["risk"]>=th for r in scored); fp=sum(r["label"]=="benign" and r["risk"]>=th for r in scored); fn=sum(r["label"]=="attack" and r["risk"]<th for r in scored)
-        return 2*tp/(2*tp+fp+fn) if tp+fp+fn else 0
-    threshold=max(candidates,key=lambda x:(f1(x),x))
-    dest=Path(args.output_dir); dest.mkdir(parents=True,exist_ok=True); model.save_pretrained(dest); tokenizer.save_pretrained(dest)
-    report={"data_commit":os.getenv("PEHREDAR_DATA_COMMIT","83d0563"),"base_model":BASE,"base_revision":getattr(model.config,"_commit_hash",None),"dataset_sha256":hashlib.sha256((ROOT/args.train_file).read_bytes()).hexdigest(),"epochs":args.epochs,"max_length":512,"truncation":"head+tail","encoder_version":args.encoder_version,"seed":SEED,"threshold":threshold,"train_count":len(train),"dev_count":len(dev),"device":str(device),"training_seconds":time.perf_counter()-start,"train_file":args.train_file,"dev_file":args.dev_file,"langs":sorted(langs),"peak_vram_gb":round(torch.cuda.max_memory_allocated()/2**30,2) if device.type=="cuda" else None}
-    (dest/"model_card.md").write_text("# Pehredar classifier v0\n\n"+json.dumps(report,indent=2)+"\n",encoding="utf-8")
-    print(json.dumps(report,indent=2))
-if __name__=="__main__": main()
+    if not args.save_each_epoch:
+        finish(args.output_dir, args.epochs)
+
+
+if __name__ == "__main__":
+    main()

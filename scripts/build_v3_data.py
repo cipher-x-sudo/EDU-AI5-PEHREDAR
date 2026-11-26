@@ -1,0 +1,98 @@
+"""Build v3 classifier data + leakage audit -> data/processed/train_v3.jsonl, dev_v3.jsonl, results/v3_data.md/.json.
+
+train = train_public_v2 (English) + translated_v2_gemini (roman_ur / ur / mixed, after the filter chain),
+        minus label-audit-flagged train rows (dropped, not relabelled).
+dev   = dev_public_v2 + dev_translated_v2_gemini, minus label-audit-flagged dev rows, minus dev rows that leak
+        (e5 cosine > 0.95 to any train row, any language).
+Leakage audit: (a) the same original (orig_id for translations, id for English rows) and the same split_group
+must never appear in two of train / dev / test; (b) e5 cosine > 0.95 between train and dev / test rows,
+cross-language included. Test rows are never changed: leaks are reported only.
+
+  python -m scripts.build_v3_data   # training image, GPU (e5)"""
+import csv, json
+from collections import Counter
+from pathlib import Path
+
+ROOT = Path("data/processed")
+TEST_FILES = ["external_eval.jsonl", "external_translated_gemini.jsonl", "overrefusal_eval.jsonl",
+              "overrefusal_translated_gemini.jsonl", "benign_email_probe.jsonl", "indirect_eval.jsonl"]
+E5 = "intfloat/multilingual-e5-small"
+SIM = 0.95
+
+
+def read(name):
+    return [json.loads(x) for x in (ROOT/name).read_text(encoding="utf-8").splitlines() if x.strip()]
+
+
+def write(name, rows):
+    (ROOT/name).write_text("".join(json.dumps(r, ensure_ascii=False) + "\n" for r in rows), encoding="utf-8")
+
+
+def text(r):
+    return r.get("text") or "\n".join(t["content"] if isinstance(t, dict) else str(t) for t in (r.get("turns") or []))
+
+
+def original(r):
+    return r.get("orig_id") or r["id"]
+
+
+def nearest(queries, refs):
+    import faiss, torch
+    from sentence_transformers import SentenceTransformer
+    model = SentenceTransformer(E5, device="cuda" if torch.cuda.is_available() else "cpu")
+    enc = lambda rs: model.encode(["query: " + text(r)[:2000] for r in rs], batch_size=128, normalize_embeddings=True,
+                                  show_progress_bar=True).astype("float32")
+    index = faiss.IndexFlatIP(384); index.add(enc(refs))
+    sims, idx = index.search(enc(queries), 1)
+    return [(float(s[0]), refs[i[0]]) for s, i in zip(sims, idx)]
+
+
+def cells(rows):
+    return {f"{l}/{b}": n for (l, b), n in sorted(Counter((r["lang"], r["label"]) for r in rows).items())}
+
+
+def main():
+    flagged = {(r["split"], r["id"]) for r in csv.DictReader((ROOT/"label_audit.csv").open(encoding="utf-8"))}
+    train_all = read("train_public_v2.jsonl") + read("translated_v2_gemini.jsonl")
+    dev_all = read("dev_public_v2.jsonl") + read("dev_translated_v2_gemini.jsonl")
+    test = [r for f in TEST_FILES for r in read(f)]
+    train = [r for r in train_all if ("train", r["id"]) not in flagged]
+    dev = [r for r in dev_all if ("dev", r["id"]) not in flagged]
+    # (a) the same original / split_group across splits
+    key = {name: ({original(r) for r in rs}, {r["split_group"] for r in rs}) for name, rs in (("train", train_all), ("dev", dev_all), ("test", test))}
+    cross = {f"{a}-{b}": {"orig_ids": len(key[a][0] & key[b][0]), "split_groups": len(key[a][1] & key[b][1])}
+             for a, b in (("train", "dev"), ("train", "test"), ("dev", "test"))}
+    # (b) e5 near-duplicates, any language
+    near_dev = nearest(dev, train); near_test = nearest(test, train)
+    dev_leak = {r["id"] for r, (s, _) in zip(dev, near_dev) if s > SIM}
+    test_leak = [(r, s, t) for r, (s, t) in zip(test, near_test) if s > SIM]
+    dev_final = [r for r in dev if r["id"] not in dev_leak]
+    write("train_v3.jsonl", sorted(train, key=lambda r: r["id"])); write("dev_v3.jsonl", dev_final)
+    ratio = lambda rs: {l: round(sum(r["lang"] == l and r["label"] == "benign" for r in rs) /
+                                 max(1, sum(r["lang"] == l and r["label"] == "attack" for r in rs)), 3) for l in sorted({r["lang"] for r in rs})}
+    out = {"train_rows": len(train), "train_dropped_label_audit": len(train_all) - len(train), "train_by_lang_label": cells(train),
+           "train_benign_per_attack": ratio(train),
+           "dev_rows": len(dev_final), "dev_dropped_label_audit": len(dev_all) - len(dev), "dev_dropped_e5_leak": len(dev_leak),
+           "dev_by_lang_label": cells(dev_final),
+           "leakage": {"same_original_or_group_across_splits": cross, "e5_threshold": SIM,
+                       "dev_rows_over_threshold_to_train": len(dev_leak),
+                       "test_rows_over_threshold_to_train": len(test_leak),
+                       "test_leaks_by_set_lang": dict(Counter(f"{r['source']}/{r['lang']}/{r['label']}" for r, _, _ in test_leak)),
+                       "test_leak_examples": [{"test_id": r["id"], "train_id": t["id"], "cos": round(s, 4)} for r, s, t in test_leak[:20]]}}
+    Path("results/v3_data.json").write_text(json.dumps(out, indent=2), encoding="utf-8")
+    lines = ["# v3 classifier data and leakage audit", "", "Generated by `scripts/build_v3_data.py`. Train = train_public_v2 (en) + "
+             "translated_v2_gemini (roman_ur/ur/mixed, filtered) minus label-audit flags; dev = dev_public_v2 + dev_translated_v2_gemini "
+             "minus label-audit flags minus dev rows with e5 cosine > 0.95 to any train row. Test sets unchanged.", "",
+             f"- Train: {out['train_rows']} rows (dropped by label audit: {out['train_dropped_label_audit']}); by lang/label "
+             f"{json.dumps(out['train_by_lang_label'])}; benign per attack {json.dumps(out['train_benign_per_attack'])}",
+             f"- Dev: {out['dev_rows']} rows (dropped: label audit {out['dev_dropped_label_audit']}, e5 leak {out['dev_dropped_e5_leak']}); "
+             f"by lang/label {json.dumps(out['dev_by_lang_label'])}", "", "## Leakage audit", "",
+             f"- Same original / split_group across splits: {json.dumps(cross)}",
+             f"- e5 cosine > {SIM} to a train row: dev {len(dev_leak)} (dropped), test {len(test_leak)} (kept, reported) "
+             f"{json.dumps(out['leakage']['test_leaks_by_set_lang'])}", ""]
+    Path("results/v3_data.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
+    print("\n".join(lines), flush=True)
+
+
+if __name__ == "__main__":
+    main()
