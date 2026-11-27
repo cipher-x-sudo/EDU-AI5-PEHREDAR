@@ -1,0 +1,109 @@
+{
+  "commit": "5120a5b9874211cd4e95acbd5f5cc458b4fa61f4",
+  "commit_subject": "final_config: label the joint-sweep threshold and judge report",
+  "policy_yaml_sha256": "a3c17fe3bd11cf66de64e87ba9a54cfd8dd098bd1b1696215744e56e235575d0",
+  "policy": {
+    "tenant": "default",
+    "thresholds": {
+      "warn": 0.45,
+      "judge_low": 0.3,
+      "block": 0.75
+    },
+    "logging": {
+      "store_raw_text": false,
+      "store_hash": true
+    },
+    "l2": {
+      "mode": "routed",
+      "xlmr_threshold": 0.9682675
+    },
+    "judge": {
+      "xlmr_floor": 0.0,
+      "block_categories": [
+        "Jailbreak",
+        "PII",
+        "Non-violent Illegal Acts",
+        "Violent"
+      ]
+    }
+  },
+  "gateway_gpu_env": {
+    "PEHREDAR_UPSTREAM_URL": "http://ollama:11434/v1",
+    "PEHREDAR_DB_PATH": "/state/pehredar.db",
+    "PEHREDAR_POLICY_PATH": "/app/config/policy.yaml",
+    "PEHREDAR_GUARD_MODEL": "hf.co/QuantFactory/Qwen3Guard-Gen-0.6B-GGUF:Q4_K_M",
+    "PEHREDAR_MODELS_DIR": "/app/models",
+    "PEHREDAR_L2": "1",
+    "PEHREDAR_L2_XLMR_DIR": "/app/models/clf_v3_e3",
+    "PEHREDAR_LANGID_MODEL": "/app/models/langid_v2.joblib",
+    "HF_HUB_OFFLINE": "1"
+  },
+  "models": {
+    "xlmr (non-English L2)": {
+      "path": "models/clf_v3_e3",
+      "files": {
+        "config.json": "78ea2ecded05d338715aa452059bd640f3297ada2e20bcd2dced3ded0c759ab2",
+        "model.safetensors": "4d059f29658393e3a0187b53ba53709888f828ddec3da25cda228351f4ab046d",
+        "model_card.md": "bfe071039936e54b57fd23baf684c06d72f15f9d086a6cef283060119f98eca2",
+        "sentencepiece.bpe.model": "cfc8146abe2a0488e9e2a0c56de7952f7c11ab059eca145a0a727afce0db2865",
+        "special_tokens_map.json": "06e405a36dfe4b9604f484f6a1e619af1a7f7d09e34a8555eb0b77b66318067f",
+        "tokenizer.json": "3a56def25aa40facc030ea8b0b87f3688e4b3c39eb8b45d5702b3a1300fe2a20",
+        "tokenizer_config.json": "ccf223ba3d5b3cc7fa6c3bf451f3bb40557a5c92b0aa33f63d17802ff1a96fd9",
+        "training_report.json": "1012d321cb4eb6f6b9a85a22dd765520d74145e34a34baa8507aba3aa5f925a4"
+      }
+    },
+    "langid_v2 (router)": {
+      "path": "models/langid_v2.joblib",
+      "files": {
+        "langid_v2.joblib": "e7dab7baf036a22003e43ce9d5c8547427cad26fefc66faa29580f23bc59ccf2"
+      }
+    },
+    "deberta (English L2)": {
+      "path": "models/hf_cache/hub/models--protectai--deberta-v3-base-prompt-injection-v2/snapshots/90c9989b1a342275dd0d1a95aad283c04e075671",
+      "files": {
+        "added_tokens.json": "dc046d04c9b0ada7ae6f1dc89c465801799acdf0c9a6aab8c15a1b2d5ca4e91f",
+        "config.json": "05079f4735092040b780d459027afab413faa6eeb66a548571a58832304b60bb",
+        "model.safetensors": "6521cb8d0ac08148c81464899c424e6148fcc62befa371089fa4061d8b6e0424",
+        "special_tokens_map.json": "9463f61e1b109a8eb4688b829260d7c6b1e6dff04c98ff7269bb89e2b92369b9",
+        "spm.model": "c679fbf93643d19aab7ee10c0b99e460bdbc02fedf34b92b05af343b4af586fd",
+        "tokenizer.json": "f0a66ad0d735d8dca9ecac4ff50fcdef4bb6adbadd2941a926844844d2c2059b",
+        "tokenizer_config.json": "557b3d33d3f41b81ad769244e506549e98a1857d41dd58160aacd4d98d710b5a"
+      }
+    }
+  },
+  "xlmr_training_report": {
+    "data_commit": "4ba5be1",
+    "base_model": "FacebookAI/xlm-roberta-base",
+    "base_revision": "e73636d4f797dec63c3081bb6ed5c7b0bb3f2089",
+    "dataset_sha256": "5fe8ed8a3c69b207529ec62ea321005f18f9b2e24b3864d413caf0c1939ddfd8",
+    "epochs": 3,
+    "max_length": 512,
+    "truncation": "head+tail",
+    "encoder_version": 2,
+    "seed": 42,
+    "threshold": 0.9629704356193542,
+    "train_count": 53348,
+    "dev_count": 7824,
+    "device": "cuda",
+    "training_seconds": 2155.013431146999,
+    "train_file": "train_v3.jsonl",
+    "dev_file": "dev_v3.jsonl",
+    "langs": [
+      "en",
+      "mixed",
+      "roman_ur",
+      "ur"
+    ],
+    "peak_vram_gb": 5.24,
+    "f1_threshold": 0.8417981863021851,
+    "threshold_source": "2% benign FPR on dev_v3.jsonl"
+  },
+  "guard_model": {
+    "name": "hf.co/QuantFactory/Qwen3Guard-Gen-0.6B-GGUF:Q4_K_M",
+    "ollama_id": "18cf431350f5"
+  },
+  "protected_model_in_experiments": {
+    "name": "richardyoung/qwen3-8b-abliterated:Q4_K_M",
+    "ollama_id": "6d7230a92342"
+  }
+}

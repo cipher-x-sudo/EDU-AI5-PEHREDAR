@@ -346,3 +346,4 @@ started: 2026-11-27T15:48:39+05:00
 gateway_v3_exit=0
 canary_v3_exit=0
 gateway-eval-v3 + canary-v3 2026-11-27T16:27:46+05:00: done; ollama stopped
+freeze 2026-11-27T16:29:28+05:00: results/final_config.md at 5120a5b; tag v1.0-eval-config; eval_frozen.py not run
