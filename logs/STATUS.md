@@ -322,3 +322,27 @@ replay_exit=0
 sweep_exit=0
 judge-replay + judge-sweep 2026-11-27T04:35:04+05:00: done; ollama stopped
 judge-policy 2026-11-27T04:35:42+05:00: no dev cell meets FPR<=3% (min 3.06% with judge off: L2 85 + rules 2 FP); STOP per prompt, config unchanged, gateway_v3/canary not run
+
+job: judge-joint
+state: running
+log: logs/judge_joint.log
+started: 2026-11-27T15:38:55+05:00
+joint_exit=0
+judge-joint 2026-11-27T15:46:49+05:00: done; ollama stopped
+
+job: gateway-eval-v3 + canary-v3
+state: running
+logs: logs/gateway_eval_v3.log, logs/canary_v3.log
+started: 2026-11-27T15:47:21+05:00
+gateway_v3_exit=1
+canary_v3_exit=1
+gateway-eval-v3 + canary-v3 2026-11-27T15:47:36+05:00: done; ollama stopped
+gateway-eval-v3 + canary-v3 2026-11-27T15:48:39+05:00: first launch failed in the pre-flight check (module import); relaunching
+
+job: gateway-eval-v3 + canary-v3
+state: running
+logs: logs/gateway_eval_v3.log, logs/canary_v3.log
+started: 2026-11-27T15:48:39+05:00
+gateway_v3_exit=0
+canary_v3_exit=0
+gateway-eval-v3 + canary-v3 2026-11-27T16:27:46+05:00: done; ollama stopped
