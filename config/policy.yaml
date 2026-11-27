@@ -8,5 +8,11 @@ logging:
   store_hash: true
 l2:
   mode: routed
-  # non-English path: models/clf_v3_e3 (PEHREDAR_L2_XLMR_DIR) at 3% dev non-English FPR (results/clf_v3_recal.md)
-  xlmr_threshold: 0.9613
+  # non-English path: models/clf_v3_e3 (PEHREDAR_L2_XLMR_DIR); threshold = 2.75% L2-only dev non-English FPR,
+  # chosen jointly with the judge policy on dev (results/judge_policy_joint.md)
+  xlmr_threshold: 0.9682675
+judge:
+  # L3 Qwen3Guard: every capped L2 score >= judge_low may reach the judge (floor 0); "unsafe" blocks only for
+  # these categories, other unsafe and controversial verdicts warn (results/judge_policy_joint.md)
+  xlmr_floor: 0.0
+  block_categories: [Jailbreak, PII, Non-violent Illegal Acts, Violent]
