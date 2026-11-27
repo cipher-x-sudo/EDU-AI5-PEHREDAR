@@ -56,11 +56,11 @@ def main():
              f"| Router | langid_v2 (`{compose['PEHREDAR_LANGID_MODEL']}`): char 1–5 TF-IDF + LR, Roman-Urdu override, low confidence < 0.6 → mixed |",
              f"| L2 en | ProtectAI DeBERTa v3 base prompt-injection v2, threshold 0.5 |",
              f"| L2 non-en | XLM-R base v3 (`{compose['PEHREDAR_L2_XLMR_DIR']}`, encoder v2 512 head+tail), threshold {l2['xlmr_threshold']} "
-             f"(3% dev non-en FPR, results/clf_v3_recal.md); model's own 2% all-dev threshold {report.get('threshold')} |",
+             f"(2.75% L2-only dev non-en FPR, chosen jointly with the judge in results/judge_policy_joint.md); the model's own 2% all-dev threshold is {report.get('threshold'):.4f} |",
              f"| L2 mode | {l2['mode']} |",
              f"| Gateway thresholds | warn {t['warn']}, judge_low {t['judge_low']}, block {t['block']}; L2 scores under their threshold are capped below block |",
              f"| L3 judge | `{guard}` (temperature 0); XLM-R judge floor {j.get('xlmr_floor', 0.0)}; blocks on unsafe categories "
-             f"{j.get('block_categories') or 'any'}; controversial / other unsafe → warn (results/judge_policy.md) |",
+             f"{j.get('block_categories') or 'any'}; controversial / other unsafe → warn (results/judge_policy_joint.md) |",
              "| Output guard | canary + PII redaction + Qwen3Guard on the response |", "",
              "## Model files (SHA-256)", ""]
     for name, m in models.items():
